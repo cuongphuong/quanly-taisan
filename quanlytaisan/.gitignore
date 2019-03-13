@@ -24,3 +24,6 @@ HELP.md
 /nbdist/
 /.nb-gradle/
 /build/
+
+### new folder ###
+/src/main/resources
