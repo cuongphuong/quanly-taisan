@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import tpm.qlts.entitys.User;
+import tpm.qlts.entitys.Users;
 import tpm.qlts.repositorys.UserRepository;
 
 @Service("userRevice")
@@ -19,17 +19,17 @@ public class UserRevice {
 		userRepository.deleteById(id);
 	}
 	
-	public User update(User user) {
+	public Users update(Users user) {
 		return userRepository.save(user);
 	}
 	
-	public Optional<User> findById(String id)
+	public Optional<Users> findById(String id)
 	{
 		return userRepository.findById(id);
 	}
 	
-	public List<User> findAll()
+	public List<Users> findAll()
 	{
-		return (List<User>) userRepository.findAll();
+		return (List<Users>) userRepository.findAll();
 	}
 }
