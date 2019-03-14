@@ -3,29 +3,28 @@ package tpm.qlts.entitys;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the User_Group database table.
  * 
  */
 @Entity
-@Table(name="User_Group")
-@NamedQuery(name="UserRefGroup.findAll", query="SELECT u FROM UserRefGroup u")
+@Table(name = "User_Group")
+@NamedQuery(name = "UserRefGroup.findAll", query = "SELECT u FROM UserRefGroup u")
 public class UserRefGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private UserRefGroupPK id;
 
-	//bi-directional many-to-one association to Group
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="GroupID")
+	// bi-directional many-to-one association to Group
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "GroupID", updatable = false, insertable = false)
 	private Group group;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="UserID")
-	private User user;
+	// bi-directional many-to-one association to User
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "UserID", updatable = false, insertable = false)
+	private Users user;
 
 	public UserRefGroup() {
 	}
@@ -46,11 +45,11 @@ public class UserRefGroup implements Serializable {
 		this.group = group;
 	}
 
-	public User getUser() {
+	public Users getUser() {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Users user) {
 		this.user = user;
 	}
 

@@ -28,12 +28,12 @@ public class TinhTrangRefThietBi implements Serializable {
 
 	//bi-directional many-to-one association to ThietBi
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaThietBi")
+	@JoinColumn(name="MaThietBi", updatable = false, insertable = false)
 	private ThietBi thietBi;
 
 	//bi-directional many-to-one association to TinhTrang
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaTinhTrang")
+	@JoinColumn(name="MaTinhTrang", updatable = false, insertable = false)
 	private TinhTrang tinhTrang;
 
 	public TinhTrangRefThietBi() {

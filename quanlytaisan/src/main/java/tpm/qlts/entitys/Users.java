@@ -10,8 +10,8 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-public class User implements Serializable {
+@NamedQuery(name="Users.findAll", query="SELECT u FROM Users u")
+public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -35,7 +35,7 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<UserRefGroup> userGroups;
 
-	public User() {
+	public Users() {
 	}
 
 	public String getUserID() {
