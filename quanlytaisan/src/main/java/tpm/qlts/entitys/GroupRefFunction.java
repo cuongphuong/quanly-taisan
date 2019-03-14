@@ -3,29 +3,27 @@ package tpm.qlts.entitys;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the Group_Function database table.
  * 
  */
 @Entity
-@Table(name="Group_Function")
-@NamedQuery(name="GroupRefFunction.findAll", query="SELECT g FROM GroupRefFunction g")
+@Table(name = "Group_Function")
+@NamedQuery(name = "GroupRefFunction.findAll", query = "SELECT g FROM GroupRefFunction g")
 public class GroupRefFunction implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private GroupRefFunctionPK id;
 
-
-	//bi-directional many-to-one association to Function
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="FunctionID")
+	// bi-directional many-to-one association to Function
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FunctionID", updatable = false, insertable = false)
 	private Function function;
 
-	//bi-directional many-to-one association to Group
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="GroupID")
+	// bi-directional many-to-one association to Group
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "GroupID", updatable = false, insertable = false)
 	private Group group;
 
 	public GroupRefFunction() {
