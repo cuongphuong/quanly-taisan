@@ -29,6 +29,11 @@ public class GroupRefFunction implements Serializable {
 	public GroupRefFunction() {
 	}
 
+	public GroupRefFunction(GroupRefFunctionPK id) {
+		super();
+		this.id = id;
+	}
+
 	public GroupRefFunctionPK getId() {
 		return this.id;
 	}

@@ -29,6 +29,11 @@ public class UserRefGroup implements Serializable {
 	public UserRefGroup() {
 	}
 
+	public UserRefGroup(UserRefGroupPK id) {
+		super();
+		this.id = id;
+	}
+
 	public UserRefGroupPK getId() {
 		return this.id;
 	}

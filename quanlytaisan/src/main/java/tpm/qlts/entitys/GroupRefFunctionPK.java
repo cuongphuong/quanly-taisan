@@ -9,26 +9,36 @@ import javax.persistence.*;
  */
 @Embeddable
 public class GroupRefFunctionPK implements Serializable {
-	//default serial version id, required for serializable classes.
+	// default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="GroupID", insertable=false, updatable=false)
+	@Column(name = "GroupID", insertable = false, updatable = false)
 	private int groupID;
 
-	@Column(name="FunctionID", insertable=false, updatable=false)
+	@Column(name = "FunctionID", insertable = false, updatable = false)
 	private int functionID;
 
 	public GroupRefFunctionPK() {
 	}
+
+	public GroupRefFunctionPK(int groupID, int functionID) {
+		super();
+		this.groupID = groupID;
+		this.functionID = functionID;
+	}
+
 	public int getGroupID() {
 		return this.groupID;
 	}
+
 	public void setGroupID(int groupID) {
 		this.groupID = groupID;
 	}
+
 	public int getFunctionID() {
 		return this.functionID;
 	}
+
 	public void setFunctionID(int functionID) {
 		this.functionID = functionID;
 	}
@@ -40,10 +50,8 @@ public class GroupRefFunctionPK implements Serializable {
 		if (!(other instanceof GroupRefFunctionPK)) {
 			return false;
 		}
-		GroupRefFunctionPK castOther = (GroupRefFunctionPK)other;
-		return 
-			(this.groupID == castOther.groupID)
-			&& (this.functionID == castOther.functionID);
+		GroupRefFunctionPK castOther = (GroupRefFunctionPK) other;
+		return (this.groupID == castOther.groupID) && (this.functionID == castOther.functionID);
 	}
 
 	public int hashCode() {
@@ -51,7 +59,7 @@ public class GroupRefFunctionPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.groupID;
 		hash = hash * prime + this.functionID;
-		
+
 		return hash;
 	}
 }

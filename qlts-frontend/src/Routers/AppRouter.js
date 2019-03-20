@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Switch, Route } from "react-router-dom";
-import Dashboard from '../Components/Dashboard/Dashboard';
+import Login from '../Components/Pages/Login';
+let Layout = null;
 
-class AppRouter extends Component {
-    render() {
-        return (
-            <Switch>
-                <Route exact path="/" component={Dashboard} />
-            </Switch>
-        );
-    }
-}
+Layout = require('../Components/Dashboard/Dashboard').default;
 
-export default AppRouter;
+export default () => (
+    <Switch>
+        <Route exact path="/login" component={Login} />
+        <Route path="/app" component={Layout} />
+    </Switch>
+)

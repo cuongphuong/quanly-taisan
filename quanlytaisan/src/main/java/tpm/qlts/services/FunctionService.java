@@ -13,24 +13,24 @@ import tpm.qlts.repositorys.FunctionRepository;
 public class FunctionService {
 	@Autowired
 	private FunctionRepository functionRepository;
-	
-	public void deleteById(int id)
-	{
+
+	public void deleteById(int id) {
 		functionRepository.deleteById(id);
 	}
-	
-	public Function update(Function function)
-	{
+
+	public Function update(Function function) {
 		return functionRepository.save(function);
 	}
-	
-	public Optional<Function> findById(int id)
-	{
+
+	public Optional<Function> findById(int id) {
 		return functionRepository.findById(id);
 	}
-	
-	public List<Function> findAll()
-	{
+
+	public List<Function> findAll() {
 		return (List<Function>) functionRepository.findAll();
+	}
+
+	public boolean existsById(int id) {
+		return functionRepository.existsById(id);
 	}
 }

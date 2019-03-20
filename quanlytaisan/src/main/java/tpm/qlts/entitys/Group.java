@@ -4,32 +4,37 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the Group database table.
  * 
  */
 @Entity
-@NamedQuery(name="Group.findAll", query="SELECT g FROM Group g")
+@Table(name = "Groups")
+@NamedQuery(name = "Group.findAll", query = "SELECT g FROM Group g")
 public class Group implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="GroupID")
+	@Column(name = "GroupID")
 	private int groupID;
 
-	@Column(name="GroupName")
+	@Column(name = "GroupName")
 	private String groupName;
 
-	//bi-directional many-to-one association to GroupRefFunction
-	@OneToMany(mappedBy="group")
+	// bi-directional many-to-one association to GroupRefFunction
+	@OneToMany(mappedBy = "group")
 	private List<GroupRefFunction> groupFunctions;
 
-	//bi-directional many-to-one association to UserRefGroup
-	@OneToMany(mappedBy="group")
+	// bi-directional many-to-one association to UserRefGroup
+	@OneToMany(mappedBy = "group")
 	private List<UserRefGroup> userGroups;
 
 	public Group() {
+	}
+
+	public Group(int groupID, String groupName) {
+		this.groupID = groupID;
+		this.groupName = groupName;
 	}
 
 	public int getGroupID() {

@@ -20,6 +20,14 @@ public class UserRefGroupPK implements Serializable {
 
 	public UserRefGroupPK() {
 	}
+	
+	
+	public UserRefGroupPK(String userID, int groupID) {
+		super();
+		this.userID = userID;
+		this.groupID = groupID;
+	}
+
 	public String getUserID() {
 		return this.userID;
 	}

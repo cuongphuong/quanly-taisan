@@ -13,24 +13,24 @@ import tpm.qlts.repositorys.GroupRepository;
 public class GroupService {
 	@Autowired
 	private GroupRepository groupRepository;
-	
-	public void deleteById(int id)
-	{
-		groupRepository.deleteById(id); 
+
+	public void deleteById(int id) {
+		groupRepository.deleteById(id);
 	}
-	
-	public Group update(Group group)
-	{
+
+	public Group update(Group group) {
 		return groupRepository.save(group);
 	}
-	
-	public Optional<Group> findById(int id)
-	{
+
+	public Optional<Group> findById(int id) {
 		return groupRepository.findById(id);
 	}
-	
-	public List<Group> findAll()
-	{
+
+	public List<Group> findAll() {
 		return (List<Group>) groupRepository.findAll();
+	}
+
+	public boolean existsById(int id) {
+		return groupRepository.existsById(id);
 	}
 }

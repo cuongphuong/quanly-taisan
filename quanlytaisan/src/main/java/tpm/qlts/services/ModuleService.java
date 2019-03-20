@@ -10,26 +10,27 @@ import tpm.qlts.entitys.Module;
 import tpm.qlts.repositorys.ModuleRepository;
 
 @Service("moduleRevice")
-public class ModuleRevice {
+public class ModuleService {
 	@Autowired
 	private ModuleRepository moduleRepository;
-	
+
 	public void deleteById(int id) {
 		moduleRepository.deleteById(id);
 	}
-	
-	public Optional<Module> findById(int id)
-	{
+
+	public Optional<Module> findById(int id) {
 		return moduleRepository.findById(id);
 	}
-	
-	public Module update(Module module)
-	{
+
+	public Module update(Module module) {
 		return moduleRepository.save(module);
 	}
-	
-	public List<Module> findAll()
-	{
+
+	public List<Module> findAll() {
 		return (List<Module>) moduleRepository.findAll();
+	}
+
+	public boolean existsById(int id) {
+		return moduleRepository.existsById(id);
 	}
 }

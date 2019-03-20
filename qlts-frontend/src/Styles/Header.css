@@ -1,0 +1,15 @@
+.menu_header{
+    height: 100%;
+    border-bottom: none !important;
+}
+
+.menu_header_item{
+    height: 100%;
+    line-height: 64px;
+    box-sizing: border-box;
+}
+
+.menu_header > .ant-menu-item-selected{
+    border-top: solid 2px #1890ff;
+    border-bottom: none !important;
+}
