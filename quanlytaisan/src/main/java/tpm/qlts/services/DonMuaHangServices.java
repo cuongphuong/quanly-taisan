@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tpm.qlts.entitys.DonMuaHang;
-import tpm.qlts.repository.DonMuaHangRepository;
+import tpm.qlts.repositorys.DonMuaHangRepository;
 
 @Service("DonMuaHangServices")
 public class DonMuaHangServices {

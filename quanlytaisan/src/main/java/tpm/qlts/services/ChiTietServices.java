@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tpm.qlts.entitys.ChiTiet;
-import tpm.qlts.repository.ChiTietRepository;
+import tpm.qlts.repositorys.ChiTietRepository;
 
 @Service("ChiTietServices")
 public class ChiTietServices {
