@@ -1,4 +1,4 @@
-package tpm.qlts.repository;
+package tpm.qlts.repositorys;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

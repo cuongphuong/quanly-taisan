@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tpm.qlts.entitys.ChiTietYeuCau;
-import tpm.qlts.repository.ChiTietYeuCauRepository;
+import tpm.qlts.repositorys.ChiTietYeuCauRepository;
 
 @Service("ChiTietYeuCauServices")
 public class ChiTietYeuCauServices {

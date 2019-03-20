@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tpm.qlts.entitys.ThietBi;
-import tpm.qlts.repository.ThietBiRepository;
+import tpm.qlts.repositorys.ThietBiRepository;
 
 @Service("ThietBiServices")
 public class ThietBiServices {

@@ -1,14 +1,16 @@
 package tpm.qlts.services;
 
+
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 
 import tpm.qlts.entitys.BienNhanThietBi;
-import tpm.qlts.repository.BienNhanThietBiRepository;
+import tpm.qlts.repositorys.BienNhanThietBiRepository;
 
-@Service("BienNhanThietBiServices")
+@Service("bienNhanThietBiServices")
 public class BienNhanThietBiServices {
 	@Autowired
 	private BienNhanThietBiRepository bienNhanThietBiRepository;
