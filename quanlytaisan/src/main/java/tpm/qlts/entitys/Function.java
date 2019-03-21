@@ -4,37 +4,37 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the Function database table.
  * 
  */
 @Entity
-@NamedQuery(name="Function.findAll", query="SELECT f FROM Function f")
+@Table(name = "Functions")
+@NamedQuery(name = "Function.findAll", query = "SELECT f FROM Function f")
 public class Function implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="FunctionID")
+	@Column(name = "FunctionID")
 	private int functionID;
 
-	@Column(name="FunctionName")
+	@Column(name = "FunctionName")
 	private String functionName;
 
-	@Column(name="Url")
+	@Column(name = "Url")
 	private String url;
 
-	//bi-directional many-to-one association to Module
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="ModuleID")
+	// bi-directional many-to-one association to Module
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ModuleID")
 	private Module module;
 
-	//bi-directional many-to-one association to GroupRefFunction
-	@OneToMany(mappedBy="function")
+	// bi-directional many-to-one association to GroupRefFunction
+	@OneToMany(mappedBy = "function")
 	private List<GroupRefFunction> groupFunctions;
 
-	//bi-directional many-to-one association to Permission
-	@OneToMany(mappedBy="function")
+	// bi-directional many-to-one association to Permission
+	@OneToMany(mappedBy = "function")
 	private List<Permission> permissions;
 
 	public Function() {

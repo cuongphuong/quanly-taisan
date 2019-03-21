@@ -15,6 +15,12 @@ public class Permission implements Serializable {
 	@EmbeddedId
 	private PermissionPK id;
 
+	@Column(name = "UserID", insertable = false, updatable = false)
+	private String userID;
+
+	@Column(name = "FunctionID", insertable = false, updatable = false)
+	private int functionID;
+
 	// bi-directional many-to-one association to Function
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FunctionID", updatable = false, insertable = false)
@@ -26,6 +32,11 @@ public class Permission implements Serializable {
 	private Users user;
 
 	public Permission() {
+	}
+
+	public Permission(PermissionPK id) {
+		super();
+		this.id = id;
 	}
 
 	public PermissionPK getId() {
@@ -50,6 +61,22 @@ public class Permission implements Serializable {
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+
+	public int getFunctionID() {
+		return functionID;
+	}
+
+	public void setFunctionID(int functionID) {
+		this.functionID = functionID;
 	}
 
 }

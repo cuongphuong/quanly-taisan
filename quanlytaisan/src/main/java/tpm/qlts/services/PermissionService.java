@@ -12,26 +12,38 @@ import tpm.qlts.repositorys.PermissionRepository;
 
 @Service("permissionService")
 public class PermissionService {
-	@Autowired 
+	@Autowired
 	private PermissionRepository permissionRepository;
-	
-	public void deleteById(PermissionPK id)
-	{
+
+	public void deleteById(PermissionPK id) {
 		permissionRepository.deleteById(id);
 	}
-	
-	public Permission update(Permission permission)
-	{
+
+	public Permission update(Permission permission) {
 		return permissionRepository.save(permission);
 	}
-	
-	public Optional<Permission> findById(PermissionPK id)
-	{
+
+	public Optional<Permission> findById(PermissionPK id) {
 		return permissionRepository.findById(id);
 	}
-	
-	public List<Permission> findAll()
-	{
+
+	public List<Permission> findAll() {
 		return (List<Permission>) permissionRepository.findAll();
+	}
+
+	public void deleteAll(Iterable<Permission> entities) {
+		permissionRepository.deleteAll(entities);
+	}
+
+	public Iterable<Permission> updateAll(Iterable<Permission> entities) {
+		return permissionRepository.saveAll(entities);
+	}
+
+	public int[] getAllFunctionByUser(String idUser) {
+		return permissionRepository.getAllFunctionByUserID(idUser);
+	}
+
+	public boolean checkPermission(String userID, int functionID) {
+		return permissionRepository.checkPerission(userID, functionID) >= 1;
 	}
 }

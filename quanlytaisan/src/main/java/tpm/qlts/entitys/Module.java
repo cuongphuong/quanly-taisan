@@ -4,25 +4,25 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the Module database table.
  * 
  */
 @Entity
-@NamedQuery(name="Module.findAll", query="SELECT m FROM Module m")
+@Table(name = "Modules")
+@NamedQuery(name = "Module.findAll", query = "SELECT m FROM Module m")
 public class Module implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="ModuleID")
+	@Column(name = "ModuleID")
 	private int moduleID;
 
-	@Column(name="ModuleName")
+	@Column(name = "ModuleName")
 	private String moduleName;
 
-	//bi-directional many-to-one association to Function
-	@OneToMany(mappedBy="module")
+	// bi-directional many-to-one association to Function
+	@OneToMany(mappedBy = "module")
 	private List<Function> functions;
 
 	public Module() {

@@ -16,17 +16,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tpm.qlts.custommodels.PermissionItem;
+import tpm.qlts.custommodels.PermissionUserUpdate;
 import tpm.qlts.entitys.Function;
 import tpm.qlts.entitys.Group;
 import tpm.qlts.entitys.GroupRefFunction;
 import tpm.qlts.entitys.GroupRefFunctionPK;
 import tpm.qlts.entitys.Module;
+import tpm.qlts.entitys.Permission;
+import tpm.qlts.entitys.PermissionPK;
 import tpm.qlts.entitys.UserRefGroup;
 import tpm.qlts.entitys.UserRefGroupPK;
 import tpm.qlts.services.FunctionService;
 import tpm.qlts.services.GroupRefFunctionService;
 import tpm.qlts.services.GroupService;
 import tpm.qlts.services.ModuleService;
+import tpm.qlts.services.PermissionService;
 import tpm.qlts.services.UserRefGroupService;
 
 @Controller
@@ -43,11 +48,18 @@ public class PermissionController {
 	private UserRefGroupService userRefGroupService;
 	@Autowired
 	private GroupRefFunctionService groupRefFunctionService;
+	@Autowired
+	private PermissionService permissionService;
 
-	// Crud table group
 	@GetMapping("index")
 	private String index() {
 		return "Permission API by Cuong, Phuong Van.";
+	}
+
+	// Crud table group
+	@GetMapping("get-all-group")
+	public List<Group> getAllGroup() {
+		return groupService.findAll();
 	}
 
 	@PostMapping("add-group")
@@ -123,6 +135,11 @@ public class PermissionController {
 	}
 
 	// Crud table UserGroup
+	@GetMapping("getall-user-group")
+	public List<UserRefGroup> getAllUserGroup() {
+		return userRefGroupService.findAll();
+	}
+
 	@Transactional
 	@PostMapping("update-usergroup-by-list")
 	public Iterable<UserRefGroup> updateUserGroup(@RequestBody List<UserRefGroupPK> lstUGPK) {
@@ -168,6 +185,12 @@ public class PermissionController {
 	}
 
 	// Crud table group-function
+	@GetMapping("getall-group-function")
+	public List<GroupRefFunction> getAllGroupFunction() {
+		return groupRefFunctionService.findAll();
+	}
+
+	@Transactional
 	@PostMapping("update-groupfunction-by-list")
 	public Iterable<GroupRefFunction> updateGroupFunction(@RequestBody List<GroupRefFunctionPK> lstKey) {
 		List<GroupRefFunction> lstInClient = this.toGroupFunction(lstKey);
@@ -199,4 +222,57 @@ public class PermissionController {
 		return lstRes;
 	}
 
+	@PostMapping("update-permission-user")
+	public Iterable<Permission> setPermissionToUser(@RequestBody PermissionUserUpdate data) {
+		List<Permission> lstPermissionClient = new ArrayList<Permission>();
+		for (int i = 0; i < data.getLstFunction().length; i++) {
+			lstPermissionClient.add(new Permission(new PermissionPK(data.getUserID(), data.getLstFunction()[i])));
+		}
+
+		//
+		List<Permission> lstInDatabase = permissionService.findAll();
+		for (int i = 0; i < lstPermissionClient.size(); i++) {
+			PermissionPK idClient = lstPermissionClient.get(i).getId();
+			for (int j = 0; j < lstInDatabase.size(); j++) {
+				if (idClient.getFunctionID() == lstInDatabase.get(j).getId().getFunctionID()
+						&& idClient.getUserID().equals(lstInDatabase.get(j).getId().getUserID())) {
+					lstPermissionClient.remove(lstPermissionClient.get(j));
+					lstInDatabase.remove(lstInDatabase.get(i));
+					continue;
+				}
+				i++;
+			}
+		}
+
+		if (lstInDatabase.size() > 0)
+			permissionService.deleteAll(lstInDatabase);
+		return permissionService.updateAll(lstPermissionClient);
+	}
+
+	//
+
+	@GetMapping("get-permission-user/{id}")
+	public List<PermissionItem> getPermissionOfUser(@PathVariable String id) {
+		List<Function> allFunction = functionService.findAll();
+		int[] functionByUser = permissionService.getAllFunctionByUser(id);
+
+		List<PermissionItem> lstRes = new ArrayList<PermissionItem>();
+		for (Function f : allFunction) {
+			if (this.existsInList(f.getFunctionID(), functionByUser))
+				lstRes.add(new PermissionItem(id, f.getFunctionID(), f.getFunctionName(), f.getModule().getModuleID(),
+						f.getModule().getModuleName(), true));
+			else
+				lstRes.add(new PermissionItem(id, f.getFunctionID(), f.getFunctionName(), f.getModule().getModuleID(),
+						f.getModule().getModuleName(), false));
+		}
+		return lstRes;
+	}
+
+	public boolean existsInList(int id, int[] lst) {
+		for (int i = 0; i < lst.length; i++) {
+			if (lst[i] == id)
+				return true;
+		}
+		return false;
+	}
 }

@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -23,10 +26,12 @@ public class Group implements Serializable {
 
 	// bi-directional many-to-one association to GroupRefFunction
 	@OneToMany(mappedBy = "group")
+	@JsonIgnore
 	private List<GroupRefFunction> groupFunctions;
 
 	// bi-directional many-to-one association to UserRefGroup
 	@OneToMany(mappedBy = "group")
+	@JsonIgnore
 	private List<UserRefGroup> userGroups;
 
 	public Group() {
