@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -22,6 +25,7 @@ public class PhongBan implements Serializable {
 	private String tenPhongBan;
 
 	//bi-directional many-to-one association to NhanVien
+	@JsonIgnore
 	@OneToMany(mappedBy="phongBan")
 	private List<NhanVien> nhanViens;
 
