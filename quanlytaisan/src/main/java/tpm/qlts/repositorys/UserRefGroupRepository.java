@@ -8,5 +8,5 @@ import tpm.qlts.entitys.UserRefGroupPK;
 
 @Repository("userRefGroupRepository")
 public interface UserRefGroupRepository extends CrudRepository<UserRefGroup, UserRefGroupPK>{
-
+	
 }

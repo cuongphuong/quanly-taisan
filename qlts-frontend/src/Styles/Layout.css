@@ -33,3 +33,11 @@
     background: rgba(10, 10, 10, 0.048);
     margin: 16px;
 }
+
+.left_menu{
+    border-right: none !important;
+}
+
+.left_menu > .ant-menu-item::after{
+    border: none !important;
+}

@@ -1,8 +1,12 @@
-var initialState = [];
+var initialState = [
 
-const config = (state = initialState , action) => {
-    switch(action.type){
-        default : return [...state];
+]
+
+const config = (state = initialState, action) => {
+    switch (action.type) {
+        case 'ADD_INFO_USER':
+            return action.item;
+        default: return state;
     }
 }
 

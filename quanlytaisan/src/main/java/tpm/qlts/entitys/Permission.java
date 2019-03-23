@@ -3,6 +3,8 @@ package tpm.qlts.entitys;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * The persistent class for the Permission database table.
  * 
@@ -23,11 +25,13 @@ public class Permission implements Serializable {
 
 	// bi-directional many-to-one association to Function
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "FunctionID", updatable = false, insertable = false)
 	private Function function;
 
 	// bi-directional many-to-one association to User
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "UserID", updatable = false, insertable = false)
 	private Users user;
 

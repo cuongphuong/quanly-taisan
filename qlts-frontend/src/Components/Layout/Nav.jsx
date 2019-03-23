@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon, Row, Col } from 'antd';
 import '../../Styles/Header.css';
+import { getToken, removeToken } from '../../Utils/token'
+import history from '../../Utils/history';
 
 const { Header } = Layout;
 class Nav extends Component {
@@ -9,17 +11,39 @@ class Nav extends Component {
     }
 
     handleClick = (e) => {
-        console.log('click ', e);
+        // console.log('click ', e);
         this.setState({
             current: e.key,
         });
     }
 
+    logout() {
+        if (getToken() !== null) {
+            removeToken();
+            history.push('login');
+        }
+    }
+
+    getDataMenu() {
+
+    }
+
+    renderMenu() {
+        return this.props.lstMenu.map(item => {
+            return (
+                <Menu.Item key={btoa(item.moduleID)} className="menu_header_item">
+                    {item.modulName}
+                </Menu.Item>
+            )
+        })
+    }
+
     render() {
         return (
             <Header style={{ background: '#fff', padding: 0, height: 'auto', position: 'fixed', width: '100%', zIndex: 9 }}>
+
                 <Row type="flex" justify="start">
-                    <Col xs={6} sm={6} md={2} lg={2} xl={1}>
+                    <Col md={1}>
                         <Icon
                             className="trigger"
                             type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
@@ -27,39 +51,26 @@ class Nav extends Component {
                         />
                     </Col>
 
-                    <Col xs={24} sm={18} md={12} lg={8} xl={8}>
+                    <Col md={12}>
                         <Menu
-                            onClick={this.handleClick}
-                            selectedKeys={[this.state.current]}
+                            onClick={this.props.handleMenuClick}
+                            selectedKeys={[this.props.currenKey]}
                             mode="horizontal"
                             className={'menu_header'}
                         >
-
-                            <Menu.Item key="mail" className="menu_header_item">
-                                Nhập
-                            </Menu.Item>
-
-                            <Menu.Item key="mot" className="menu_header_item">
-                                Quản lý
-                            </Menu.Item>
-
-                            <Menu.Item key="hai" className="menu_header_item">
-                                Kiểm kê/Báo cáo
-                            </Menu.Item>
+                            {this.renderMenu()}
 
                         </Menu>
                     </Col>
-                    <Col xs={16} sm={8} md={7} lg={6} xl={7}>
+                    <Col md={11}>
                         <Menu
                             mode="horizontal"
                             style={{ lineHeight: '64px' }}
                             onClick={this.menuClick}
                         >
-                            <Menu.SubMenu title={<span className="avatar"><img src={this.props.avatar} alt="avatar" /><i className="on bottom b-white" /></span>}>
-                                <Menu.ItemGroup title="用户中心">
-                                    <Menu.Item key="setting:1">你好 - {this.props.name}</Menu.Item>
-                                    <Menu.Item key="setting:2"><Icon type="user" />个人信息</Menu.Item>
-                                    <Menu.Item key="logout"><span onClick={this.logout}><Icon type="logout" />退出登录</span></Menu.Item>
+                            <Menu.SubMenu style={{}} title={<span className="avatar"><img src={this.props.avatar} alt="avatar" /><i className="on bottom b-white" /></span>}>
+                                <Menu.ItemGroup title="Cá nhân">
+                                    <Menu.Item key="logout"><span onClick={this.logout.bind()}><Icon type="logout" />Logout</span></Menu.Item>
                                 </Menu.ItemGroup>
                             </Menu.SubMenu>
                         </Menu>

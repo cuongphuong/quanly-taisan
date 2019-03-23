@@ -3,6 +3,18 @@ import { Layout, Menu, Icon } from 'antd';
 
 const { Sider } = Layout;
 class Sidebar extends Component {
+
+    renderSubMenu() {
+        return this.props.lstSubMenu.map(item => {
+            return (
+                <Menu.Item key={item.functionID}>
+                    <Icon type={item.iconType} />
+                    <span>{item.functionName}</span>
+                </Menu.Item>
+            )
+        })
+    }
+
     render() {
         return (
             <Sider
@@ -12,19 +24,13 @@ class Sidebar extends Component {
                 collapsed={this.props.collapsed}
             >
                 <div className="logo" />
-                <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1">
-                        <Icon type="user" />
-                        <span>nav 1</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Icon type="video-camera" />
-                        <span>nav 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="upload" />
-                        <span>nav 3</span>
-                    </Menu.Item>
+                <Menu
+                    className="left_menu"
+                    onClick={this.props.handleClickMenu}
+                    theme="light"
+                    mode="inline"
+                    defaultSelectedKeys={['1']}>
+                    {this.renderSubMenu()}
                 </Menu>
             </Sider>
         );

@@ -13,23 +13,24 @@ import tpm.qlts.repositorys.UserRepository;
 public class UserRevice {
 	@Autowired
 	private UserRepository userRepository;
-	
-	public void deleteById(String id)
-	{
+
+	public void deleteById(String id) {
 		userRepository.deleteById(id);
 	}
-	
+
 	public Users update(Users user) {
 		return userRepository.save(user);
 	}
-	
-	public Optional<Users> findById(String id)
-	{
+
+	public Optional<Users> findById(String id) {
 		return userRepository.findById(id);
 	}
-	
-	public List<Users> findAll()
-	{
+
+	public List<Users> findAll() {
 		return (List<Users>) userRepository.findAll();
+	}
+
+	public Users findByUserName(String username) {
+		return userRepository.findByUserName(username);
 	}
 }

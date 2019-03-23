@@ -1,5 +1,6 @@
 package tpm.qlts.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tpm.qlts.custommodels.PermissionItem;
 import tpm.qlts.custommodels.PermissionUserUpdate;
+import tpm.qlts.custommodels.Permissions;
 import tpm.qlts.entitys.Function;
 import tpm.qlts.entitys.Group;
 import tpm.qlts.entitys.GroupRefFunction;
@@ -27,12 +29,14 @@ import tpm.qlts.entitys.Permission;
 import tpm.qlts.entitys.PermissionPK;
 import tpm.qlts.entitys.UserRefGroup;
 import tpm.qlts.entitys.UserRefGroupPK;
+import tpm.qlts.entitys.Users;
 import tpm.qlts.services.FunctionService;
 import tpm.qlts.services.GroupRefFunctionService;
 import tpm.qlts.services.GroupService;
 import tpm.qlts.services.ModuleService;
 import tpm.qlts.services.PermissionService;
 import tpm.qlts.services.UserRefGroupService;
+import tpm.qlts.services.UserRevice;
 
 @Controller
 @RestController
@@ -50,6 +54,8 @@ public class PermissionController {
 	private GroupRefFunctionService groupRefFunctionService;
 	@Autowired
 	private PermissionService permissionService;
+	@Autowired
+	private UserRevice userService;
 
 	@GetMapping("index")
 	private String index() {
@@ -254,6 +260,7 @@ public class PermissionController {
 	@GetMapping("get-permission-user/{id}")
 	public List<PermissionItem> getPermissionOfUser(@PathVariable String id) {
 		List<Function> allFunction = functionService.findAll();
+
 		int[] functionByUser = permissionService.getAllFunctionByUser(id);
 
 		List<PermissionItem> lstRes = new ArrayList<PermissionItem>();
@@ -265,6 +272,7 @@ public class PermissionController {
 				lstRes.add(new PermissionItem(id, f.getFunctionID(), f.getFunctionName(), f.getModule().getModuleID(),
 						f.getModule().getModuleName(), false));
 		}
+
 		return lstRes;
 	}
 
@@ -274,5 +282,28 @@ public class PermissionController {
 				return true;
 		}
 		return false;
+	}
+
+	@GetMapping("get-function-active")
+	public List<Permissions> getFunctionActiveByUser(Principal principal) {
+		Users uRes = userService.findByUserName(principal.getName());
+		List<Permissions> lstData = new ArrayList<Permissions>();
+		List<Module> allModule = moduleService.findAll();
+		for (Module itemModule : allModule) {
+			List<Permission> lstPermission = permissionService.getAllFunctionByUserIDFull(uRes.getUserID(),
+					itemModule.getModuleID());
+			List<Function> tmpList = new ArrayList<Function>();
+			for (Permission p : lstPermission) {
+				Function f = p.getFunction();
+//				if(f.getFunctionName().equals("thiết bị".toUpperCase())){
+//					f.setFunctionName(f.getFunctionName().replace("thiết bị", "TB"));
+//					f.setFunctionName(f.getFunctionName().replace("Thiết bị", "TB"));
+//					f.setFunctionName(f.getFunctionName().replace("Thiết Bị", "TB"));
+//				}
+				tmpList.add(f);
+			}
+			lstData.add(new Permissions(itemModule.getModuleID(), itemModule.getModuleName(), tmpList));
+		}
+		return lstData;
 	}
 }

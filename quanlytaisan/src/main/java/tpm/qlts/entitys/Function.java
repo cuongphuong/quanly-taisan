@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -24,17 +27,23 @@ public class Function implements Serializable {
 	@Column(name = "Url")
 	private String url;
 
+	@Column(name = "IconType")
+	private String iconType;
+
 	// bi-directional many-to-one association to Module
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ModuleID")
+	@JsonIgnore
 	private Module module;
 
 	// bi-directional many-to-one association to GroupRefFunction
 	@OneToMany(mappedBy = "function")
+	@JsonIgnore
 	private List<GroupRefFunction> groupFunctions;
 
 	// bi-directional many-to-one association to Permission
 	@OneToMany(mappedBy = "function")
+	@JsonIgnore
 	private List<Permission> permissions;
 
 	public Function() {
@@ -116,4 +125,11 @@ public class Function implements Serializable {
 		return permission;
 	}
 
+	public String getIconType() {
+		return iconType;
+	}
+
+	public void setIconType(String iconType) {
+		this.iconType = iconType;
+	}
 }

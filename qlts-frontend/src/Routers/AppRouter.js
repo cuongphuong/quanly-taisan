@@ -7,7 +7,7 @@ Layout = require('../Components/Dashboard/Dashboard').default;
 
 export default () => (
     <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route path="/app" component={Layout} />
+        <Route exact path="/login" component={Login} /> 
+        <Route path="/" component={Layout} />
     </Switch>
 )

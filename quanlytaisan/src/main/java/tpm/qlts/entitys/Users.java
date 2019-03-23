@@ -2,37 +2,41 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
 
 /**
  * The persistent class for the User database table.
  * 
  */
 @Entity
-@NamedQuery(name="Users.findAll", query="SELECT u FROM Users u")
+@NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
 public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="UserID")
+	@Column(name = "UserID")
 	private String userID;
 
-	@Column(name="FullName")
+	@Column(name = "FullName")
 	private String fullName;
 
-	@Column(name="Password")
+	@Column(name = "Password")
 	private String password;
 
-	@Column(name="Username")
+	@Column(name = "Username")
 	private String username;
 
-	//bi-directional many-to-one association to Permission
-	@OneToMany(mappedBy="user")
+	// bi-directional many-to-one association to Permission
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
 	private List<Permission> permissions;
 
-	//bi-directional many-to-one association to UserRefGroup
-	@OneToMany(mappedBy="user")
+	// bi-directional many-to-one association to UserRefGroup
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
 	private List<UserRefGroup> userGroups;
 
 	public Users() {

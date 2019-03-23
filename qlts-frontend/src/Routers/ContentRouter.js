@@ -1,9 +1,9 @@
 import React  from 'react';
 import { Switch, Route } from "react-router-dom";
-import CreateUser from '../Components/Pages/UserPages/CreateUser';
+import Users from '../Components/Pages/Users';
 
 export default () => (
     <Switch>
-        <Route exact path="/app/create" component={CreateUser} />
+        <Route exact path="/app/user" component={Users} />
     </Switch>
 )

@@ -1,26 +1,47 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox,} from 'antd';
+import { Form, Icon, Input, Button, Checkbox, } from 'antd';
 import '../../Styles/Login.css';
+import { loginByUsername } from '../../Services/api';
+import { setToken, getToken } from '../../Utils/token'
 
 class Login extends React.Component {
-    checkUsername = (rule, value, callback) => {
-        const form = this.props.form;
-        form.setFields({
-            username: {
-                value: "asdas"
-            }
-        });
-        form.setFieldsValue("pedro, manada");
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLogin: false
+        }
+    }
+
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log("Received values of form: ", values);
-            }
-        });
+        if (this.state.isLogin === false) {
+            this.setState({ isLogin: true })
+            this.props.form.validateFields(async (err, values) => {
+                if (!err) {
+                    try {
+                        var data = await loginByUsername(values.userName, values.password);
+                        setToken(data);
+                        const { history } = this.props;
+                        setTimeout(() => {
+                            history.push('/');
+                        }, 1000);
+                    } catch (e) {
+                        this.setState({ isLogin: false })
+                    }
+                }
+            });
+        }
     };
+
+    componentWillMount() {
+        const { history } = this.props;
+        let token = getToken();
+        if (token) {
+            history.push('/');
+        }
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -58,6 +79,4 @@ class Login extends React.Component {
     }
 }
 
-const WrappedLogin = Form.create()(Login)
-
-export default WrappedLogin;
+export default Form.create()(Login);

@@ -66,7 +66,6 @@ public class DonViTinh implements Serializable {
 	public ThietBi addThietBi(ThietBi thietBi) {
 		getThietBis().add(thietBi);
 		thietBi.setDonViTinh(this);
-
 		return thietBi;
 	}
 
@@ -76,5 +75,4 @@ public class DonViTinh implements Serializable {
 
 		return thietBi;
 	}
-
 }
