@@ -24,7 +24,6 @@ class Dashboard extends Component {
     }
 
     handleMenuClick = (e) => {
-        // console.log('click ', e);
         for (let i = 0; i < this.state.lstMenu.length; i++) {
             if (btoa(this.state.lstMenu[i].moduleID) === e.key) {
                 this.setState({
@@ -92,9 +91,9 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <Layout style={{ height: "100vh" }}>
+            <Layout style={{ height: "100vh", }} >
                 <Sidebar handleClickMenu={this.updateBreadcrumb.bind()} lstSubMenu={this.state.lstSubMenu} collapsed={this.state.collapsed}></Sidebar>
-                <Layout>
+                <Layout style={{background: '#fff'}}>
                     <Nav currenKey={this.state.currenKey} handleMenuClick={this.handleMenuClick} lstMenu={this.state.lstMenu} collapsed={this.state.collapsed} toggle={this.toggle}></Nav>
                     <MyBreadcrumb data={this.props.path} style={{ padding: '10px 10px 10px 17px', background: 'rgb(250, 250, 250)', marginTop: '64px' }}></MyBreadcrumb>
                     <Content style={{padding: '24px 12px', background: '#fff' }}>

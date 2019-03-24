@@ -41,3 +41,17 @@
 .left_menu > .ant-menu-item::after{
     border: none !important;
 }
+
+.span-link{
+    cursor: pointer;
+    color: #0256a5;
+}
+
+.span-link:hover{
+    text-decoration: underline;
+}
+
+.empty_menu .ant-empty-image img{
+    width: 100%;
+    height: auto;
+}

@@ -35,13 +35,32 @@ service.interceptors.response.use(
                 message.success("Đăng nhập thành công");
                 return jwt;
             } else {
+                if (response.config.method === 'post') {
+                    message.success("Thêm thành công.");
+                }
+                else if (response.config.method === 'put')
+                    message.success("Cập nhật thành công.");
+                else if (response.config.method === 'delete')
+                    message.success("Xòa thành công.");
                 return response.data;
             }
         }
     },
     error => {
         // loading.hide(error.config)
-        if (error.response && error.response.status === 401) {
+        if (error.response && error.response.status === 400) {
+            switch (error.response.data.message) {
+                case 'OBJECT_EXISTS':
+                    message.error('Bảng ghi có mã đã tồn tại!');
+                    break;
+                case 'ID_NOT_EXISTS':
+                    message.error('Bảng ghi cần chỉnh sữa có mã không tồn tại!');
+                    break;
+                default:
+                    message.error('Lổi không sác định');
+                    break;
+            }
+        } else if (error.response && error.response.status === 401) {
             removeToken();
             if (error.config.url.indexOf("logout") === -1) {
                 message.error('Hết phiên làm việc, đăng nhập lại!');
@@ -57,6 +76,7 @@ service.interceptors.response.use(
         }
         else if (error === "403") {
             message.error('Yêu cầu không được cho phép!');
+
         } else {
             message.error('Không có kết nối!');
         }

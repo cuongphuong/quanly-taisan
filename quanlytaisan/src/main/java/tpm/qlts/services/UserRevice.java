@@ -33,4 +33,16 @@ public class UserRevice {
 	public Users findByUserName(String username) {
 		return userRepository.findByUserName(username);
 	}
+
+	public boolean existsById(String id) {
+		return userRepository.existsById(id);
+	}
+
+	public String getPasswordByID(String id) {
+		return userRepository.getPasswordByID(id);
+	}
+	
+	public void deleteByList(List<Users> entities) {
+		userRepository.deleteAll(entities);
+	}
 }

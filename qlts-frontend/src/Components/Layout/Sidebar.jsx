@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Empty } from 'antd';
 
 const { Sider } = Layout;
 class Sidebar extends Component {
@@ -24,14 +24,17 @@ class Sidebar extends Component {
                 collapsed={this.props.collapsed}
             >
                 <div className="logo" />
-                <Menu
-                    className="left_menu"
-                    onClick={this.props.handleClickMenu}
-                    theme="light"
-                    mode="inline"
-                    defaultSelectedKeys={['1']}>
-                    {this.renderSubMenu()}
-                </Menu>
+                {(this.props.lstSubMenu.length > 0) ?
+                    <Menu
+                        className="left_menu"
+                        onClick={this.props.handleClickMenu}
+                        theme="light"
+                        mode="inline"
+                        defaultSelectedKeys={['1']}>
+                        {this.renderSubMenu()}
+                    </Menu>
+                    : <Empty className="empty_menu" image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original" />}
+
             </Sider>
         );
     }

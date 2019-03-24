@@ -15,7 +15,6 @@ import java.util.List;
 @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
 public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@Column(name = "UserID")
 	private String userID;
@@ -40,6 +39,21 @@ public class Users implements Serializable {
 	private List<UserRefGroup> userGroups;
 
 	public Users() {
+	}
+
+	public Users(String userID, String fullName, String password, String username) {
+		super();
+		this.userID = userID;
+		this.fullName = fullName;
+		this.username = username;
+		this.password = password;
+	}
+
+	public Users(String fullName, String password, String username) {
+		super();
+		this.fullName = fullName;
+		this.password = password;
+		this.username = username;
 	}
 
 	public String getUserID() {

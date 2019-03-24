@@ -90,6 +90,12 @@ public class PermissionController {
 	}
 
 	// Crud table module
+	
+	@GetMapping("get-all-module")
+	public List<Module> getAllModule() {
+		return moduleService.findAll();
+	}
+	
 	@PostMapping("add-module")
 	public Module addNewModule(@RequestBody Module module) {
 		// check permission
