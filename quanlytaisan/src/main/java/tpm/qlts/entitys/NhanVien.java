@@ -5,49 +5,54 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the NhanVien database table.
  * 
  */
 @Entity
-@NamedQuery(name="NhanVien.findAll", query="SELECT n FROM NhanVien n")
+@NamedQuery(name = "NhanVien.findAll", query = "SELECT n FROM NhanVien n")
 public class NhanVien implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaNhanVien")
+	@Column(name = "MaNhanVien")
 	private String maNhanVien;
 
-	@Column(name="MaTinhTrang")
+	@Column(name = "MaTinhTrang")
 	private String maTinhTrang;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="NgaySinh")
+	@Column(name = "NgaySinh")
 	private Date ngaySinh;
 
-	@Column(name="QueQuan")
+	@Column(name = "QueQuan")
 	private String queQuan;
 
-	@Column(name="TenNhanVien")
+	@Column(name = "TenNhanVien")
 	private String tenNhanVien;
 
-	//bi-directional many-to-one association to NhanVienRefThietBi
-	@OneToMany(mappedBy="nhanVien")
+	@Column(name = "MaChucVu", insertable = false, updatable = false)
+	private int maChucVu;
+	
+	@Column(name = "MaPhongBan", insertable = false, updatable = false)
+	private String maPhongBan;
+
+	// bi-directional many-to-one association to NhanVienRefThietBi
+	@OneToMany(mappedBy = "nhanVien")
 	private List<NhanVienRefThietBi> nvTbs;
 
-	//bi-directional many-to-one association to ChucVu
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaChucVu")
+	// bi-directional many-to-one association to ChucVu
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaChucVu")
 	private ChucVu chucVu;
 
-	//bi-directional many-to-one association to PhongBan
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaPhongBan")
+	// bi-directional many-to-one association to PhongBan
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaPhongBan")
 	private PhongBan phongBan;
 
-	//bi-directional many-to-one association to PhieuYeuCauThietBi
-	@OneToMany(mappedBy="nhanVien")
+	// bi-directional many-to-one association to PhieuYeuCauThietBi
+	@OneToMany(mappedBy = "nhanVien")
 	private List<PhieuYeuCauThietBi> phieuYeuCauThietBis;
 
 	public NhanVien() {
@@ -153,4 +158,38 @@ public class NhanVien implements Serializable {
 		return phieuYeuCauThietBi;
 	}
 
+	public int getMaChucVu() {
+		return maChucVu;
+	}
+
+	public void setMaChucVu(int maChucVu) {
+		this.maChucVu = maChucVu;
+	}
+
+	public String getMaPhongBan() {
+		return maPhongBan;
+	}
+
+	public void setMaPhongBan(String maPhongBan) {
+		this.maPhongBan = maPhongBan;
+	}
+
+	public NhanVien(String maNhanVien, String maTinhTrang, Date ngaySinh, String queQuan, String tenNhanVien,
+			int maChucVu, String maPhongBan, List<NhanVienRefThietBi> nvTbs, ChucVu chucVu, PhongBan phongBan,
+			List<PhieuYeuCauThietBi> phieuYeuCauThietBis) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.maTinhTrang = maTinhTrang;
+		this.ngaySinh = ngaySinh;
+		this.queQuan = queQuan;
+		this.tenNhanVien = tenNhanVien;
+		this.maChucVu = maChucVu;
+		this.maPhongBan = maPhongBan;
+		this.nvTbs = nvTbs;
+		this.chucVu = chucVu;
+		this.phongBan = phongBan;
+		this.phieuYeuCauThietBis = phieuYeuCauThietBis;
+	}
+
+	
 }
