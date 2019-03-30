@@ -39,7 +39,6 @@ class Donvitinh extends Component{
         }],
     isUpdate: false,
     dataForm: {
-        maDonViTinh:'',
         tenDonViTinh:'',
         moTa:'',
     }
@@ -196,22 +195,6 @@ class Donvitinh extends Component{
                     ]}
                     >
                     <Form id ="addĐVTForm" onSubmit ={this.handlSubmit}>
-                        <Form.Item 
-                        {...formItemLayout}
-                            hasFeedback
-                            label=" Mã ĐVT"
-                        >
-                            {getFieldDecorator('maDonViTinh',{
-                                 initialValue: this.state.dataForm.maDonViTinh,
-                                 rulus: [{
-                                     required: true, message: 'Yêu cầu nhập Mã ĐVT!',
-                                 }],
-                             })(
-                                 (this.state.isUpdate) === true ? <Input disabled /> : <Input />
-                             )}
-                                
-                        
-                        </Form.Item>
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
@@ -233,9 +216,7 @@ class Donvitinh extends Component{
                         >
                             {getFieldDecorator('moTa', {
                                 initialValue: this.state.dataForm.moTa,
-                                rules: [{
-                                    required: true, message: 'Yêu cầu nhập mô tả!',
-                                }],
+                                rules: [],
                             })(
                                 <Input />
                             )}

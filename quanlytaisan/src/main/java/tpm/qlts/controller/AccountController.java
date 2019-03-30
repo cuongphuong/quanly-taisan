@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tpm.qlts.entitys.Users;
+import tpm.qlts.services.PermissionService;
 import tpm.qlts.services.UserRevice;
 
 @Controller
@@ -25,6 +26,8 @@ import tpm.qlts.services.UserRevice;
 public class AccountController {
 	@Autowired
 	private UserRevice userService;
+	
+	@Autowired PermissionService perService;
 
 	@PostMapping("check")
 	public boolean checkLogin() {
@@ -96,6 +99,13 @@ public class AccountController {
 		Users uRes = userService.findByUserName(principal.getName());
 		uRes.setPassword("password is not response...");
 		return uRes;
+//		if(perService.checkPermission(uRes.getUserID(), 8)) {
+//			//cos quyen
+//		} 
+//		else 
+//		{
+//			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "NOT_ACCESS");
+//		}
 	}
 
 //	public OutputAccount getInfoUser() {

@@ -90,12 +90,12 @@ public class PermissionController {
 	}
 
 	// Crud table module
-	
+
 	@GetMapping("get-all-module")
 	public List<Module> getAllModule() {
 		return moduleService.findAll();
 	}
-	
+
 	@PostMapping("add-module")
 	public Module addNewModule(@RequestBody Module module) {
 		// check permission
@@ -118,15 +118,22 @@ public class PermissionController {
 	}
 
 	// Crud table function
+	@GetMapping("get-function-by-moduleid/{id}")
+	public List<Function> getAllFunctionByModuleID(@PathVariable("id") int id) {
+		return functionService.getFunctionByModuleID(id);
+	}
+
 	@PostMapping("add-function")
 	public Function addNewFunction(@RequestBody Function function) {
 		// check permission
+		function.setModule(new Module(function.getModuleID()));
 		return functionService.update(function);
 	}
 
 	@PutMapping("update-function")
 	public Function updateModule(@RequestBody Function function) {
 		// check permission
+		function.setModule(new Module(function.getModuleID()));
 		if (functionService.existsById(function.getFunctionID()))
 			return functionService.update(function);
 		else
@@ -137,6 +144,18 @@ public class PermissionController {
 	public void deleteFunction(@PathVariable int id) {
 		if (functionService.existsById(id))
 			functionService.deleteById(id);
+	}
+
+	@DeleteMapping("delete-function-by-list")
+	public int deleteFunctionByList(@RequestBody List<Integer> lstID) {
+		int count = 0;
+		for (int id : lstID) {
+			if (functionService.existsById(id) == true) {
+				functionService.deleteById(id);
+				count++;
+			}
+		}
+		return count;
 	}
 
 	// Crud table UserGroup

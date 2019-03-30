@@ -7,26 +7,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
-
 /**
  * The persistent class for the PhongBan database table.
  * 
  */
 @Entity
-@NamedQuery(name="PhongBan.findAll", query="SELECT p FROM PhongBan p")
+@NamedQuery(name = "PhongBan.findAll", query = "SELECT p FROM PhongBan p")
 public class PhongBan implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaPhongBan")
+	@Column(name = "MaPhongBan")
 	private String maPhongBan;
 
-	@Column(name="TenPhongBan")
+	@Column(name = "TenPhongBan")
 	private String tenPhongBan;
 
-	//bi-directional many-to-one association to NhanVien
+	// bi-directional many-to-one association to NhanVien
 	@JsonIgnore
-	@OneToMany(mappedBy="phongBan")
+	@OneToMany(mappedBy = "phongBan")
 	private List<NhanVien> nhanViens;
 
 	public PhongBan() {
@@ -68,6 +67,11 @@ public class PhongBan implements Serializable {
 		nhanVien.setPhongBan(null);
 
 		return nhanVien;
+	}
+
+	public PhongBan(String maPhongBan) {
+		super();
+		this.maPhongBan = maPhongBan;
 	}
 
 }

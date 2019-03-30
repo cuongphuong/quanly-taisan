@@ -16,6 +16,7 @@ public class DonViTinh implements Serializable {
 
 	@Id
 	@Column(name="MaDonViTinh")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int maDonViTinh;
 
 	@Column(name="MoTa")

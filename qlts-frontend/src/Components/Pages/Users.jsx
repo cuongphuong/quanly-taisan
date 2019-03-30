@@ -38,6 +38,7 @@ class Users extends Component {
             }
         }],
         isUpdate: false,
+        isProcess: false,
         dataForm: {
             fullName: '',
             username: ''
@@ -104,29 +105,35 @@ class Users extends Component {
     //submitform
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                if (this.state.isUpdate === false) {
-                    let res = await addNewUser(values);
-                    if (res) {
-                        this.setState({
-                            data: [res, ...this.state.data]
+        if (this.state.isProcess === false) {
+            this.setState({isProcess: true})
+            this.props.form.validateFields(async (err, values) => {
+                if (!err) {
+                    if (this.state.isUpdate === false) {
+                        let res = await addNewUser(values);
+                        if (res) {
+                            this.setState({
+                                data: [res, ...this.state.data]
+                            });
+                            this.handleCancel();
+                            this.setState({isProcess: false})
+                        }
+                    } else {
+                        let res = await updateUser(values);
+                        var item = this.state.data.find(function (element) {
+                            return element.userID === values.userID;
                         });
-                        this.handleCancel();
-                    }
-                } else {
-                    let res = await updateUser(values);
-                    var item = this.state.data.find(function (element) {
-                        return element.userID === values.userID;
-                    });
 
-                    item.userID = res.userID;
-                    item.username = res.username;
-                    item.fullName = res.fullName;
-                    this.handleCancel();
+                        item.userID = res.userID;
+                        item.username = res.username;
+                        item.fullName = res.fullName;
+                        this.handleCancel();
+                        this.setState({isProcess: false})
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     deleteFunction = async (record) => {
@@ -190,7 +197,6 @@ class Users extends Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                {console.log(rowSelection)}
                 <Table rowKey='userID' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
                 <Modal
                     onCancel={this.handleCancel}

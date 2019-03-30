@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tpm.qlts.entitys.DonViTinh;
-import tpm.qlts.repositorys.DonViTinhRepository;
+import tpm.qlts.repositorys.DonViTInhRepository;
 
 @Service("donViTinhServices")
 public class DonViTinhServices {
 	
 	@Autowired
-	private DonViTinhRepository donViTinhRepository;
+	private DonViTInhRepository donViTinhRepository;
 	
 	public DonViTinh update(DonViTinh dvt)
 	{

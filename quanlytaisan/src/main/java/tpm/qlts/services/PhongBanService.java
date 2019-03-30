@@ -32,4 +32,8 @@ public class PhongBanService {
 	{
 		return (List<PhongBan>) phongBanRepository.findAll();
 	}
+	
+	public boolean existsById(String id) {
+		return phongBanRepository.existsById(id);
+	}
 }

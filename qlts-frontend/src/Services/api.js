@@ -75,7 +75,7 @@ export function deleteByList(lst){
 }
 
 /////////////////////////////////////////////////
-
+// Crud bảng module
 // API lấy tất cả module
 export function getAllModule() {
     return request({
@@ -106,7 +106,7 @@ export function updateModule(data){
 export function deleteModule(id){
     return request({
         url: '/permission/delete-module/' + id,
-        method: 'DELETE',
+        method: 'DELETE'
     })
 }
 
@@ -118,3 +118,51 @@ export function deleteModuleByList(lst){
         data: lst
     })
 }
+
+/////////////////////////////////////////////////////
+//Crud bảng function
+//Get all function by module ID
+export function getFunctionByModuleID(id){
+    return request({
+        url: '/permission/get-function-by-moduleid/' + id,
+        method: 'GET',
+    })
+}
+
+// Thêm một function
+export function addNewFunction(data){
+    return request({
+        url: '/permission/add-function',
+        method: 'POST',
+        data: data
+    })
+}
+
+//Cập nhật mọt function
+export function updateFunction(data){
+    return request({
+        url: '/permission/update-function',
+        method: 'PUT',
+        data: data
+    })
+}
+
+// Xóa một function theo id
+export function deleteFunctionByID(id){
+    return request({
+        url: '/permission/delete-function/' + id,
+        method: 'DELETE'
+    })
+}
+
+// delete-function-by-list
+export function deleteFunctionByList(lstID){
+    return request({
+        url: '/permission/delete-function-by-list',
+        method: 'DELETE',
+        data: lstID
+    })
+}
+
+/////////////////////////////////////////////////////
+//Crud bảng group

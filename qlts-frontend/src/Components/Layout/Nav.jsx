@@ -3,6 +3,7 @@ import { Layout, Menu, Icon, Row, Col } from 'antd';
 import '../../Styles/Header.css';
 import { getToken, removeToken } from '../../Utils/token'
 import history from '../../Utils/history';
+import { message } from 'antd';
 
 const { Header } = Layout;
 class Nav extends Component {
@@ -17,10 +18,15 @@ class Nav extends Component {
         });
     }
 
-    logout() {
+    logout = () => {
+        // const { history } = this.props;
         if (getToken() !== null) {
             removeToken();
-            history.push('login');
+            message.success("Đăng xuất thành công.");
+            setTimeout(() => {
+                history.push('/login');
+            }, 1500);
+
         }
     }
 
@@ -70,7 +76,7 @@ class Nav extends Component {
                         >
                             <Menu.SubMenu style={{}} title={<span className="avatar"><img src={this.props.avatar} alt="avatar" /><i className="on bottom b-white" /></span>}>
                                 <Menu.ItemGroup title="Cá nhân">
-                                    <Menu.Item key="logout"><span onClick={this.logout.bind()}><Icon type="logout" />Logout</span></Menu.Item>
+                                    <Menu.Item key="logout"><span onClick={this.logout}><Icon type="logout" />Logout</span></Menu.Item>
                                 </Menu.ItemGroup>
                             </Menu.SubMenu>
                         </Menu>

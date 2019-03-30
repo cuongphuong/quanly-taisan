@@ -19,6 +19,7 @@ public class Module implements Serializable {
 
 	@Id
 	@Column(name = "ModuleID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int moduleID;
 
 	@Column(name = "ModuleName")
@@ -68,6 +69,11 @@ public class Module implements Serializable {
 		function.setModule(null);
 
 		return function;
+	}
+
+	public Module(int moduleID) {
+		super();
+		this.moduleID = moduleID;
 	}
 
 }

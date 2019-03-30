@@ -18,6 +18,7 @@ public class Function implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "FunctionID")
 	private int functionID;
 
@@ -29,6 +30,17 @@ public class Function implements Serializable {
 
 	@Column(name = "IconType")
 	private String iconType;
+
+	@Column(name = "ModuleID", updatable = false, insertable = false)
+	private int moduleID;
+
+	public int getModuleID() {
+		return moduleID;
+	}
+
+	public void setModuleID(int moduleID) {
+		this.moduleID = moduleID;
+	}
 
 	// bi-directional many-to-one association to Module
 	@ManyToOne(fetch = FetchType.LAZY)

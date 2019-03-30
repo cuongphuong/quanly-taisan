@@ -7,30 +7,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
-
 /**
  * The persistent class for the ChucVu database table.
  * 
  */
 @Entity
-@NamedQuery(name="ChucVu.findAll", query="SELECT c FROM ChucVu c")
+@NamedQuery(name = "ChucVu.findAll", query = "SELECT c FROM ChucVu c")
 public class ChucVu implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="MaChucVu")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "MaChucVu")
 	private int maChucVu;
 
-	@Column(name="MoTa")
+	@Column(name = "MoTa")
 	private String moTa;
 
-	@Column(name="TenChucVu")
+	@Column(name = "TenChucVu")
 	private String tenChucVu;
 
-	//bi-directional many-to-one association to NhanVien
+	// bi-directional many-to-one association to NhanVien
 	@JsonIgnore
-	@OneToMany(mappedBy="chucVu")
+	@OneToMany(mappedBy = "chucVu")
 	private List<NhanVien> nhanViens;
 
 	public ChucVu() {
@@ -73,6 +72,11 @@ public class ChucVu implements Serializable {
 		nhanVien.setChucVu(this);
 
 		return nhanVien;
+	}
+
+	public ChucVu(int maChucVu) {
+		super();
+		this.maChucVu = maChucVu;
 	}
 
 	public NhanVien removeNhanVien(NhanVien nhanVien) {

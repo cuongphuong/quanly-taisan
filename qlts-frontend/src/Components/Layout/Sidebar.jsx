@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon, Empty } from 'antd';
+import { Link } from 'react-router-dom';
 
 const { Sider } = Layout;
 class Sidebar extends Component {
@@ -8,8 +9,10 @@ class Sidebar extends Component {
         return this.props.lstSubMenu.map(item => {
             return (
                 <Menu.Item key={item.functionID}>
-                    <Icon type={item.iconType} />
-                    <span>{item.functionName}</span>
+                    <Link to={item.url}>
+                        <Icon type={item.iconType} />
+                        <span>{item.functionName}</span>
+                    </Link>
                 </Menu.Item>
             )
         })
