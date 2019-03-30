@@ -1,5 +1,6 @@
 package tpm.qlts.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import tpm.qlts.custommodels.NhanVienUpdate;
 import tpm.qlts.entitys.ChucVu;
+import tpm.qlts.entitys.DonViTinh;
 import tpm.qlts.entitys.NhanVien;
 import tpm.qlts.entitys.PhongBan;
 import tpm.qlts.entitys.TinhTrang;
 import tpm.qlts.services.ChucVuService;
+import tpm.qlts.services.DonViTinhService;
 import tpm.qlts.services.NhanVienService;
 import tpm.qlts.services.PhongBanService;
 import tpm.qlts.services.TinhTrangService;
@@ -40,6 +44,9 @@ public class InformationController {
 	@Autowired
 	private TinhTrangService tinhTrangService;
 	
+	@Autowired
+	private DonViTinhService donViTinhService;
+	
 	@GetMapping(value="listAllPhongBan")
 	public List<PhongBan> getPhongBan()
 	{
@@ -52,6 +59,34 @@ public class InformationController {
 	{
 		PhongBan resPhongBan = phongBanService.update(phongBan);
 		return resPhongBan;
+	}
+	
+	@PutMapping("update-phongban")
+	public PhongBan updatePhongBan(@RequestBody PhongBan phongBan)
+	{
+		if (phongBanService.existsById(phongBan.getMaPhongBan())) {
+			return phongBanService.update(phongBan);
+		}
+		return null;
+	}
+	
+	@DeleteMapping(value="delete-phongban/{id}")
+	public void deletePhongBan(@PathVariable String id)
+	{
+		phongBanService.deleteById(id);
+	}
+	
+	@DeleteMapping("delete-listPhongBan")
+	public int deleteBylistPhongBan(@RequestBody List<String> lstID)
+	{
+		int count = 0;
+		for (String id : lstID) {
+			if (phongBanService.existsById(id)) {
+				phongBanService.deleteById(id);
+			}
+			count ++;
+		}
+		return count;
 	}
 	
 	@GetMapping(value="listAllChucVu")
@@ -76,17 +111,27 @@ public class InformationController {
 	}
 	
 	@PostMapping(value="add-employee")
-	public NhanVien addEmployee(@RequestBody NhanVien nhanVien) {
+	public NhanVienUpdate addEmployee(@RequestBody NhanVien nhanVien) { // vì sao lại có 2 cái trường đầu tiên
+//		 vì trong entity nhân viên xét thuộc tính insertable và updatetable xét cho nó là false nên khi vào phải get cái trường đó vào
+		nhanVien.setChucVu(new ChucVu(nhanVien.getMaChucVu()));
+		nhanVien.setPhongBan(new PhongBan(nhanVien.getMaPhongBan()));
 		NhanVien resNhanVien= nhanVienService.save(nhanVien);
-		return resNhanVien;
+		String tenChucVu = resNhanVien.getChucVu().getTenChucVu();
+		String tenPhongBan = resNhanVien.getPhongBan().getTenPhongBan();
+		
+		return new NhanVienUpdate(resNhanVien.getMaNhanVien(), resNhanVien.getTenNhanVien(), resNhanVien.getNgaySinh(), resNhanVien.getQueQuan(), tenChucVu, tenPhongBan);
 	}
 	
 	@RequestMapping(value = "update-employee", method = RequestMethod.PUT)
-	public NhanVien updateNhanVien(@RequestBody NhanVien nhanVien)
+	public NhanVienUpdate updateNhanVien(@RequestBody NhanVien nhanVien)
 	{
+		nhanVien.setChucVu(new ChucVu(nhanVien.getMaChucVu()));
+		nhanVien.setPhongBan(new PhongBan(nhanVien.getMaPhongBan()));
 		if (nhanVienService.existsById(nhanVien.getMaNhanVien())) {
 			NhanVien resNhanVien= nhanVienService.save(nhanVien);
-			return resNhanVien;
+			String tenChucVu = resNhanVien.getChucVu().getTenChucVu();
+			String tenPhongBan = resNhanVien.getPhongBan().getTenPhongBan();
+			return new NhanVienUpdate(resNhanVien.getMaNhanVien(), resNhanVien.getTenNhanVien(), resNhanVien.getNgaySinh(), resNhanVien.getQueQuan(), tenChucVu, tenPhongBan);
 		}
 		return null;
 	}
@@ -95,6 +140,19 @@ public class InformationController {
 	public void deleteNhanVien(@PathVariable String id)
 	{
 		nhanVienService.deleteById(id);
+	}
+	
+	@DeleteMapping("delete-by-listNhanVien")
+	public int deleteByListNhanVien(@RequestBody List<String> lstID)
+	{
+		int cout = 0;
+		for (String id : lstID) {
+			if (nhanVienService.existsById(id)) {
+				nhanVienService.deleteById(id);
+				cout ++;
+			}
+		}
+		return cout;
 	}
 	
 	@GetMapping(value="list-employeeId/{id}")
@@ -134,10 +192,89 @@ public class InformationController {
 		return null;
 	}
 	
-	@DeleteMapping(value="delete-tinhtrang")
+	@DeleteMapping(value="delete-tinhtrang/{id}")
 	public void deleteTinhTrang(@PathVariable String id)
 	{
 		tinhTrangService.deleteById(id);
 	}
 	
+	@DeleteMapping("delete-by-list")
+	public int deleteByList(@RequestBody List<String> lstID)
+	{
+		int cout = 0;
+		for (String id : lstID) {
+			if (tinhTrangService.exitstsById(id)) {
+				tinhTrangService.deleteById(id);
+				cout ++;
+			}
+		}
+		return cout;
+	}
+	
+//	@GetMapping(value="list-searchNhanVien/{key}")
+//	public List<NhanVienUpdate> search(@RequestBody String key){
+//		List<NhanVien> nvList = nhanVienService.findByKey(key);
+//
+//		List<NhanVienUpdate> resList = new ArrayList<>();
+//		for(NhanVien nvItem : nvList){
+//
+//			resList.add(new NhanVienUpdate(nvItem.getTenNhanVien(), nvItem.getChucVu().getTenChucVu(), nvItem.getNgaySinh(), nvItem.getQueQuan(), nvItem.getPhongBan().getTenPhongBan(), key));
+//		}
+//		return resList;
+//
+//	}
+	
+	@RequestMapping(value="list-employeeUpdate")
+	public List<NhanVienUpdate> getNhanVienUpdate()
+	{
+		List<NhanVien> nvList = nhanVienService.findAll();
+		
+		List<NhanVienUpdate> reslist = new ArrayList<>();
+		for(NhanVien nvItem : nvList){
+
+			reslist.add(new NhanVienUpdate(nvItem.getMaNhanVien(), nvItem.getTenNhanVien()
+					, nvItem.getNgaySinh(), nvItem.getQueQuan(), nvItem.getChucVu().getTenChucVu(), 
+					nvItem.getPhongBan().getTenPhongBan()));
+		}
+		return reslist;
+	}
+	////////////////////////----------Don vi tinh-----------------///////////////////////
+	@GetMapping(value = "listAllDonViTinh")
+	public List<DonViTinh> listDonViTinh()
+	{
+		return donViTinhService.findAll();
+	}
+	
+	@PostMapping(value = "add-newdonvitinh")
+	public DonViTinh addDonViTinh(@RequestBody DonViTinh donViTinh)
+	{
+		return donViTinhService.save(donViTinh);
+	}
+	
+	@PutMapping(value = "update-donviinh")
+	public DonViTinh updateDonViTinh(@RequestBody DonViTinh donViTinh)
+	{
+		if (donViTinhService.existsById(donViTinh.getMaDonViTinh())) {
+			return donViTinhService.save(donViTinh);
+		}
+		return null;
+	}
+	
+	@DeleteMapping(value = "delete-donvitinh/{id}")
+	public void deleteDonviTinh(@PathVariable Integer id)
+	{
+		donViTinhService.deleteById(id);
+	}
+	
+	@DeleteMapping(value = "delete-list-donvitinh")
+	public int deleteByLstDonViTinh(@RequestBody List<Integer> lstID) {
+		int count = 0;
+		for (Integer id : lstID) {
+			if (donViTinhService.existsById(id)) {
+				donViTinhService.deleteById(id);
+			}
+			count ++;
+		}
+		return count;
+	}
 }
