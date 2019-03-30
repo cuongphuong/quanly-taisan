@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { Modal, Button, Table, Divider, Form, Input } from 'antd';
-import { getAllUser, addNewUser, updateUser, deleteUser, deleteByList } from "../../Services/api";
+import { getAllChucvu, addNewChucvu, updateChucvu, deleteChucVu } from '../../Services/apimanh';
 
-class Users extends Component {
+class Chucvu extends Component{
     state = {
         visible: false,
         selectedRowKeys: [], // Check here to configure the default column
         loading: false,
         data: [],
-        columns: [{
-            title: 'ID',
-            dataIndex: 'userID',
-        }, {
-            title: 'Họ tên',
-            dataIndex: 'fullName',
-        }, {
-            title: 'Tên đăng nhập',
-            dataIndex: 'username',
-        }, {
-            title: 'Mật khẩu',
-            dataIndex: 'password'
-        }, {
+        columns:[{
+            title: 'Mã chức vụ',
+            dataIndex: 'maChucVu',
+            width: 170,
+        },{
+            title:'Tên Chức vụ',
+            dataIndex:'tenChucVu',
+            width: 370,
+        },{
+            title:'Mô tả',
+            dataIndex: 'moTa',
+            width: 380,
+        },{
             title: 'Điều khiển',
             fixed: 'right',
             width: 150,
@@ -37,15 +37,13 @@ class Users extends Component {
                 </div>
             }
         }],
-        isUpdate: false,
-        dataForm: {
-            fullName: '',
-            username: ''
-        }
+    isUpdate: false,
+    dataForm: {
+        maChucVu:'',
+        tenChucVu:'',
+        moTa:'',
     }
-
-
-    //on modal form
+    }
     showModal = () => {
         this.setState({
             visible: true,
@@ -58,8 +56,9 @@ class Users extends Component {
             visible: false,
             isUpdate: false,
             dataForm: {
-                fullName: '',
-                username: ''
+                maChucVu : '',
+                tenChucVu: '',
+                moTa:'',
             }
         });
     }
@@ -75,10 +74,9 @@ class Users extends Component {
             });
         }, 1000);
     }
-
     onSelectChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys });
-    }
+    } 
 
     editFunction = (record) => {
         this.setState({
@@ -87,76 +85,71 @@ class Users extends Component {
             isUpdate: true
         });
     }
-
-    // send request to get data
-    getAllUser = async () => {
-        let data = await getAllUser();
+    getAllChucvu = async () => {
+        let data = await getAllChucvu();
         this.setState({
             data: data
         });
     }
-
-    // function in life cycle
-    componentDidMount() {
-        this.getAllUser();
+    componentDidMount(){
+        this.getAllChucvu();
     }
 
-    //submitform
-    handleSubmit = (e) => {
+    handleSubmit = (e) =>{
         e.preventDefault();
         this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                if (this.state.isUpdate === false) {
-                    let res = await addNewUser(values);
-                    if (res) {
+            if(!err){
+                if(this.state.isUpdate === false){
+                    let res = await addNewChucvu(values);
+                    if(res){
                         this.setState({
-                            data: [res, ...this.state.data]
+                            data:[res, ...this.state.data]
                         });
                         this.handleCancel();
                     }
-                } else {
-                    let res = await updateUser(values);
-                    var item = this.state.data.find(function (element) {
-                        return element.userID === values.userID;
+                }else{
+                    let res = await updateChucvu(values);
+                    var item = this.state.data.find(function(element){
+                        return element.maChucVu === values.maChucVu;
                     });
 
-                    item.userID = res.userID;
-                    item.username = res.username;
-                    item.fullName = res.fullName;
+                    item.maChucVu = res.maChucVu;
+                    item.tenChucVu = res.tenChucVu;
+                    item.moTa = res.moTa;
                     this.handleCancel();
+        
                 }
-            }
-        });
-    }
 
-    deleteFunction = async (record) => {
-        if (window.confirm("Xóa " + record.fullName)) {
-            await deleteUser(record.userID);
+            }
+        } )
+    }
+    deleteFunction = async(record) =>{
+        if(window.confirm("Xóa" + record.maChucVu)){
+            await deleteChucVu(record.maChucVu);
             this.setState({
-                data: this.state.data.filter(e => e.userID !== record.userID)
+                data: this.state.data.filter(e => e.maChucVu !== record.maChucVu)
             });
         }
     }
-
-    onDeleteAllRecord = async () => {
-        if (window.confirm("Xóa mục đã chọn?")) {
-            await deleteByList(this.state.selectedRowKeys);
-            this.getAllUser();
-            this.setState({
-                selectedRowKeys: []
-            })
+    onDeleteAllRecord = async() => {
+        if (window.confirm("Xóa mục đã chọn")){
+            await deleteChucVu(this.state.selectedRowKeys);
+            this.getAllChucvu();
+            this.setState(
+                {
+                    selectedRowKeys: []
+                }
+            )
         }
     }
-
-    render() {
-        const { loading, selectedRowKeys } = this.state;
+    render(){
+        const {loading, selectedRowKeys} = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
         };
         const hasSelected = selectedRowKeys.length > 0;
 
-        //setup form
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -172,7 +165,7 @@ class Users extends Component {
             <div>
                 <Button
                     type="primary"
-                    icon="plus-square-o" onClick={this.showModal}>Thêm user</Button>
+                    icon="plus-square-o" onClick={this.showModal}>Thêm chức vụ</Button>
                 <Button
                     style={{ marginLeft: '5px' }}
                     type="danger"
@@ -191,77 +184,69 @@ class Users extends Component {
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
                 {console.log(rowSelection)}
-                <Table rowKey='userID' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
+                <Table rowKey='maChucVu' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
                 <Modal
                     onCancel={this.handleCancel}
-                    title={this.state.isUpdate === false ? "Tạo tài khoản mới" : "Cập nhật tài khoản"}
+                    title={this.state.isUpdate === false ? "Thêm Chức vụ mới" : "Cập nhật chức vụ"}
                     visible={this.state.visible}
                     footer={[
-                        <Button form="addUserForm" key="submit" type="primary" htmlType="submit">
+                        <Button form="addChucvuForm" key="submit" type="primary" htmlType="submit">
                             Submit </Button>,
                         <Button key="cancel" onClick={this.handleCancel}>
                             Đóng </Button>
+
                     ]}
-                >
-                    <Form id="addUserForm" onSubmit={this.handleSubmit}>
+                    >
+                    <Form id="addChucvuForm" onSubmit={this.handleSubmit}>
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
-                            label="User ID"
+                            label="Mã chức vụ"
                         >
-                            {getFieldDecorator('userID', {
-                                initialValue: this.state.dataForm.userID,
+                            {getFieldDecorator('maChucVu', {
+                                initialValue: this.state.dataForm.maChucVu,
                                 rules: [{
-                                    required: true, message: 'Yêu cầu nhập ID!',
+                                    required: true, message: 'Yêu cầu nhập Mã chức vụ!',
                                 }],
                             })(
                                 (this.state.isUpdate) === true ? <Input disabled /> : <Input />
                             )}
                         </Form.Item>
-
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
-                            label="Họ tên"
+                            label="Tên chức vụ"
                         >
-                            {getFieldDecorator('fullName', {
-                                initialValue: this.state.dataForm.fullName,
+                            {getFieldDecorator('tenChucVu', {
+                                initialValue: this.state.dataForm.tenChucVu,
                                 rules: [{
-                                    required: true, message: 'Yêu cầu nhập họ tên!',
+                                    required: true, message: 'Yêu cầu nhập tên chức vụ!',
                                 }],
                             })(
                                 <Input />
                             )}
-                        </Form.Item>
-
+                        </Form.Item> 
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
-                            label="Tên đăng nhập"
+                            label="Mô tả"
                         >
-                            {getFieldDecorator('username', {
-                                initialValue: this.state.dataForm.username,
+                            {getFieldDecorator('moTa', {
+                                initialValue: this.state.dataForm.moTa,
                                 rules: [{
-                                    required: true, message: 'Yêu cầu nhập tên đăng nhập!',
+                                    required: true, message: 'Yêu cầu nhập mô tả!',
                                 }],
                             })(
                                 <Input />
                             )}
-                        </Form.Item>
-                        <Form.Item
-                            {...formItemLayout}
-                            hasFeedback
-                            label="Mật khẩu"
-                        >
-                            {getFieldDecorator('password')(
-                                <Input />
-                            )}
-                        </Form.Item>
-                    </Form>
+                        </Form.Item>   
+                        </Form>
                 </Modal>
+
+                    
             </div>
-        );
+        )
     }
 }
 
-export default Form.create()(Users);
+export default Form.create()(Chucvu);
