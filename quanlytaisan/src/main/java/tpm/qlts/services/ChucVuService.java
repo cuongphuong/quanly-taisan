@@ -32,4 +32,8 @@ public class ChucVuService {
 	{
 		return (List<ChucVu>) chucVuRepository.findAll();
 	}
+	
+	public Boolean existById(int id) {
+		return chucVuRepository.existsById(id);
+	}
 }
