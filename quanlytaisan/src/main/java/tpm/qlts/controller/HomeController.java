@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("home")
 public class HomeController {
 
-	@RequestMapping(value = "hello", method = RequestMethod.GET)
+	@RequestMapping(value = "conmeo", method = RequestMethod.GET)
 	public String hello() {
-		return "Xin chào";
+		return "Xin chà";
 	}
 
 }
