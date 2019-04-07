@@ -2,6 +2,7 @@ package tpm.qlts.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
 import tpm.qlts.entitys.Users;
 import tpm.qlts.services.PermissionService;
 import tpm.qlts.services.UserRevice;
@@ -26,8 +28,9 @@ import tpm.qlts.services.UserRevice;
 public class AccountController {
 	@Autowired
 	private UserRevice userService;
-	
-	@Autowired PermissionService perService;
+
+	@Autowired
+	PermissionService perService;
 
 	@PostMapping("check")
 	public boolean checkLogin() {
@@ -50,7 +53,7 @@ public class AccountController {
 			String encodePassword = (user.getPassword() != null) ? passwordEncoder.encode(user.getPassword())
 					: passwordEncoder.encode(user.getUsername());
 			Users res = userService
-					.update(new Users(user.getUserID(), user.getFullName(), encodePassword, user.getUsername()));
+					.update(new Users(user.getUserID(), user.getFullName(), encodePassword, user.getUsername(), true));
 			res.setPassword("encode with bcrypt.");
 			return res;
 		} else {
@@ -66,7 +69,7 @@ public class AccountController {
 			String encodePassword = (user.getPassword() != null) ? passwordEncoder.encode(user.getPassword())
 					: oldPassword;
 			Users res = userService
-					.update(new Users(user.getUserID(), user.getFullName(), encodePassword, user.getUsername()));
+					.update(new Users(user.getUserID(), user.getFullName(), encodePassword, user.getUsername(), true));
 			res.setPassword("encode with bcrypt.");
 			return res;
 		} else {
@@ -106,6 +109,18 @@ public class AccountController {
 //		{
 //			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "NOT_ACCESS");
 //		}
+	}
+
+	@GetMapping("get-info-user-by-id/{id}")
+	public Users getInfoUser(@PathVariable String id) {
+		Optional<Users> uRes = userService.findById(id);
+		Users user = null;
+		if (uRes.isPresent()) {
+			user = uRes.get();
+		}
+
+		user.setPassword("password is not response...");
+		return user;
 	}
 
 //	public OutputAccount getInfoUser() {

@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
-import { message, Row, Col, Button, Menu, Table, Modal, Form, Input } from 'antd';
-import { getAllModule, getFunctionByModuleID, addNewModule, updateModule, deleteModule, addNewFunction, updateFunction } from '../../Services/api';
+import { message, Row, Col, Button, Menu, Table, Modal, Tree } from 'antd';
+import {
+    getAllGroup, addNewGroup, updateGroup, deleteGroup, getAllFunctionByGroupID, getAllFunctionGroupByModule, getAllFunctionSelectedByGroup, updateFunctionByGroupID
+} from '../../Services/api';
+const { TreeNode } = Tree;
 
-class Group extends Component {
+class Permission extends Component {
     constructor(props) {
         super(props);
         this.state = {
             visible: false,
             functionIDUpdate: null,
-            visibleAddModule: 'none',
-            moduleSelected: null,
-            modules: [],
+            visibleAddGroup: 'none',
+            groupSelected: null,
+            groups: [],
             functionData: [],
             iconLoading: false,
-            isUpdateModule: false,
-            isUpdate: false,
+            isUpdateGroup: false,
             columns: [{
                 title: 'ID',
                 dataIndex: 'functionID',
@@ -30,43 +32,60 @@ class Group extends Component {
             {
                 title: 'URL',
                 dataIndex: 'url',
-            },
-            {
-                title: 'Điều khiển',
-                fixed: 'right',
-                width: 150,
-                render: (text, record) => {
-                    return <div>
-                        <span className="span-link"
-                            onClick={() => this.deleteFunction(record)}> Xóa</span>
-                    </div>
-                }
             }],
-            selectedRowKeys: [], // Check here to configure the default column
-            dataForm: {
-                functionID: '',
-                functionName: '',
-                iconType: '',
-                url: ''
-            }
+            //on tree
+            expandedKeys: [],
+            autoExpandParent: true,
+            checkedKeys: [],
+            selectedKeys: [],
+            functionTree: []
         }
     }
+
+    // onTree selected
+
+    onExpand = (expandedKeys) => {
+        this.setState({
+            expandedKeys,
+            autoExpandParent: false,
+        });
+    }
+
+    onCheck = (checkedKeys) => {
+        this.setState({ checkedKeys });
+    }
+
+    onSelect = (selectedKeys, info) => {
+        this.setState({ selectedKeys });
+    }
+
+    renderTreeNodes = data => {
+        const iconsTree = [];
+        for (let item of data) {
+            let chidren = [];
+            for (let child of item.lstFunction) {
+                chidren.push(<TreeNode title={child.functionName} key={child.functionID} dataRef={child}></TreeNode>)
+            }
+            iconsTree.push(<TreeNode title={item.functionName} key={'module_' + item.functionID} dataRef={item}>{chidren}</TreeNode>)
+        }
+        return iconsTree;
+    }
+
     //on modal form
-    showModal = () => {
+    showModal = async () => {
+        let functionSelected;
+        functionSelected = await getAllFunctionSelectedByGroup(this.state.groupSelected);
+        console.log(functionSelected);
+        this.setState({ checkedKeys: functionSelected });
+        this.getFunctionGroupByID();
         this.setState({
             visible: true,
         });
     }
 
     handleCancel = (e) => {
-        this.props.form.resetFields();
         this.setState({
-            visible: false,
-            isUpdate: false,
-            dataForm: {
-                fullName: '',
-                username: ''
-            }
+            visible: false
         });
     }
 
@@ -77,24 +96,29 @@ class Group extends Component {
     //set height
     setHeight = () => {
         var visiblea = 'true';
-        if (this.state.visibleAddModule === 'none')
+        if (this.state.visibleAddGroup === 'none')
             visiblea = 'block';
         this.setState({
-            visibleAddModule: visiblea,
-            isUpdateModule: false
+            visibleAddGroup: visiblea,
+            isUpdateGroup: false
         });
-        this.refs.moduleName.value = "";
+        this.refs.groupNameAdd.value = "";
     }
 
     //get data from server
-    getAllModules = async () => {
-        let modules = await getAllModule();
-        let functions = await getFunctionByModuleID(modules[0].moduleID);
+    getAllGroups = async () => {
+        let groups = await getAllGroup();
+        let functions = await getAllFunctionByGroupID(groups[0].groupID);
         this.setState({
-            modules: modules,
-            moduleSelected: this.state.moduleSelected === null ? modules[0].moduleID : this.state.moduleSelected,
+            groups: groups,
+            groupSelected: this.state.groupSelected === null ? groups[0].groupID : this.state.groupSelected,
             functionData: functions
         });
+    }
+
+    getFunctionGroupByID = async () => {
+        let data = await getAllFunctionGroupByModule();
+        this.setState({ functionTree: data })
     }
 
     // on table
@@ -115,126 +139,81 @@ class Group extends Component {
 
     //on module list
     //map data to module list
-    mapFunction = () => {
-        return this.state.modules.map(item => {
+    mapListGroups = () => {
+        return this.state.groups.map(item => {
             return (
-                <Menu.Item key={item.moduleID}>
-                    <span>{item.moduleName}</span>
+                <Menu.Item key={item.groupID}>
+                    <span>{item.groupName}</span>
                 </Menu.Item>
             )
         });
     }
 
     handleOnClickItem = async (e) => {
-        let moduleID = e.key;
-        let functions = await getFunctionByModuleID(moduleID);
-        let moduleItem = this.state.modules.find(element => {
-            return element.moduleID.toString() === e.key
+        let groupID = e.key;
+        let functions = await getAllFunctionByGroupID(groupID);
+        let groupItem = this.state.groups.find(element => {
+            return element.groupID.toString() === e.key
         });
-        this.refs.moduleName.value = moduleItem.moduleName;
+        this.refs.groupNameAdd.value = groupItem.groupName;
         this.setState({
-            moduleSelected: moduleID,
+            groupSelected: e.key,
             functionData: functions,
-            isUpdateModule: true,
-            visibleAddModule: 'block'
+            isUpdateGroup: true,
+            visibleAddGroup: 'block'
         });
     }
 
-    deleteModuleSelected = async () => {
-        if (window.confirm("Xóa module đã chọn đã chọn?")) {
-            await deleteModule(this.state.moduleSelected);
-            this.setState({ modules: [] })
-            this.getAllModules();
+    deleteGroupSelected = async () => {
+        if (window.confirm("Xóa nhóm quyền đã chọn?")) {
+            await deleteGroup(this.state.groupSelected);
+            this.setState({ groups: [] })
+            this.getAllGroups();
         }
     }
 
-    themModule = async () => {
+    addNewGroup = async () => {
         this.setState({ iconLoading: true });
-        if (this.refs.moduleName.value.length >= 1) {
-            if (this.state.isUpdateModule === false) {
-                let newModule = await addNewModule({ moduleName: this.refs.moduleName.value });
+        if (this.refs.groupNameAdd.value.length >= 1) {
+            if (this.state.isUpdateGroup === false) {
+                let groupNew = await addNewGroup({ groupName: this.refs.groupNameAdd.value });
 
                 setTimeout(() => {
-                    this.setState({ modules: [...this.state.modules, newModule], iconLoading: false });
-                    this.refs.moduleName.value = "";
+                    this.setState({ groups: [...this.state.groups, groupNew], iconLoading: false });
+                    this.refs.groupNameAdd.value = "";
                 }, 600);
             } else {
-                await updateModule({ moduleID: this.state.moduleSelected, moduleName: this.refs.moduleName.value });
+                await updateGroup({ groupID: this.state.groupSelected, groupName: this.refs.groupNameAdd.value });
                 this.setState({ iconLoading: false });
-                this.getAllModules();
+                this.getAllGroups();
             }
         } else {
-            message.error("Tên module không được để trống.");
+            message.error("Tên [group] không được để trống.");
             this.setState({ iconLoading: false })
         }
     }
 
-    //on form
-    handleSubmit = async (e) => {
-        e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                if (this.state.isUpdate === false) {
-                    let newFunction = await addNewFunction({ functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected });
-                    this.setState({
-                        functionData: [newFunction, ...this.state.functionData]
-                    })
-                    this.handleCancel();
-                } else {
-                    let idUpdate = this.state.functionIDUpdate;
-                    let res = await updateFunction({ functionID: this.state.functionIDUpdate, functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected });
-                    var item = this.state.functionData.find(function (element) {
-                        return element.functionID.toString() === idUpdate.toString();
-                    });
-
-                    item.functionID = res.functionID;
-                    item.functionName = res.functionName;
-                    item.iconType = res.iconType;
-                    item.url = res.url;
-                    this.handleCancel();
-                }
-            }
-        });
-    }
-
-    //on table
-    deleteFunction = async (record) => {
-        if (window.confirm("Xóa " + record.functionName)) {
-
+    handleSubmit = async () => {
+        let mang = this.state.checkedKeys.filter(element => {
+            return element.substring(0, 7) !== 'module_'
+        })
+        let data = {
+            groupID: this.state.groupSelected,
+            lstFunction: [
+                ...mang
+            ]
         }
-    }
-
-    deleteFunctionSelected = async () => {
-        if (window.confirm("Xóa các mục đã chọn?")) {
-
-        }
+        let datasFunction = await updateFunctionByGroupID(data);
+        console.log(datasFunction)
+        this.setState({ functionData: datasFunction, visible: false })
     }
 
     //component in life cycle
     componentDidMount() {
-        this.getAllModules();
+        this.getAllGroups();
     }
 
     render() {
-        const { loading, selectedRowKeys } = this.state;
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-        };
-        const hasSelected = selectedRowKeys.length > 0;
-        //setup form
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 7 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-
         return (
             <div>
                 <Row type="flex" justify="start">
@@ -242,20 +221,20 @@ class Group extends Component {
                         <Button
                             size="small"
                             type="primary"
-                            icon="plus-square-o" onClick={this.setHeight}>Thêm module</Button>
+                            icon="plus-square-o" onClick={this.setHeight}>Thêm mới group</Button>
                         <Button
                             style={{ marginLeft: '5px' }}
                             size="small"
                             type="danger"
-                            icon="minus" onClick={this.deleteModuleSelected}>Xóa mục chọn</Button>
+                            icon="minus" onClick={this.deleteGroupSelected}>Xóa mục chọn</Button>
                         {/* render list */}
-                        <Row style={{ display: this.state.visibleAddModule }}>
+                        <Row style={{ display: this.state.visibleAddGroup }}>
                             <Col xs={16} sm={16} md={16} lg={16} xl={16}>
-                                <input ref="moduleName" style={{ marginTop: '10px' }} className="pg_collapse_moduleadd ant-input" type="text" placeholder="Module name"></input>
+                                <input ref="groupNameAdd" style={{ marginTop: '10px' }} className="pg_collapse_moduleadd ant-input" type="text" placeholder="Tên nhóm quyền"></input>
                             </Col>
                             <Col xs={8} sm={8} md={8} lg={8} xl={8}>
-                                <Button onClick={this.themModule} style={{ marginTop: '10px', marginLeft: '5px', width: '100%' }} type="primary" loading={this.state.iconLoading}>
-                                    {this.state.isUpdateModule === false ? 'Thêm' : "Cập nhật"}
+                                <Button onClick={this.addNewGroup} style={{ marginTop: '10px', marginLeft: '5px', width: '100%' }} type="primary" loading={this.state.iconLoading}>
+                                    {this.state.isUpdateGroup === false ? 'Thêm' : "Cập nhật"}
                                 </Button>
                             </Col>
                         </Row>
@@ -266,7 +245,7 @@ class Group extends Component {
                             onClick={this.handleOnClickItem}
                             mode="inline"
                             defaultSelectedKeys={['1']}>
-                            {this.mapFunction()}
+                            {this.mapListGroups()}
                         </Menu>
 
 
@@ -275,76 +254,38 @@ class Group extends Component {
                         <Button
                             size="small"
                             type="primary"
-                            icon="plus-square-o" onClick={this.showModal}>Thêm function</Button>
-                        <Button
-                            size="small"
-                            style={{ marginLeft: '5px' }}
-                            type="danger"
-                            onClick={this.deleteFunctionSelected}
-                            disabled={!hasSelected}
-                            loading={loading}
-                        >Xóa mục chọn</Button>
-                        <Button
-                            size="small"
-                            style={{ marginLeft: '5px' }}
-                            type="dashed"
-                            onClick={this.start}
-                            disabled={!hasSelected}
-                            loading={loading}
-                        >Bỏ chọn tất cả</Button>
-                        <span style={{ marginLeft: 8 }}>
-                            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-                        </span>
-                        <Table rowKey='functionID' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.functionData} />
+                            icon="plus-square-o" onClick={this.showModal}>Chỉnh sửa quyền</Button>
+                        <Table rowKey='functionID' style={{ marginTop: '10px' }}  columns={this.state.columns} dataSource={this.state.functionData} />
                     </Col>
                 </Row>
 
                 <Modal
                     onCancel={this.handleCancel}
-                    title={this.state.isUpdate === false ? "Thêm chức năng mới" : "Cập nhật chức năng"}
+                    title="Cập nhật chức năng"
                     visible={this.state.visible}
                     footer={[
-                        <Button form="addFunctionForm" key="submit" type="primary" htmlType="submit">
+                        <Button onClick={this.handleSubmit} key="submit" type="primary" htmlType="submit">
                             Submit </Button>,
                         <Button key="cancel" onClick={this.handleCancel}>
                             Đóng </Button>
                     ]}
                 >
-                    <Form id="addFunctionForm" onSubmit={this.handleSubmit}>
-                        <Form.Item
-                            {...formItemLayout}
-                            hasFeedback
-                            label="Function Name"
-                        >
-                            {getFieldDecorator('functionName', {
-                                initialValue: this.state.dataForm.functionName,
-                                rules: [{
-                                    required: true, message: 'Yêu cầu nhập họ tên!',
-                                }],
-                            })(
-                                <Input />
-                            )}
-                        </Form.Item>
-
-                        <Form.Item
-                            {...formItemLayout}
-                            hasFeedback
-                            label="Đường dẩn (url)"
-                        >
-                            {getFieldDecorator('url', {
-                                initialValue: this.state.dataForm.url,
-                                rules: [{
-                                    required: true, message: 'Yêu cầu nhập tên đăng nhập!',
-                                }],
-                            })(
-                                <Input />
-                            )}
-                        </Form.Item>
-                    </Form>
+                    <Tree
+                        checkable
+                        onExpand={this.onExpand}
+                        expandedKeys={this.state.expandedKeys}
+                        autoExpandParent={this.state.autoExpandParent}
+                        onCheck={this.onCheck}
+                        checkedKeys={this.state.checkedKeys}
+                        onSelect={this.onSelect}
+                        selectedKeys={this.state.selectedKeys}
+                    >
+                        {this.renderTreeNodes(this.state.functionTree)}
+                    </Tree>
                 </Modal>
             </div>
         );
     }
 }
 
-export default Form.create()(Group);
+export default Permission;

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tpm.qlts.entitys.Function;
 import tpm.qlts.entitys.GroupRefFunction;
 import tpm.qlts.entitys.GroupRefFunctionPK;
 import tpm.qlts.repositorys.GroupRefFunctionRepository;
@@ -38,5 +39,19 @@ public class GroupRefFunctionService {
 	public Iterable<GroupRefFunction> saveAllByList(Iterable<GroupRefFunction> lst) {
 		return groupRefFunctionRepository.saveAll(lst);
 	}
+	
+	public List<Function> getAllFunctionByGroupID(int id) {
+		return groupRefFunctionRepository.getFunctionByGroupKey(id);
+	}
+	
+	public List<Integer> getFunctionByGroupID(int groupID) {
+		return groupRefFunctionRepository.getFunctionByGroupID(groupID);
+	}
+	
+	public List<Integer> getAllFunctionByGroup(List<Integer> groups){
+		return groupRefFunctionRepository.getFunctionByLstGroupID(groups);
+	}
+	
+	
 
 }

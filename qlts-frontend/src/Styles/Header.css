@@ -1,7 +1,9 @@
-.menu_header{
+.menu_header, .menu_canhan{
     height: 100%;
     border-bottom: none !important;
 }
+
+
 
 .menu_header_item{
     height: 100%;
@@ -12,4 +14,28 @@
 .menu_header > .ant-menu-item-selected{
     border-top: solid 2px #1890ff;
     border-bottom: none !important;
+}
+
+.ant-checkbox-group-item {
+    display: block !important;
+    margin-bottom: 10px !important;
+}
+
+.user_avatar{
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    line-height: 200px;
+    font-size: 50px;
+    color: blue;
+    margin: 0 auto;
+    background: #fafafa;
+    border-radius: 50%;
+}
+.name_username{
+    text-align: center;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #333;
 }

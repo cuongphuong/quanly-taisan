@@ -1,154 +1,168 @@
 import React, { Component } from 'react';
-import { Modal, Button, Table, Divider, Form, Input} from 'antd';
-import { getALLDonvitinh, addNewDonvitinh, updateDonvitinh, deleteDonvitinh } from '../../Services/apimanh';
+import { Modal, Button, Table, Divider, Form, Input } from 'antd';
+import { getAllDonViTinh, addNewDonViTinh, updateDonViTinh, deleteByListDonViTinh, deleteDonViTinh } from '../../Services/apiHuu';
 
-class Donvitinh extends Component{
-    state = {
-        visible: false,
-        selectedRowKeys: [], // Check here to configure the default column
-        loading: false,
-        data: [],
-        columns:[{
-            title: 'Mã ĐVT',
-            dataIndex: 'maDonViTinh',
-            width: 170,
-        },{
-            title:'Tên ĐVT',
-            dataIndex:'tenDonViTinh',
-            width: 370,
-        },{
-            title:'Mô tả',
-            dataIndex: 'moTa',
-            width: 380,
-        },{
-            title: 'Điều khiển',
-            fixed: 'right',
-            width: 150,
-            render: (text, record) => {
-                return <div>
-                    <span className="span-link"
-                        onClick={() => this.editFunction(record)}
-                    >Chỉnh sửa</span>
+class Donvitinh extends Component {
 
-                    <Divider type="vertical" />
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedRowKeys: [],
+            visible: false,
+            loading: false,
+            data: [],
+            columns: [
+                {
+                    title: 'Mã đơn vị',
+                    dataIndex: 'maDonViTinh'
+                },
+                {
+                    title: 'Tên đơn vị',
+                    dataIndex: 'tenDonViTinh'
+                },
+                {
+                    title: 'Mô tả',
+                    dataIndex: 'moTa'
+                },
+                {
+                    title: 'Điều khiển',
+                    fixed: 'right',
+                    width: 150,
+                    render: (text, record) => {
+                        return <div>
+                            <span className="span-link"
+                                onClick={() => this.editFunction(record)}
+                            >Chỉnh sửa</span>
 
-                    <span className="span-link"
-                        onClick={() => this.deleteFunction(record)}> Xóa</span>
-                </div>
+                            <Divider type="vertical" />
+
+                            <span className="span-link"
+                                onClick={() => this.deleteFunction(record)}> Xóa</span>
+                        </div>
+                    }
+                }],
+            isUpdate: false,
+            fromData: {
+                maDonViTinh: '',
+                tenDonViTinh: '',
+                moTa: ''
             }
-        }],
-    isUpdate: false,
-    dataForm: {
-        tenDonViTinh:'',
-        moTa:'',
+        }
     }
-    }
-    showModal = () => {
+
+    // tất cả các khi tích vào 
+    onSelectChange = (selectedRowKeys) => {
         this.setState({
-            visible: true,
+            selectedRowKeys: selectedRowKeys
         });
     }
+    // lấy tất cả tình trạng
+    getAllDonViTinh = async () => {
+        let data = await getAllDonViTinh();
+        this.setState({
+            data: data
+        });
+    }
+    // chạy lại một lần nữa để lấy tất cả dữ liệu từ database 
+    componentDidMount() {
+        this.getAllDonViTinh();
+    }
+    // on table
+    start = () => {
+        this.setState({
+            loading: true
+        });
+        // ajax request after empty completing
+        setTimeout(() => {
+            this.setState({
+                selectedRowKeys: [],
+                loading: false
+            })
+        }, 1000);
+    }
+    // resert form
     handleCancel = (e) => {
         this.props.form.resetFields();
         this.setState({
             visible: false,
             isUpdate: false,
-            dataForm: {
-                maDonViTinh : '',
+            fromData: {
+                maDonViTinh: '',
                 tenDonViTinh: '',
-                moTa:'',
+                moTa: ''
             }
-        }); 
+        });
     }
-    start = () => {
-        this.setState({ loading: true });
-        // ajax request after empty completing
-        setTimeout(() => {
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
-    }
-    onSelectChange = (selectedRowKeys) => {
-        this.setState({ selectedRowKeys });
-    }
-
-    editFunction = (record) => {
+    //on modal form ===================================================
+    showModal = () => {
         this.setState({
-            dataForm: record,
             visible: true,
-            isUpdate: true
         });
     }
-
-    getALLDonvitinh = async () => {
-        let data = await getALLDonvitinh();
-        this.setState({
-            data: data
-        });
-        console.log(data);
-    }
-    componentDidMount()
-    {
-        this.getALLDonvitinh();
-    }
-
-    handlSubmit = (e) => {
+    // onSubmitFrom
+    handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields(async (err, values) =>{
-            if(!err){
-                if(this.state.isUpdate === false){
-                    let res = await addNewDonvitinh(values);
-                    if(res){
+        this.props.form.validateFields(async (err, values) => {
+            console.log(err)
+            if (!err) {
+                if (this.state.isUpdate === false) {
+                    let res = await addNewDonViTinh(values);
+                    if (res) {
                         this.setState({
-                            data: [res, ... this.state.data]
+                            data: [res, ...this.state.data]
                         });
                         this.handleCancel();
                     }
-                    
-                }else{
-                    let res = await updateDonvitinh(values);
-                    var item = this.state.data.find(function(element){
+                } else {  /// update data
+                    let res = await updateDonViTinh(values);
+                    var item = this.state.data.find(function (element) {
                         return element.maDonViTinh === values.maDonViTinh;
                     });
-
                     item.maDonViTinh = res.maDonViTinh;
                     item.tenDonViTinh = res.tenDonViTinh;
                     item.moTa = res.moTa;
                     this.handleCancel();
                 }
             }
-        })
+        });
     }
-    deleteFunction = async(record) =>{
-        if(window.confirm("Xóa" + record.maDonViTinh)){
-            await deleteDonvitinh(record.maDonViTinh);
+
+    // update From
+    editFunction = (record) => {
+        this.setState({
+            visible: true,
+            isUpdate: true,
+            fromData: record
+        });
+    }
+    // delete data
+    deleteFunction = async (record) => {
+        if (window.confirm("xóa" + record.tenDonViTinh)) {
+            await deleteDonViTinh(record.maDonViTinh);
             this.setState({
-                data: this.setState.data.filter(e => e.maDonViTinh !== record.maDonViTinh)
+                data : this.state.data.filter(e=> e.maDonViTinh !== record.maDonViTinh)
             });
         }
     }
-    onDeleteAllRecord = async() =>{
-        if(window.confirm("Xóa mục đã chọn")){
-            await deleteDonvitinh(this.state.selectedRowKeys);
-            this.getALLDonvitinh();
-            this.setState(
-                {
-                    selectedRowKeys: []
-                }
-            )
+    // deleteAdd data
+    onDeleteAllRecord = async () => {
+        if (window.confirm("xóa mục đã chọn")) {
+            await deleteByListDonViTinh(this.state.selectedRowKeys);
+            this.getAllDonViTinh();
+            this.setState({
+                selectedRowKeys : []
+            });
         }
     }
-    render(){
-        const {loading, selectedRowKeys} = this.state;
+
+    render() {
+        const { selectedRowKeys, data, columns, loading } = this.state;
         const rowSelection = {
             selectedRowKeys,
-            onchange: this.onSelectChange,
+            onChange: this.onSelectChange
         };
         const hasSelected = selectedRowKeys.length > 0;
-
-        const{ getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -159,75 +173,82 @@ class Donvitinh extends Component{
                 sm: { span: 16 },
             },
         };
-        return(
+        return (
             <div>
                 <Button
                     type="primary"
-                    icon="plus-square-o" onClick={this.showModal}>Thêm ĐVT</Button>
+                    icon="plus-square-o" onClick={this.showModal}>Thêm tình trạng</Button>
                 <Button
                     style={{ marginLeft: '5px' }}
                     type="danger"
-                    onClick={this.onDeleteAllRecord}
                     disabled={!hasSelected}
                     loading={loading}
+                    onClick={this.onDeleteAllRecord}
                 >Xóa mục chọn</Button>
                 <Button
                     style={{ marginLeft: '5px' }}
                     type="dashed"
                     onClick={this.start}
-                    disabled={!hasSelected}
                     loading={loading}
                 >Bỏ chọn tất cả</Button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <Table rowKey='maDonViTinh' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
+                <Table rowKey='maDonViTinh' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={columns} dataSource={data} />
                 <Modal
-                    onCancel={this.handleCancel}
-                    title={this.state.isUpdate === false ? "Thêm Chức ĐVT" : "Cập nhật ĐVT"}
+                    title={this.state.isUpdate === false ? "Tạo đơn vị tính" : "Cập nhật đơn vị tính"}
                     visible={this.state.visible}
+                    onCancel={this.handleCancel}
                     footer={[
-                        <Button form="addĐVTForm" key="submit" type="primary" htmlType="submit">
+                        <Button form="addDonViTinh" key="submit" type="primary" htmlType="submit">
                             Submit </Button>,
                         <Button key="cancel" onClick={this.handleCancel}>
-                            Đóng </Button>
-
+                            Close </Button>
                     ]}
-                    >
-                    <Form id ="addĐVTForm" onSubmit ={this.handlSubmit}>
+                >
+                    <Form id="addDonViTinh" onSubmit={this.handleSubmit}>
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
-                            label="Tên ĐVT"
+                            label="Mã đơn vị"
+                        >
+                            {getFieldDecorator('maDonViTinh', {
+                                initialValue: this.state.fromData.maDonViTinh
+                            })(
+                                (this.state.isUpdate) === true ? <Input disabled /> : <Input />
+                            )}
+                        </Form.Item>
+
+                        <Form.Item
+                            {...formItemLayout}
+                            hasFeedback
+                            label="Tên đơn vị"
                         >
                             {getFieldDecorator('tenDonViTinh', {
-                                initialValue: this.state.dataForm.tenDonViTinh,
+                                initialValue: this.state.fromData.tenDonViTinh,
                                 rules: [{
-                                    required: true, message: 'Yêu cầu nhập tên ĐVT!',
+                                    required: true, message: 'Yêu cầu nhập tên đơn vị!',
                                 }],
                             })(
                                 <Input />
                             )}
-                        </Form.Item> 
+                        </Form.Item>
+
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
                             label="Mô tả"
                         >
                             {getFieldDecorator('moTa', {
-                                initialValue: this.state.dataForm.moTa,
-                                rules: [],
+                                initialValue: this.state.fromData.moTa,
                             })(
                                 <Input />
                             )}
-                        </Form.Item>   
+                        </Form.Item>
                     </Form>
                 </Modal>
-
-      
             </div>
         )
     }
-
 }
 export default Form.create()(Donvitinh);

@@ -22,6 +22,9 @@ public class Permission implements Serializable {
 
 	@Column(name = "FunctionID", insertable = false, updatable = false)
 	private int functionID;
+	
+	@Column(name = "Enable", nullable = false)
+	private boolean enable;
 
 	// bi-directional many-to-one association to Function
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +39,22 @@ public class Permission implements Serializable {
 	private Users user;
 
 	public Permission() {
+	}
+
+	public Permission(PermissionPK id, String userID, int functionID, boolean enable) {
+		super();
+		this.id = id;
+		this.userID = userID;
+		this.functionID = functionID;
+		this.enable = enable;
+	}
+
+	public boolean isEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 
 	public Permission(PermissionPK id) {

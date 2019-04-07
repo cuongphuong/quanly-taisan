@@ -16,6 +16,12 @@ public class GroupRefFunction implements Serializable {
 	@EmbeddedId
 	private GroupRefFunctionPK id;
 
+	@Column(name = "GroupID", updatable = false, insertable = false)
+	private int groupID;
+	
+	@Column(name = "FunctionID", insertable = false, updatable = false)
+	private int functionID;
+
 	// bi-directional many-to-one association to Function
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FunctionID", updatable = false, insertable = false)
@@ -56,6 +62,14 @@ public class GroupRefFunction implements Serializable {
 
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+
+	public int getGroupID() {
+		return groupID;
+	}
+
+	public void setGroupID(int groupID) {
+		this.groupID = groupID;
 	}
 
 }

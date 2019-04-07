@@ -57,7 +57,7 @@ class Nav extends Component {
                         />
                     </Col>
 
-                    <Col md={12}>
+                    <Col md={18}>
                         <Menu
                             onClick={this.props.handleMenuClick}
                             selectedKeys={[this.props.currenKey]}
@@ -65,16 +65,16 @@ class Nav extends Component {
                             className={'menu_header'}
                         >
                             {this.renderMenu()}
-
                         </Menu>
                     </Col>
-                    <Col md={11}>
+                    <Col md={2}>
                         <Menu
+                        className="menu_canhan"
                             mode="horizontal"
                             style={{ lineHeight: '64px' }}
                             onClick={this.menuClick}
                         >
-                            <Menu.SubMenu style={{}} title={<span className="avatar"><img src={this.props.avatar} alt="avatar" /><i className="on bottom b-white" /></span>}>
+                            <Menu.SubMenu title={<span className="avatar"><img height='50px' src='https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg' alt="avatar" /><i className="on bottom b-white" /></span>}>
                                 <Menu.ItemGroup title="Cá nhân">
                                     <Menu.Item key="logout"><span onClick={this.logout}><Icon type="logout" />Logout</span></Menu.Item>
                                 </Menu.ItemGroup>

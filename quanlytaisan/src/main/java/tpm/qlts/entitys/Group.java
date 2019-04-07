@@ -19,6 +19,7 @@ public class Group implements Serializable {
 
 	@Id
 	@Column(name = "GroupID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int groupID;
 
 	@Column(name = "GroupName")

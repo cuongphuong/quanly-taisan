@@ -42,7 +42,11 @@ public class PermissionService {
 	public int[] getAllFunctionByUser(String idUser) {
 		return permissionRepository.getAllFunctionByUserID(idUser);
 	}
-	
+
+	public int[] getAllFunctionEnableByUserID(String idUser) {
+		return permissionRepository.getAllFunctionEnableByUserID(idUser);
+	}
+
 	public List<Permission> getAllFunctionByUserIDFull(String idUser, int moduleID) {
 		return permissionRepository.getAllFunctionByUserIDFull(idUser, moduleID);
 	}
@@ -50,4 +54,9 @@ public class PermissionService {
 	public boolean checkPermission(String userID, int functionID) {
 		return permissionRepository.checkPerission(userID, functionID) >= 1;
 	}
+	
+	public List<Permission> selectAllPermissionByUserID(String userID) {
+		return permissionRepository.selectAllPermissionByUserID(userID);
+	}
+
 }

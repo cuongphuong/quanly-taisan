@@ -37,5 +37,4 @@ public class FunctionService {
 	public List<Function> getFunctionByModuleID(int id) {
 		return functionRepository.getFunctionByModuleID(id);
 	}
-
 }
