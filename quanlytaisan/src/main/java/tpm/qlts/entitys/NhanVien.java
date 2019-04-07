@@ -33,13 +33,18 @@ public class NhanVien implements Serializable {
 
 	@Column(name = "MaChucVu", insertable = false, updatable = false)
 	private int maChucVu;
-	
+
 	@Column(name = "MaPhongBan", insertable = false, updatable = false)
 	private String maPhongBan;
 
 	// bi-directional many-to-one association to NhanVienRefThietBi
 	@OneToMany(mappedBy = "nhanVien")
 	private List<NhanVienRefThietBi> nvTbs;
+
+	public NhanVien(String maNhanVien) {
+		super();
+		this.maNhanVien = maNhanVien;
+	}
 
 	// bi-directional many-to-one association to ChucVu
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -191,5 +196,4 @@ public class NhanVien implements Serializable {
 		this.phieuYeuCauThietBis = phieuYeuCauThietBis;
 	}
 
-	
 }

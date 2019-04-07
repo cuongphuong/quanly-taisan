@@ -1,5 +1,6 @@
 package tpm.qlts.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import tpm.qlts.entitys.PhieuYeuCauThietBi;
 import tpm.qlts.repositorys.PhieuYeuCauThietBiRepository;
 
-@Service("PhieuYeuCauThietBiServices")
+@Service("phieuYeuCauThietBiServices")
 public class PhieuYeuCauThietBiServices {
 	@Autowired
 	private PhieuYeuCauThietBiRepository phieuYeuCauThietBiRepository;
@@ -23,13 +24,14 @@ public class PhieuYeuCauThietBiServices {
 		phieuYeuCauThietBiRepository.deleteById(id);
 	}
 	
-	public Iterable<PhieuYeuCauThietBi> findAll()
+	public List<PhieuYeuCauThietBi> findAll()
 	{
-		return phieuYeuCauThietBiRepository.findAll();
+		return (List<PhieuYeuCauThietBi>) phieuYeuCauThietBiRepository.findAll();
 	}
 	
-	public Optional<PhieuYeuCauThietBi> finById(Integer id)
+	public Optional<PhieuYeuCauThietBi> finById(int id)
 	{
 		return phieuYeuCauThietBiRepository.findById(id);
 	}
+	
 }
