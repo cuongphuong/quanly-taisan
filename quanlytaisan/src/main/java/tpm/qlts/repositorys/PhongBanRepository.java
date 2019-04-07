@@ -13,5 +13,4 @@ public interface PhongBanRepository extends CrudRepository<PhongBan, String>{
 
 	@Query("SELECT p FROM PhongBan p ORDER BY p.tenPhongBan DESC")
 	List<PhongBan> findAll();
-	
 }
