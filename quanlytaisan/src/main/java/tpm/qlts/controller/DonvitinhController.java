@@ -2,6 +2,7 @@ package tpm.qlts.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import tpm.qlts.services.DonViTinhServices;
 @RestController
 @RequestMapping("donvitinh")
 public class DonvitinhController {
+	
 	@Autowired
 	private DonViTinhServices donViTinhServices;
 	
@@ -56,6 +58,18 @@ public class DonvitinhController {
 	{
 		if(donViTinhServices.existById(id))
 			donViTinhServices.deleteByID(id);
+	}
+	
+	@DeleteMapping("xoadvtbylist")
+	public int delebylist(@RequestBody List<Integer> lisID)
+	{
+		int count = 0;
+		for(Integer id: lisID) {
+			if(donViTinhServices.existById(id))
+				donViTinhServices.deleteByID(id);
+			count ++;
+		}
+		return count;
 	}
 	
 	@GetMapping("listdvt")

@@ -55,15 +55,17 @@ public class ChucvuController {
 		if(chucVuService.existById(id))	
 			chucVuService.deleteById(id);
 	}
-	@DeleteMapping("delete-by-LIST")
+	
+	@DeleteMapping("deletebylist")
 	public int deleteByList(@RequestBody List<Integer> lstId)
 	{
 		int count = 0;
-		for (Integer integer : lstId) {
-			if (chucVuService.existById(integer)) {
-				chucVuService.deleteById(integer);
+		for (Integer id : lstId) {
+			if (chucVuService.existById(id)) {
+				chucVuService.deleteById(id);
+				count ++;
 			}
-			count ++;
+			
 		}
 		return count;
 	}
