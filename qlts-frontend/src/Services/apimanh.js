@@ -35,10 +35,10 @@ export function deleteChucVu(id)
     })
 }
 
-export function deleteByList(lst)
+export function deleteByListcv(lst)
 {
     return request({
-        url:'/chucvu/delete-by-LIST',
+        url:'/chucvu/deletebylist',
         method: 'DELETE',
         data: lst
     })
@@ -64,16 +64,16 @@ export function addNewDonvitinh(data)
 export function updateDonvitinh(data)
 {
     return request({
-        url:'/donvitinh/donvitinh',
+        url:'/donvitinh/updatedvt',
         method:'PUT',
         data: data
     })
 }
-export function deleteDonvitinh()
+export function deleteDonvitinh(id)
 {
     return request(
         {
-            url:'/donvitinh/xoa-dvt',
+            url:'/donvitinh/xoa-dvt/' + id,
             method: 'DELETE'
         }
     )
@@ -81,8 +81,8 @@ export function deleteDonvitinh()
 export function deleteByListdvt(lstdvt)
 {
     return request({
-        url:'',
-        method:'',
+        url:'/donvitinh/xoadvtbylist',
+        method:'DELETE',
         data : lstdvt
     })
 }

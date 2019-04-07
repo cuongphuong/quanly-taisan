@@ -33,6 +33,7 @@ public class NhacungcapController {
 	{
 		return nhaCungCapService.update(ncc);
 	}
+	
 	@PutMapping("update-nhacungcap")
 	public NhaCungCap updateNhaCungCap(@RequestBody NhaCungCap ncc)
 	{
@@ -49,6 +50,18 @@ public class NhacungcapController {
 	{
 		if(nhaCungCapService.existsById(id))
 			nhaCungCapService.deleteById(id);
+	}
+	
+	@DeleteMapping("delete-by-list")
+	public int deletebylist(@RequestBody List<String> lstID)
+	{
+		int count = 0;
+		for(String id : lstID) {
+			if(nhaCungCapService.existsById(id))
+				nhaCungCapService.deleteById(id);
+			count ++;
+		}
+		return count;
 	}
 	@GetMapping("findbyID/{id}")
 	public Optional<NhaCungCap> findByID(@PathVariable String id)
