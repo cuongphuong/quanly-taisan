@@ -36,4 +36,7 @@ public class PhongBanService {
 	public boolean existsById(String id) {
 		return phongBanRepository.existsById(id);
 	}
+	public void deleteByListPhongBan(List<PhongBan> entities) {
+		phongBanRepository.deleteAll(entities);
+	}
 }
