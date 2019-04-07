@@ -7,6 +7,7 @@ import NhanVien from '../Components/Pages/NhanVien';
 import Chucvu from '../Components/Pages/Chucvu';
 import TinhTrang from '../Components/Pages/TinhTrang';
 import Donvitinh from '../Components/Pages/Donvitinh';
+import PhongBan from '../Components/Pages/PhongBan';
 // import  Module  from '../Components/Pages/Module';
 
 export default () => (
@@ -20,5 +21,6 @@ export default () => (
         <Route exact path="/app/chucvu" component={Chucvu} />
         <Route exact path="/app/tinhtrang" component={TinhTrang} />
         <Route exact path="/app/donvitinh" component={Donvitinh} />
+        <Route exact path="/app/phongban" component={PhongBan}/>
     </Switch>
 )
