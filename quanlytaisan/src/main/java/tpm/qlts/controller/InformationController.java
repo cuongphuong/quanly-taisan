@@ -1,6 +1,7 @@
 package tpm.qlts.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,15 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import tpm.qlts.custommodels.ChiTietYeuCauUpdate;
 import tpm.qlts.custommodels.NhanVienUpdate;
+import tpm.qlts.custommodels.PhieuYeuCauThietBiUpdate;
+import tpm.qlts.entitys.ChiTietYeuCau;
 import tpm.qlts.entitys.ChucVu;
 import tpm.qlts.entitys.DonViTinh;
 import tpm.qlts.entitys.NhanVien;
+import tpm.qlts.entitys.PhieuYeuCauThietBi;
 import tpm.qlts.entitys.PhongBan;
 import tpm.qlts.entitys.TinhTrang;
+import tpm.qlts.services.ChiTietYeuCauServices;
 import tpm.qlts.services.ChucVuService;
 import tpm.qlts.services.DonViTinhService;
 import tpm.qlts.services.NhanVienService;
+import tpm.qlts.services.PhieuYeuCauThietBiServices;
 import tpm.qlts.services.PhongBanService;
 import tpm.qlts.services.TinhTrangService;
 
@@ -46,6 +53,12 @@ public class InformationController {
 	
 	@Autowired
 	private DonViTinhService donViTinhService;
+	
+	@Autowired
+	private ChiTietYeuCauServices chiTietYeuCauServices;
+	
+	@Autowired
+	private PhieuYeuCauThietBiServices phieuYeuCauThietBiServices;
 	
 	@GetMapping(value="listAllPhongBan")
 	public List<PhongBan> getPhongBan()
@@ -277,4 +290,110 @@ public class InformationController {
 		}
 		return count;
 	}
+	
+	@GetMapping(value = "listAllctyc")
+	public List<ChiTietYeuCau> getAllctyc()
+	{
+		return chiTietYeuCauServices.findAll();
+	}
+	
+	@PostMapping(value = "add-ctyc")
+	public ChiTietYeuCau addChiTietyeuCau(@RequestBody ChiTietYeuCau chiTietYeuCau)
+	{ 
+		return chiTietYeuCauServices.update(chiTietYeuCau);
+	}
+	
+	@PutMapping(value = "update-ctyc")
+	public ChiTietYeuCau updateChiTietYeuCau(@RequestBody ChiTietYeuCau chiTietYeuCau)
+	{
+		if (chiTietYeuCauServices.existsById(chiTietYeuCau.getMaCT())) {
+			return chiTietYeuCauServices.update(chiTietYeuCau);
+		}
+		return null;
+	}
+	
+	@DeleteMapping(value = "delete-ctyc")
+	public void deleteChiTietYeuCau(@PathVariable Integer id)
+	{
+		chiTietYeuCauServices.delete(id);
+	}
+	
+	@DeleteMapping(value = "delete-list-ctyc")
+	public int deleteByLstctyc(@RequestBody List<Integer> lstID) {
+		int count = 0;
+		for (Integer id : lstID) {
+			if (chiTietYeuCauServices.existsById(id)) {
+				chiTietYeuCauServices.delete(id);
+			}
+			count ++;
+		}
+		return count;
+	}
+	
+	@GetMapping(value = "listAllphieuyeucauthietbi")
+	public List<PhieuYeuCauThietBi> getPhieuyeucauthietbi()
+	{
+		return phieuYeuCauThietBiServices.findAll();
+	}
+	
+//	@PostMapping(value = "addPhieuyeucauthietbi")
+//	public PhieuYeuCauThietBiUpdate addPhieuyeucauthietbi(@RequestBody PhieuYeuCauThietBi phieuYeuCauThietBi)
+//	{
+//		 );
+//	}
+	
+//	@GetMapping(value = "list-allphieu")
+//	public PhieuYeuCauThietBiUpdate getAllPhieu(@RequestBody PhieuYeuCauThietBiUpdate phieuYeuCauThietBiUpdate)
+//	{
+//		List<ChiTietYeuCau> listChiTiet = chiTietYeuCauServices.findAll();
+//		List<ChiTietYeuCauUpdate> listChiTietupdate = new ArrayList<ChiTietYeuCauUpdate>();
+//		for (ChiTietYeuCau list : listChiTiet) {
+//			
+//		}
+//		return null;
+//	}
+	
+	@PostMapping(value = "add-phieuyeucau")
+	public PhieuYeuCauThietBi addPhieuYeuCau(@RequestBody PhieuYeuCauThietBiUpdate data) {
+		PhieuYeuCauThietBi phieu = new PhieuYeuCauThietBi(); //entity -> save to PhieuYeuCau
+		// set data to Phieu
+		phieu.setNgayLapPhieu(new Date());
+		phieu.setNhanVien(new NhanVien(data.getNhanVien()));
+		phieu.setMucDich(data.getMucDich());
+		PhieuYeuCauThietBi phieuMoi = phieuYeuCauThietBiServices.update(phieu);	
+		List<ChiTietYeuCau> lstCTYeuCau = new ArrayList<ChiTietYeuCau>(); //entitys -> save to ChiTietYeuCau
+		//set data lst chi tiet
+		for(ChiTietYeuCauUpdate item : data.getChiTietYeuCaus()) {
+			ChiTietYeuCau chiTietYeuCau = new ChiTietYeuCau();
+			chiTietYeuCau.setPhieuYeuCauThietBi(phieuMoi);
+			
+			chiTietYeuCau.setTenThietBi(item.getTenThietBi());
+			chiTietYeuCau.setDonViTInh(item.getDonViTInh());
+			chiTietYeuCau.setQuyCach_DatTinh(item.getQuyCach_DatTinh());
+			chiTietYeuCau.setSoLuong(item.getSoLuong());
+			
+			lstCTYeuCau.add(chiTietYeuCau);
+		}
+		chiTietYeuCauServices.updateByList(lstCTYeuCau);
+		
+		return phieuMoi;
+	}
+	
+	@GetMapping(value = "getByIdPhieuYeucau/{id}")
+	public Optional<PhieuYeuCauThietBi> getByIdPhieuYeuCau(@PathVariable int id) {
+		return phieuYeuCauThietBiServices.finById(id);
+	}
+	
+	@GetMapping(value = "getAllPhieuYeuCau")
+	public List<PhieuYeuCauThietBi> getAllPhieuYeuCau(){
+		return phieuYeuCauThietBiServices.findAll();
+	}
+
+	@GetMapping(value = "getAllByIdPhieu/{id}")
+	public List<ChiTietYeuCau> getAllByIdPhieu(@PathVariable int id)
+	{
+		return chiTietYeuCauServices.getAllByIdPhieu(id);
+	}
+	
+	
 }
