@@ -140,4 +140,40 @@ export function deleteByListDonViTinh(list){
         method : 'DELETE', 
         data : list
     });
-}/////////////////////////////////////////////////////////////
+}////////////////////////////////////////////////////////
+// crud list All chi tiet yeu cau
+export function getAllChiTietYeuCau(){
+    return request({
+        url: '/infor/listAllctyc',
+        method: 'GET',
+    })
+}
+
+export function addNewPhieuYeuCau(data){
+    return request({
+        url : '/infor/add-phieuyeucau',
+        method : 'POST', 
+        data : data
+    });
+}
+// get phiếu yêu cầu theo id
+export function getByIdPhieuYeuCau(id){
+    return request({
+        url : '/infor/getByIdPhieuYeucau/' + id,
+        method : 'GET', 
+    });
+}
+// lấy tất cả phiếu yêu cầu
+export function getAllPhieuYeucau(){
+    return request({
+        url : '/infor/getAllPhieuYeuCau', 
+        method : 'GET'
+    });
+}
+// lay chi tiet theo BYid
+export function getAllByIdPhieuYeucau(id){
+    return request({
+        url : '/infor/getAllByIdPhieu/' + id, 
+        method : 'GET'
+    });
+}

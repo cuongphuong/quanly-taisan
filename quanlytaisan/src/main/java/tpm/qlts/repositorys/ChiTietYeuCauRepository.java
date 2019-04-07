@@ -1,9 +1,18 @@
 package tpm.qlts.repositorys;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import tpm.qlts.entitys.ChiTietYeuCau;
 
-public interface ChiTietYeuCauRepository extends JpaRepository<ChiTietYeuCau, Integer>{
+@Repository("chiTietYeuCauRepository")
+public interface ChiTietYeuCauRepository extends CrudRepository<ChiTietYeuCau, Integer>{
+	
+	@Query("select c from ChiTietYeuCau c where c.maPhieu = :maPhieu")
+	public List<ChiTietYeuCau> getAllByIdPhieu(@Param("maPhieu") int maPhieu);
 
 }
