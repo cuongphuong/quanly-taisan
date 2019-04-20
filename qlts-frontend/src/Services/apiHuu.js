@@ -177,3 +177,53 @@ export function getAllByIdPhieuYeucau(id){
         method : 'GET'
     });
 }
+
+export function getAllLoaiThietBi(){
+    return request({
+        url : '/infor/listAllloaiTb', 
+        method : 'GET'
+    });
+}
+
+export function getAllLoaiTbPhongBan(id){
+    return request({
+        url : '/infor/listAllWithPhongBan/' + id, 
+        method : 'GET'
+    });
+}
+
+export function getThietBiTheoLoai(IDPhongBan, IDLoai){
+    return request({
+        url : '/infor/listThietBiTheoLoai/' + IDPhongBan + '/' + IDLoai, 
+        method : 'GET'
+    });
+}
+
+export function getDanhSachThietBi(){
+    return request({
+        url : '/infor/listallDanhSachTB', 
+        method : 'GET'
+    });
+}
+
+export function getNhanVienThietBi(){
+    return request({
+        url : 'infor/listAllNhanVienThietBi', 
+        method : 'GET'
+    });
+}
+// update nhan vien theo thiet bi
+export function updateNhanVienRefThietBi(data){
+    return request({
+        url : '/infor/update-nhanvien-ref-thietbi',
+        method : 'PUT', 
+        data : data
+    });
+}
+// nhan vien thoe phong ban
+export function getNhanVienRefPhongBan(id){
+    return request({
+        url : 'infor/listNhanVienRefPhongBan/' + id, 
+        method : 'GET'
+    });
+}
