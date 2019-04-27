@@ -18,21 +18,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import tpm.qlts.custommodels.ChiTietYeuCauUpdate;
+import tpm.qlts.custommodels.DanhSachTB;
+import tpm.qlts.custommodels.DataUpdateNhanVienThietBi;
+import tpm.qlts.custommodels.LuanChuyenOptions;
 import tpm.qlts.custommodels.NhanVienUpdate;
 import tpm.qlts.custommodels.PhieuYeuCauThietBiUpdate;
+import tpm.qlts.custommodels.options;
 import tpm.qlts.entitys.ChiTietYeuCau;
 import tpm.qlts.entitys.ChucVu;
 import tpm.qlts.entitys.DonViTinh;
+import tpm.qlts.entitys.LoaiTB;
 import tpm.qlts.entitys.NhanVien;
+import tpm.qlts.entitys.NhanVienRefThietBi;
+import tpm.qlts.entitys.NhanVienRefThietBiPK;
 import tpm.qlts.entitys.PhieuYeuCauThietBi;
 import tpm.qlts.entitys.PhongBan;
+import tpm.qlts.entitys.ThietBi;
 import tpm.qlts.entitys.TinhTrang;
 import tpm.qlts.services.ChiTietYeuCauServices;
 import tpm.qlts.services.ChucVuService;
 import tpm.qlts.services.DonViTinhService;
+import tpm.qlts.services.LoaiTBService;
+import tpm.qlts.services.NhanVienRefThietBiService;
 import tpm.qlts.services.NhanVienService;
 import tpm.qlts.services.PhieuYeuCauThietBiServices;
 import tpm.qlts.services.PhongBanService;
+import tpm.qlts.services.ThietBiServices;
 import tpm.qlts.services.TinhTrangService;
 
 @Controller
@@ -60,11 +71,21 @@ public class InformationController {
 	@Autowired
 	private PhieuYeuCauThietBiServices phieuYeuCauThietBiServices;
 	
+	@Autowired
+	private LoaiTBService loaiTBService;
+	
+	@Autowired
+	private ThietBiServices thietBiServices;
+	
+	@Autowired
+	private NhanVienRefThietBiService NhanVienRefThietBiService;
+
+	
+	@SuppressWarnings("unused")
 	@GetMapping(value="listAllPhongBan")
 	public List<PhongBan> getPhongBan()
 	{
-		List<PhongBan> listPhongBan = phongBanService.findAll();
-		return listPhongBan;
+		return phongBanService.findAll();
 	}
 	
 	@PostMapping(value="add-phongban")
@@ -395,5 +416,106 @@ public class InformationController {
 		return chiTietYeuCauServices.getAllByIdPhieu(id);
 	}
 	
+	@GetMapping(value = "listAllloaiTb")
+	public List<LoaiTB> getAllloaiTb(){
+		return loaiTBService.findAll();
+	}
 	
+	@GetMapping(value = "listLoaiTBByIdphongBan/{id}")
+	public List<LoaiTB> getAlllaoiTbByIdphongBan(@PathVariable String id)
+	{
+		return loaiTBService.getAllByIdPhongBan(id);
+	}
+	
+	@GetMapping(value = "listThietBiTheoLoai/{maPhongBan}/{maLoai}")
+	public List<LuanChuyenOptions> getThietBiTheoLoai(@PathVariable("maPhongBan") String maPhongBan, @PathVariable("maLoai") String maLoai)
+	{
+		List<LuanChuyenOptions> lcOptions = new ArrayList<LuanChuyenOptions>();
+		List<LoaiTB> loai = loaiTBService.getAllThietBimaLoai(maPhongBan, maLoai);
+		for (LoaiTB loaiTB : loai) {
+			LuanChuyenOptions luanchuyen = new LuanChuyenOptions();
+			luanchuyen.setLabel(loaiTB.getTenLoai());
+			List<options> option = new ArrayList<options>();
+			luanchuyen.setOptions(option);
+			List<ThietBi> thietbi = loaiTB.getThietBis();
+			for (ThietBi item : thietbi) {
+				options list = new options();
+				list.setValue(Long.toString(item.getMaThietBi()));
+				list.setLabel(loaiTB.getTenLoai() + " "+  Long.toString(item.getMaThietBi()));
+				option.add(list);
+			}
+			lcOptions.add(luanchuyen);
+		}
+		return lcOptions;
+		
+	}
+	
+	@GetMapping(value = "listAllWithPhongBan/{id}")
+	public List<LuanChuyenOptions> getLuanChuyenOption(@PathVariable String id){
+		List<LuanChuyenOptions> luanchuyen = new ArrayList<LuanChuyenOptions>();
+		List<LoaiTB> listLoai = loaiTBService.getAllByIdPhongBan(id);
+		for (LoaiTB loaiTB : listLoai) {
+			LuanChuyenOptions luanChuyenOptions = new LuanChuyenOptions();
+			luanChuyenOptions.setLabel(loaiTB.getTenLoai());
+			List<options> option = new ArrayList<options>();
+			luanChuyenOptions.setOptions(option);
+			List<ThietBi> thietbi = loaiTB.getThietBis();
+			for (ThietBi thietbis : thietbi) {
+				options list = new options();
+				list.setValue(Long.toString(thietbis.getMaThietBi()));
+				list.setLabel(loaiTB.getTenLoai()+ " "+  Long.toString(thietbis.getMaThietBi()));
+				option.add(list);
+			}
+			luanchuyen.add(luanChuyenOptions);			
+		}
+		return luanchuyen;
+			
+		}
+	
+	@GetMapping(value = "listallDanhSachTB")
+	public List<DanhSachTB> getDanhSachTB(){
+		List<DanhSachTB> danhsach = new ArrayList<DanhSachTB>();
+		List<ThietBi> thietbi = thietBiServices.findAll();
+		for (ThietBi listThietBi : thietbi) {
+			DanhSachTB danh = new DanhSachTB();
+			danh.setMaThietBi(listThietBi.getMaThietBi());
+			danh.setTenLoai(listThietBi.getLoaiTb().getTenLoai() + " "+ listThietBi.getMaThietBi());
+			danhsach.add(danh);
+		}
+		return danhsach;
+	}
+	
+	@GetMapping(value = "listAllNhanVienThietBi")
+	public List<NhanVienRefThietBi> getNhanVienRefThietBi(){
+		return NhanVienRefThietBiService.findAll();
+	}
+	
+	@PutMapping(value = "update-nhanvien-ref-thietbi")
+	public List<NhanVienRefThietBi> updateNhanVienRefThietBi(@RequestBody DataUpdateNhanVienThietBi data) {
+		List<NhanVienRefThietBi> lstUpdate = new ArrayList<NhanVienRefThietBi>();
+		for(long maTB : data.getLstThietBi()) {
+			NhanVienRefThietBiPK key = new NhanVienRefThietBiPK(data.getMaNhanVien(), maTB, new Date());
+			lstUpdate.add(new NhanVienRefThietBi(key, new Date(), data.isKieuBangiao()));
+			
+			NhanVienRefThietBi recoreOld = NhanVienRefThietBiService.getAllMathietbi(maTB);
+			recoreOld.setDenNgay(new Date());
+			lstUpdate.add(recoreOld);
+		}
+		return NhanVienRefThietBiService.updateAll(lstUpdate);
+	}
+	
+	@GetMapping(value = "listMathietbi/{id}")
+	public NhanVienRefThietBi getAllMathietbi(@PathVariable long id){
+		return NhanVienRefThietBiService.getAllMathietbi(id);
+	}
+	
+	@GetMapping(value = "listNhanVienRefPhongBan/{maPhongBan}")
+	public List<NhanVien> getNhanVienRefPhongBan(@PathVariable String maPhongBan){
+		return nhanVienService.getNhanVienRefPhongBan(maPhongBan);
+	}
+	
+	@GetMapping(value = "getByIdThietBi/{id}")
+	public PhongBan getByIdThietBi(@PathVariable long id) {
+		return phongBanService.getByIdThietBi(id);
+	}
 }

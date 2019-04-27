@@ -24,6 +24,10 @@ public class NhanVienRefThietBiService {
 		return nhanVienRefThietBiRepository.save(nhanVienRefThietBi);
 	}
 	
+	public  List<NhanVienRefThietBi> updateAll(List<NhanVienRefThietBi> nhanVienRefThietBis) {
+		return (List<NhanVienRefThietBi>) nhanVienRefThietBiRepository.saveAll(nhanVienRefThietBis);
+	}
+	
 	public Optional<NhanVienRefThietBi> findById(NhanVienRefThietBiPK id)
 	{
 		return nhanVienRefThietBiRepository.findById(id);
@@ -32,5 +36,9 @@ public class NhanVienRefThietBiService {
 	public List<NhanVienRefThietBi> findAll()
 	{
 		return (List<NhanVienRefThietBi>) nhanVienRefThietBiRepository.findAll();
+	}
+	
+	public NhanVienRefThietBi getAllMathietbi(long id){
+		return nhanVienRefThietBiRepository.getAllMathietbi(id);
 	}
 }
