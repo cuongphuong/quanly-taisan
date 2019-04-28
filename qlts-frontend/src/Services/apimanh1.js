@@ -40,3 +40,27 @@ export function deletebylistncc(ltsdvt)
         data: ltsdvt
     }) 
 }
+
+export function getallphongban()
+{
+    return request({
+        url:'phongban/getall-phongban',
+        method:'GET'
+    })
+}
+
+export function getallnhanvien()
+{
+    return request({
+        url:'infor/listAllNhanVien',
+        method:'GET'
+    })
+}
+
+export function getttthietbi(id)
+{
+    return request({
+        url:'nhacungcap/gettenthietbi/' + id,
+        method: 'GET'
+    })
+}
