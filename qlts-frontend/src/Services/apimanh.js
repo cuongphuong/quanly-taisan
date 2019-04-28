@@ -86,3 +86,35 @@ export function deleteByListdvt(lstdvt)
         data : lstdvt
     })
 }
+
+export function getAllloaiTBbyid(id)
+{
+    return request({
+        url:'/nhacungcap/listloaitb/' + id,
+        method: 'GET',
+
+    })
+}
+
+export function getAllloaitb()
+{
+    return request({
+        url:'/loaitb/listtb',
+        method: 'GET'
+    })
+}
+export function getbyIdNCC(id)
+{
+    return request({
+        url: '/thietbi/get-tb-by-ncc/' + id,
+        method: 'GET'
+    })
+}
+
+export function gettenloai(mancc, maloai)
+{
+    return request({
+        url:'/nhacungcap/listalltb/' + mancc + '/' + maloai,
+        method: 'GET'
+    })
+}
