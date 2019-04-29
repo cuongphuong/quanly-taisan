@@ -389,7 +389,10 @@ public class PermissionController {
 				Function f = p.getFunction();
 				tmpList.add(f);
 			}
-			lstData.add(new Permissions(itemModule.getModuleID(), itemModule.getModuleName(), tmpList));
+			if(tmpList.size() > 0) {
+				lstData.add(new Permissions(itemModule.getModuleID(), itemModule.getModuleName(), tmpList));
+			}
+			
 		}
 		return lstData;
 	}

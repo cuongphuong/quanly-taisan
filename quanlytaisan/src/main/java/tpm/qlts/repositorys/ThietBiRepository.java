@@ -11,6 +11,8 @@ import tpm.qlts.entitys.ThietBi;
 
 @Repository("thietBiRepository")
 public interface ThietBiRepository extends JpaRepository<ThietBi, Long>{
+	@Query(value = "select top 1 MaThietBi from ThietBi order by MaThietBi desc", nativeQuery = true)
+	public long getMaxIDThietBi();
 
 	@Query("select tb from PhongBan p JOIN p.nhanViens n Join n.nvTbs m Join m.thietBi tb Join tb.loaiTb l where p.maPhongBan =:maPhongBan and l.maLoai =:maLoai")
 	public List<ThietBi> getAllThietBiByID(@Param("maPhongBan") String maPhongBan, @Param("maLoai") String maLoai);

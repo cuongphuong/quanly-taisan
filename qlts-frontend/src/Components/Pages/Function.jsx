@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { message, Row, Col, Button, Menu, Table, Divider, Modal, Form, Input, TreeSelect, Icon } from 'antd';
+import { message, Row, Col, Button, Menu, Table, Divider, Modal, Form, Input, TreeSelect, Icon, Switch } from 'antd';
 import { getAllModule, getFunctionByModuleID, addNewModule, updateModule, deleteModule, addNewFunction, deleteFunctionByID, deleteFunctionByList, updateFunction } from '../../Services/api';
 import Icons from '../../Utils/Icons';
 const SelectTreeNode = TreeSelect.TreeNode;
@@ -41,6 +41,21 @@ class Function extends Component {
             {
                 title: 'URL',
                 dataIndex: 'url',
+            },
+            {
+                title: 'Cho phép hiển thị',
+                render: (text, record) => {
+                    if (record.enable === true) {
+                        return (
+                            'Cho phép'
+                        )
+                    } else {
+                        return (
+                            'Không cho phép'
+                        )
+                    }
+
+                }
             },
             {
                 title: 'Điều khiển',
@@ -202,14 +217,14 @@ class Function extends Component {
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 if (this.state.isUpdate === false) {
-                    let newFunction = await addNewFunction({ functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected });
+                    let newFunction = await addNewFunction({ functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected, enable: values.enable });
                     this.setState({
                         functionData: [newFunction, ...this.state.functionData]
                     })
                     this.handleCancel();
                 } else {
                     let idUpdate = this.state.functionIDUpdate;
-                    let res = await updateFunction({ functionID: this.state.functionIDUpdate, functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected });
+                    let res = await updateFunction({ functionID: this.state.functionIDUpdate, functionName: values.functionName, url: values.url, iconType: values.iconType, moduleID: this.state.moduleSelected, enable: values.enable });
                     var item = this.state.functionData.find(function (element) {
                         return element.functionID.toString() === idUpdate.toString();
                     });
@@ -218,6 +233,7 @@ class Function extends Component {
                     item.functionName = res.functionName;
                     item.iconType = res.iconType;
                     item.url = res.url;
+                    item.enable = res.enable;
                     this.handleCancel();
                 }
             }
@@ -393,6 +409,15 @@ class Function extends Component {
                                 >
                                     {iconsTree}
                                 </TreeSelect>
+                            )}
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="Cho phép hiển thị"
+                            
+                        >
+                            {getFieldDecorator('enable', { initialValue: this.state.dataForm.enable, valuePropName: 'checked' })(
+                                <Switch />
                             )}
                         </Form.Item>
                     </Form>

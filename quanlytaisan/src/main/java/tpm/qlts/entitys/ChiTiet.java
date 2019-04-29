@@ -3,40 +3,51 @@ package tpm.qlts.entitys;
 import java.io.Serializable;
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the ChiTiet database table.
  * 
  */
 @Entity
-@NamedQuery(name="ChiTiet.findAll", query="SELECT c FROM ChiTiet c")
+@NamedQuery(name = "ChiTiet.findAll", query = "SELECT c FROM ChiTiet c")
 public class ChiTiet implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaCT")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "MaCT")
 	private int maCT;
 
-	@Column(name="DonViTinh")
+	@Column(name = "DonViTinh")
 	private int donViTinh;
 
-	@Column(name="SoLuong")
+	@Column(name = "SoLuong")
 	private int soLuong;
 
-	@Column(name="TenThietBi")
+	@Column(name = "TenThietBi")
 	private String tenThietBi;
 
-	//bi-directional many-to-one association to BienNhanThietBi
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaBienNhan")
+	@Column(name = "GiaTri")
+	private float giaTri;
+
+	// bi-directional many-to-one association to BienNhanThietBi
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaBienNhan")
 	private BienNhanThietBi bienNhanThietBi;
 
-	//bi-directional many-to-one association to DonMuaHang
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaHoaDon")
+	// bi-directional many-to-one association to DonMuaHang
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaHoaDon")
 	private DonMuaHang donMuaHang;
 
 	public ChiTiet() {
+	}
+
+	public float getGiaTri() {
+		return giaTri;
+	}
+
+	public void setGiaTri(float giaTri) {
+		this.giaTri = giaTri;
 	}
 
 	public int getMaCT() {

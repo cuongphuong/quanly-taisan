@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { message, Row, Col, Button, Checkbox, Tree, } from 'antd';
+import { Row, Col, Button, Checkbox, Tree, } from 'antd';
 import {
     getAllGroupAndCheck, getFunctionGroupByGroup, updatePermission, updateEnablePermission, getInfoUserByID
 } from '../../Services/api';
@@ -19,7 +19,6 @@ class Group extends Component {
             autoExpandParent: false,
             checkedKeys: [],
             selectedKeys: [],
-            functionTree: [],
             infoUser: null
         }
     }
@@ -78,8 +77,12 @@ class Group extends Component {
 
     loadInfoUser = async (id) => {
         let data = await getInfoUserByID(id);
-        this.setState({ infoUser: data });
-        console.log(this.state.infoUser)
+        if(data){
+            this.setState({ infoUser: data });
+        } else {
+            alert("Mã không tồn tại")
+        }
+        
     }
 
     renderTreeNodes = data => {
@@ -141,7 +144,6 @@ class Group extends Component {
                                 checkable
                                 expandedKeys={this.state.expandedKeys}
                                 onExpand={this.onExpand}
-                                expandedKeys={this.state.expandedKeys}
                                 onCheck={this.onCheck}
                                 checkedKeys={this.state.checkedKeys}
                                 onSelect={this.onSelect}

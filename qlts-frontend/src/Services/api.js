@@ -277,3 +277,47 @@ export function updateEnablePermission(data, id) {
         data: data
     })
 }
+
+
+// Chức năng nhập kho 
+// API lấy danh sách nhà cung cấp
+export function getAllNhaCungCap() {
+    return request({
+        url: '/nhap-kho/get-all-ncc',
+        method: 'GET'
+    })
+}
+
+// API lấy tất cả đơn vị tính get-all-dvt
+export function getAllDonViTinh() {
+    return request({
+        url: '/nhap-kho/get-all-dvt',
+        method: 'GET'
+    })
+}
+
+// API lấy tất cả các tên thiết bị có trong cơ sở dữ liệu
+export function getAllTenThietBiExits() {
+    return request({
+        url: '/nhap-kho/get-loaitb-sub',
+        method: 'GET'
+    })
+}
+
+
+// API lấy tất cả loai thiết bị cha
+export function getAllLoaiThietBi() {
+    return request({
+        url: '/nhap-kho/get-loaitb-cha',
+        method: 'GET'
+    })
+}
+
+//API nhập kho hàng loạt
+export function nhapKhoHangLoat(data) {
+    return request({
+        url: '/nhap-kho/nhap-kho-hang-loat',
+        method: 'POST',
+        data: data
+    })
+}

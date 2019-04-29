@@ -38,4 +38,8 @@ public class TinhTrangService {
 	{
 		return tinhTrangRepository.existsById(id);
 	}
+	
+	public String getTenTinhTrangByIDThietBi(long idThietBi) {
+		return tinhTrangRepository.getTenTinhTrangByIDThietBi(idThietBi);
+	}
 }

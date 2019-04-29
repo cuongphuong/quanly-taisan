@@ -9,7 +9,7 @@ export function getAllTinhTrang() {
 }
 
 //API thêm mới tinh trang
-export function addNewTinhTrang(data){
+export function addNewTinhTrang(data) {
     return request({
         url: '/infor/add-tinhtrang',
         method: 'POST',
@@ -18,7 +18,7 @@ export function addNewTinhTrang(data){
 }
 
 //API cập nhật user
-export function updateTinhTrang(data){
+export function updateTinhTrang(data) {
     return request({
         url: '/infor/update-tinhtrang',
         method: 'PUT',
@@ -27,7 +27,7 @@ export function updateTinhTrang(data){
 }
 
 //API xóa user
-export function deleteTinhTrang(id){
+export function deleteTinhTrang(id) {
     return request({
         url: '/infor/delete-tinhtrang/' + id,
         method: 'DELETE',
@@ -35,7 +35,7 @@ export function deleteTinhTrang(id){
 }
 
 //API xóa theo list
-export function deleteByListTinhTrang(lst){
+export function deleteByListTinhTrang(lst) {
     return request({
         url: '/infor/delete-by-list',
         method: 'DELETE',
@@ -51,7 +51,7 @@ export function getAllNhanVien() {
 }
 
 //API thêm mới nhan vien
-export function addNewNhanVien(data){
+export function addNewNhanVien(data) {
     return request({
         url: '/infor/add-employee',
         method: 'POST',
@@ -60,7 +60,7 @@ export function addNewNhanVien(data){
 }
 
 //API cập nhật nhan vien
-export function updateNhanVien(data){
+export function updateNhanVien(data) {
     return request({
         url: '/infor/update-employee',
         method: 'PUT',
@@ -69,7 +69,7 @@ export function updateNhanVien(data){
 }
 
 //API xóa nhan vien
-export function deleteNhanVien(id){
+export function deleteNhanVien(id) {
     return request({
         url: '/infor/delete-employee/' + id,
         method: 'DELETE',
@@ -78,7 +78,7 @@ export function deleteNhanVien(id){
 
 ///////////////////////
 // crud barng chuc vu
-export function getAllChucVu(){
+export function getAllChucVu() {
     return request({
         url: '/infor/listAllChucVu',
         method: 'GET',
@@ -86,7 +86,7 @@ export function getAllChucVu(){
 }
 ////////////////////
 // crud list All phong ban
-export function getAllPhongBan(){
+export function getAllPhongBan() {
     return request({
         url: '/infor/listAllPhongBan',
         method: 'GET',
@@ -94,7 +94,7 @@ export function getAllPhongBan(){
 }
 
 //API xóa theo list
-export function deleteByListNhanVien(lst){
+export function deleteByListNhanVien(lst) {
     return request({
         url: '/infor/delete-by-listNhanVien',
         method: 'DELETE',
@@ -103,127 +103,126 @@ export function deleteByListNhanVien(lst){
 }
 
 // crud list All phong ban
-export function getAllDonViTinh(){
+export function getAllDonViTinh() {
     return request({
         url: '/infor/listAllDonViTinh',
         method: 'GET',
     })
 }
 
-export function addNewDonViTinh(data)
-{
+export function addNewDonViTinh(data) {
     return request({
-        url : '/infor/add-newdonvitinh',
-        method : 'POST', 
-        data : data
+        url: '/infor/add-newdonvitinh',
+        method: 'POST',
+        data: data
     })
 }
 
-export function updateDonViTinh(data){
+export function updateDonViTinh(data) {
     return request({
-        url : '/infor/update-donviinh',
-        method : 'PUT', 
-        data : data
+        url: '/infor/update-donviinh',
+        method: 'PUT',
+        data: data
     });
 }
 
-export function deleteDonViTinh(id){
+export function deleteDonViTinh(id) {
     return request({
-        url : '/infor/delete-donvitinh/'+ id, 
-        method : 'DELETE'
+        url: '/infor/delete-donvitinh/' + id,
+        method: 'DELETE'
     });
 }
 
-export function deleteByListDonViTinh(list){
+export function deleteByListDonViTinh(list) {
     return request({
-        url : '/infor/delete-list-donvitinh',
-        method : 'DELETE', 
-        data : list
+        url: '/infor/delete-list-donvitinh',
+        method: 'DELETE',
+        data: list
     });
 }////////////////////////////////////////////////////////
 // crud list All chi tiet yeu cau
-export function getAllChiTietYeuCau(){
+export function getAllChiTietYeuCau() {
     return request({
         url: '/infor/listAllctyc',
         method: 'GET',
     })
 }
 
-export function addNewPhieuYeuCau(data){
+export function addNewPhieuYeuCau(data) {
     return request({
-        url : '/infor/add-phieuyeucau',
-        method : 'POST', 
-        data : data
+        url: '/infor/add-phieuyeucau',
+        method: 'POST',
+        data: data
     });
 }
 // get phiếu yêu cầu theo id
-export function getByIdPhieuYeuCau(id){
+export function getByIdPhieuYeuCau(id) {
     return request({
-        url : '/infor/getByIdPhieuYeucau/' + id,
-        method : 'GET', 
+        url: '/infor/getByIdPhieuYeucau/' + id,
+        method: 'GET',
     });
 }
 // lấy tất cả phiếu yêu cầu
-export function getAllPhieuYeucau(){
+export function getAllPhieuYeucau() {
     return request({
-        url : '/infor/getAllPhieuYeuCau', 
-        method : 'GET'
+        url: '/infor/getAllPhieuYeuCau',
+        method: 'GET'
     });
 }
 // lay chi tiet theo BYid
-export function getAllByIdPhieuYeucau(id){
+export function getAllByIdPhieuYeucau(id) {
     return request({
-        url : '/infor/getAllByIdPhieu/' + id, 
-        method : 'GET'
+        url: '/infor/getAllByIdPhieu/' + id,
+        method: 'GET'
     });
 }
 
-export function getAllLoaiThietBi(){
+export function getAllLoaiThietBi() {
     return request({
-        url : '/infor/listAllloaiTb', 
-        method : 'GET'
+        url: '/infor/listAllloaiTb',
+        method: 'GET'
     });
 }
 
-export function getAllLoaiTbPhongBan(id){
+export function getAllLoaiTbPhongBan(id) {
     return request({
-        url : '/infor/listAllWithPhongBan/' + id, 
-        method : 'GET'
+        url: '/infor/listAllWithPhongBan/' + id,
+        method: 'GET'
     });
 }
 
-export function getThietBiTheoLoai(IDPhongBan, IDLoai){
+export function getThietBiTheoLoai(IDPhongBan, IDLoai) {
     return request({
-        url : '/infor/listThietBiTheoLoai/' + IDPhongBan + '/' + IDLoai, 
-        method : 'GET'
+        url: '/infor/listThietBiTheoLoai/' + IDPhongBan + '/' + IDLoai,
+        method: 'GET'
     });
 }
 
-export function getDanhSachThietBi(){
+export function getDanhSachThietBi() {
     return request({
-        url : '/infor/listallDanhSachTB', 
-        method : 'GET'
+        url: '/infor/listallDanhSachTB',
+        method: 'GET'
     });
 }
 
-export function getNhanVienThietBi(){
+export function getNhanVienThietBi() {
     return request({
-        url : 'infor/listAllNhanVienThietBi', 
-        method : 'GET'
+        url: 'infor/listAllNhanVienThietBi',
+        method: 'GET'
     });
 }
 // update nhan vien theo thiet bi
-export function updateNhanVienRefThietBi(data){
+export function updateNhanVienRefThietBi(data) {
     return request({
-        url : '/infor/update-nhanvien-ref-thietbi',
-        method : 'PUT', 
-        data : data
+        url: '/infor/update-nhanvien-ref-thietbi',
+        method: 'PUT',
+        data: data
     });
 }
 // nhan vien thoe phong ban
-export function getNhanVienRefPhongBan(id){
+export function getNhanVienRefPhongBan(id) {
     return request({
-        url : 'infor/listNhanVienRefPhongBan/' + id, 
-        method : 'GET'
+        url: 'infor/listNhanVienRefPhongBan/' + id,
+        method: 'GET'
     });
 }

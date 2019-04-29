@@ -40,7 +40,7 @@ public class ThietBiChiTiet {
 		return giaTri;
 	}
 
-	public void setGiaTri(float giaTri) {
+	public void setGiaTri(double giaTri) {
 		this.giaTri = giaTri;
 	}
 
@@ -48,7 +48,7 @@ public class ThietBiChiTiet {
 		return khauHao;
 	}
 
-	public void setKhauHao(float khauHao) {
+	public void setKhauHao(double khauHao) {
 		this.khauHao = khauHao;
 	}
 
@@ -74,14 +74,6 @@ public class ThietBiChiTiet {
 
 	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
-	}
-
-	public void setGiaTri(double giaTri) {
-		this.giaTri = giaTri;
-	}
-
-	public void setKhauHao(double khauHao) {
-		this.khauHao = khauHao;
 	}
 
 	public ThietBiChiTiet(String maTB, String tenThietBi, int baoHanh, double giaTri, double khauHao, String maLoai,

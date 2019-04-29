@@ -7,20 +7,25 @@ class Sidebar extends Component {
 
     renderSubMenu() {
         return this.props.lstSubMenu.map(item => {
-            return (
-                <Menu.Item key={item.functionID}>
-                    <Link to={item.url}>
-                        <Icon type={item.iconType} />
-                        <span>{item.functionName}</span>
-                    </Link>
-                </Menu.Item>
-            )
+            if(item.enable === true){
+                return (
+                    <Menu.Item key={item.functionID}>
+                        <Link to={item.url}>
+                            <Icon type={item.iconType} />
+                            <span>{item.functionName}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            } else {
+                return '';
+            }
         })
     }
 
     render() {
         return (
             <Sider
+                className="pg_slider"
                 style={{ background: '#fff' }}
                 trigger={null}
                 collapsible

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import tpm.qlts.entitys.LoaiTB;
 
 @Repository("loaiTBRepositoryByManhGa")
-public interface LoaiTBRepositoryByManhGa extends LoaiThietBiRepository {
+public interface LoaiTBRepositoryByManhGa extends LoaiTBRepository {
 	@Query(value = "select LoaiTB.* from LoaiTB where MaLoai = (select MaLoaiCha from LoaiTB where MaLoai= :MaLoai)", nativeQuery = true)
 	public LoaiTB getLoaiChaFromMaLoaiCon(@Param("MaLoai") String maLoai);
 }

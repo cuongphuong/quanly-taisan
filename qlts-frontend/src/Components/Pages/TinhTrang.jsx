@@ -94,7 +94,6 @@ class TinhTrang extends Component {
         this.setState({
             data: data
         });
-        console.log(data);
     }
 
     // function in life cycle

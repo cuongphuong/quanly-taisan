@@ -1,6 +1,8 @@
 package tpm.qlts.entitys;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.*;
 
 /**
@@ -9,49 +11,95 @@ import javax.persistence.*;
  */
 @Embeddable
 public class NhanVienRefThietBiPK implements Serializable {
-	//default serial version id, required for serializable classes.
+	// default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="MaNhanVien", insertable=false, updatable=false)
+	@Column(name = "MaNhanVien", insertable = false, updatable = false)
 	private String maNhanVien;
 
-	@Column(name="MaThietBi", insertable=false, updatable=false)
+	@Column(name = "MaThietBi", insertable = false, updatable = false)
 	private long maThietBi;
+
+	@Column(name = "MaBanGiao", insertable = false, updatable = false)
+	private int MaBanGiao;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "Timestame", insertable = false, updatable = false)
+	private Date timestame;
 
 	public NhanVienRefThietBiPK() {
 	}
+
 	public String getMaNhanVien() {
 		return this.maNhanVien;
 	}
+
 	public void setMaNhanVien(String maNhanVien) {
 		this.maNhanVien = maNhanVien;
 	}
+
 	public long getMaThietBi() {
 		return this.maThietBi;
 	}
+
+	public int getMaBanGiao() {
+		return MaBanGiao;
+	}
+
+	public void setMaBanGiao(int maBanGiao) {
+		MaBanGiao = maBanGiao;
+	}
+
 	public void setMaThietBi(long maThietBi) {
 		this.maThietBi = maThietBi;
 	}
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof NhanVienRefThietBiPK)) {
-			return false;
-		}
-		NhanVienRefThietBiPK castOther = (NhanVienRefThietBiPK)other;
-		return 
-			this.maNhanVien.equals(castOther.maNhanVien)
-			&& (this.maThietBi == castOther.maThietBi);
+	public Date getTimestame() {
+		return timestame;
 	}
 
+	public void setTimestame(Date timestame) {
+		this.timestame = timestame;
+	}
+
+	public NhanVienRefThietBiPK(String maNhanVien, long maThietBi, Date timestame) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.maThietBi = maThietBi;
+		this.timestame = timestame;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NhanVienRefThietBiPK other = (NhanVienRefThietBiPK) obj;
+		if (maNhanVien == null) {
+			if (other.maNhanVien != null)
+				return false;
+		} else if (!maNhanVien.equals(other.maNhanVien))
+			return false;
+		if (maThietBi != other.maThietBi)
+			return false;
+		if (timestame == null) {
+			if (other.timestame != null)
+				return false;
+		} else if (!timestame.equals(other.timestame))
+			return false;
+		return true;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.maNhanVien.hashCode();
-		hash = hash * prime + ((int) (this.maThietBi ^ (this.maThietBi >>> 32)));
-		
-		return hash;
+		int result = 1;
+		result = prime * result + ((maNhanVien == null) ? 0 : maNhanVien.hashCode());
+		result = prime * result + (int) (maThietBi ^ (maThietBi >>> 32));
+		result = prime * result + ((timestame == null) ? 0 : timestame.hashCode());
+		return result;
 	}
 }

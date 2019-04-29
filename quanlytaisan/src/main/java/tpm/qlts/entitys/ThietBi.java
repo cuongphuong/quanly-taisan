@@ -5,59 +5,69 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the ThietBi database table.
  * 
  */
 @Entity
-@NamedQuery(name="ThietBi.findAll", query="SELECT t FROM ThietBi t")
+@NamedQuery(name = "ThietBi.findAll", query = "SELECT t FROM ThietBi t")
 public class ThietBi implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaThietBi")
+	@Column(name = "MaThietBi")
 	private long maThietBi;
 
-	@Column(name="BaoHanh")
+	@Column(name = "BaoHanh")
 	private int baoHanh;
 
-	@Column(name="GiaTri")
+	@Column(name = "GiaTri")
 	private double giaTri;
 
-	@Column(name="KhauHao")
+	@Column(name = "KhauHao")
 	private double khauHao;
 
+	@Column(name = "MaLoai", updatable = false, insertable = false)
+	private String maLoai;
+
+	public String getMaLoai() {
+		return maLoai;
+	}
+
+	public void setMaLoai(String maLoai) {
+		this.maLoai = maLoai;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="NgayNhap")
+	@Column(name = "NgayNhap")
 	private Date ngayNhap;
 
-	//bi-directional many-to-one association to NhanVienRefThietBi
-	@OneToMany(mappedBy="thietBi")
+	// bi-directional many-to-one association to NhanVienRefThietBi
+	@OneToMany(mappedBy = "thietBi")
 	private List<NhanVienRefThietBi> nvTbs;
 
-	//bi-directional many-to-one association to TinhTrangRefThietBi
-	@OneToMany(mappedBy="thietBi")
+	// bi-directional many-to-one association to TinhTrangRefThietBi
+	@OneToMany(mappedBy = "thietBi")
 	private List<TinhTrangRefThietBi> ttTbs;
 
-	//bi-directional many-to-one association to BienNhanThietBi
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaBienNhan")
+	// bi-directional many-to-one association to BienNhanThietBi
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaBienNhan")
 	private BienNhanThietBi bienNhanThietBi;
 
-	//bi-directional many-to-one association to DonViTinh
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaDonViTinh")
+	// bi-directional many-to-one association to DonViTinh
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaDonViTinh")
 	private DonViTinh donViTinh;
 
-	//bi-directional many-to-one association to LoaiTB
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaLoai")
+	// bi-directional many-to-one association to LoaiTB
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaLoai")
 	private LoaiTB loaiTb;
 
-	//bi-directional many-to-one association to PhieuThanhLy
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaPhieuThanhLy")
+	// bi-directional many-to-one association to PhieuThanhLy
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaPhieuThanhLy")
 	private PhieuThanhLy phieuThanhLy;
 
 	public ThietBi() {
@@ -177,6 +187,19 @@ public class ThietBi implements Serializable {
 
 	public void setPhieuThanhLy(PhieuThanhLy phieuThanhLy) {
 		this.phieuThanhLy = phieuThanhLy;
+	}
+
+	public ThietBi(long maThietBi, int baoHanh, double giaTri, double khauHao, Date ngayNhap,
+			BienNhanThietBi bienNhanThietBi, DonViTinh donViTinh, LoaiTB loaiTb) {
+		super();
+		this.maThietBi = maThietBi;
+		this.baoHanh = baoHanh;
+		this.giaTri = giaTri;
+		this.khauHao = khauHao;
+		this.ngayNhap = ngayNhap;
+		this.bienNhanThietBi = bienNhanThietBi;
+		this.donViTinh = donViTinh;
+		this.loaiTb = loaiTb;
 	}
 
 }

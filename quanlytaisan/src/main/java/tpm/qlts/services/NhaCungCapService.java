@@ -1,4 +1,5 @@
 package tpm.qlts.services;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import tpm.qlts.repositorys.NhaCungCapRepository;
 public class NhaCungCapService {
 	@Autowired
 	private NhaCungCapRepository nhaCungCapRepository;
-	
+
 	public void deleteById(String id) {
 		nhaCungCapRepository.deleteById(id);
 	}
@@ -21,8 +22,14 @@ public class NhaCungCapService {
 		return nhaCungCapRepository.save(ncc);
 	}
 
-	public Optional<NhaCungCap> findById(String id) {
-		return nhaCungCapRepository.findById(id);
+	public NhaCungCap findById(String id) {
+		Optional<NhaCungCap> a = nhaCungCapRepository.findById(id);
+		if (a.isPresent()) {
+			return a.get();
+		} else {
+			return null;
+		}
+
 	}
 
 	public List<NhaCungCap> findAll() {

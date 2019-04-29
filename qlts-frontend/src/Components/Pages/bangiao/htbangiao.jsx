@@ -1,21 +1,24 @@
 import React, { Component } from "react";
-import { Row, Col, Input, Select, Button, Avatar, List } from "antd";
+import { Row, Col, Input, Select, Button, } from "antd";
 import { getallphongban, getallnhanvien } from "../../../Services/apimanh1";
+import { banGiaoThietBi } from "../../../Services/apimanh";
+import history from '../../../Utils/history'
+
 import { element } from "prop-types";
+import List2 from "./List";
 import { connect } from "react-redux";
 
 const Option = Select.Option;
-function handleChange1(value) {
-  console.log(`selected ${value}`);
-}
-
 
 class bangiao1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       phongBan: [],
-      nhanVien: []
+      nhanVien: [],
+      maPhongBan: '',
+      kieuBanGiao: false,
+      maNhanVien: ''
     };
   }
   callapi = async () => {
@@ -25,33 +28,54 @@ class bangiao1 extends Component {
       phongBan: phongBan,
       nhanVien: nhanVien
     });
-    console.log(phongBan);
-    console.log(nhanVien);
   };
   componentDidMount() {
+    if (this.props.lstBanGiao.lst2.length === 0) {
+      history.push('/app/kcbangiao');
+    }
     this.callapi();
   }
 
-  handleChangepb = async value => {
-    let vaR = await getallphongban(value);
-
+  handleChangepb = value => {
     this.setState({
-      phongBan: vaR
+      maPhongBan: value
     });
-    console.log(value);
   };
 
-  handleChangenv = async nv => {
-    let VaR = await getallnhanvien(nv);
+  handleChangeKieuBanGiao = value => {
     this.setState({
-      nhanVien: VaR
+      kieuBanGiao: value
     });
-    console.log(nv);
+  }
+
+  handleChangenv = nv => {
+    this.setState({
+      maNhanVien: nv
+    });
   };
 
-  onHandleClickSubmit1 = () => {
+  getListThietBi = () => {
+    var lstThietBi = [];
+    for (var element of this.props.lstBanGiao.lst2) {
+      for (var tb of element.lstThietBi) {
+        lstThietBi = [...lstThietBi, tb];
+      }
+    }
+    return lstThietBi;
+  }
+
+  onHandleClickSubmit1 = async () => {
     var b = window.confirm("Bạn có muốn hoàn tất");
     if (b == true) {
+      var objectToServer = {
+        kieuBanGiao: this.state.kieuBanGiao,
+        maPhongBanNhan: this.state.maPhongBan,
+        maNhanVien: this.state.maNhanVien,
+        lstThietBi: this.getListThietBi()
+
+      }
+      let res = banGiaoThietBi(objectToServer);
+      console.log(objectToServer);
     }
   };
 
@@ -68,30 +92,12 @@ class bangiao1 extends Component {
             md={12}
             lg={12}
             xl={12}
-            style={{ textAlign: "center", fontSize: "150%" }}
           >
             <div>
-              DANH SÁCH THIẾT BỊ BÀN GIAO
-              <div
-                style={{
-                  marginLeft: "90px",
-                  marginRight: "90px",
-                  marginTop: "10px",
-                  textAlign: "center",
-                  borderBottom: "1.5px solid #110a0a"
-                }}
-              />
-              <div style={{ marginTop: "50px", marginRight: "40px" }}>
-                <List
-                  bordered
-                  dataSource={thietbiLoai}
-                  renderItem={item => (
-                    <List.Item>
-                      {item}
-                    </List.Item>
-                  )}
-                />
-              </div>
+              <h3 style={{ textAlign: 'center' }}>DANH SÁCH THIẾT BỊ BÀN GIAO</h3>
+
+              <List2 handleClickSelect={this.changeDataInListUnSelect} lableClick="Bỏ chọn" data={this.props.lstBanGiao.lst2} />
+
             </div>
           </Col>
 
@@ -101,92 +107,95 @@ class bangiao1 extends Component {
             md={12}
             lg={12}
             xl={12}
-            style={{ textAlign: "center", fontSize: "150%" }}
           >
-            <div>
-              THÔNG TIN BÀN GIAO
-              <div
-                style={{
-                  marginLeft: "90px",
-                  marginRight: "90px",
-                  marginTop: "10px",
-                  textAlign: "center",
-                  borderBottom: "1.5px solid #110a0a"
-                }}
-              />
-              <div style={{ marginTop: "30px", marginRight: "40px" }}>
-                <label
-                  style={{
-                    padding: "10px",
-                    fontSize: "80%",
-                    fontWeight: "10 bold"
-                  }}
-                >
-                  Kiểu bàn giao
-                </label>
-                <br />
-                <Select
-                  defaultValue="Chọn kiểu bàn giao"
-                  style={{ width: 300 }}
-                  onChange={handleChange1}
-                >
-                  <Option value={0}>Cá nhân</Option>
-                  <Option value={1}>Đơn vị</Option> 
-                </Select>
+            <h3 style={{ textAlign: 'center' }}>THÔNG TIN BÀN GIAO</h3>
+            <div />
+            <div style={{ backgroundColor: '#f1f1f1', paddingTop: '10px' }}>
+
+              <div className="ant-row ant-form-item">
+                <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-7">
+                  <label htmlFor="tenTinhTrang" className="ant-form-item-required" title="Kiểu bàn giao">Kiểu bàn giao</label>
+                </div>
+                <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16">
+                  <div className="ant-form-item-control">
+                    <span className="ant-form-item-children">
+                      <Select
+                        defaultValue="Chọn kiểu bàn giao"
+                        style={{ width: 300 }}
+                        onChange={this.handleChangeKieuBanGiao}
+                      >
+                        <Option value="ca_nhan">Cá nhân</Option>
+                        <Option value="don_vi">Đơn vị</Option>
+                      </Select>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div style={{ marginTop: "30px", marginRight: "40px" }}>
-                <label
-                  style={{
-                    padding: "10px",
-                    fontSize: "80%",
-                    fontWeight: "10 bold"
-                  }}
-                >
-                  Đơn vị nhận bàn giao
-                </label>
-                <br />
-                <Select
-                  defaultValue="Chọn phòng ban"
-                  style={{ width: 300 }}
-                  onChange={this.handleChangepb}
-                >
-                  {phongBan.map(element => (
-                    <Option key={element.maPhongBan} value={element.maPhongBan}>
-                      {element.tenPhongBan}
-                    </Option>
-                  ))}
-                </Select>
+
+              <div className="ant-row ant-form-item">
+                <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-7">
+                  <label htmlFor="tenTinhTrang" className="ant-form-item-required" title="Phòng ban nhận">Phòng ban nhận</label>
+                </div>
+                <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16">
+                  <div className="ant-form-item-control">
+                    <span className="ant-form-item-children">
+                      <Select
+                        defaultValue="Chọn phòng ban"
+                        style={{ width: 300 }}
+                        onChange={this.handleChangepb}
+                      >
+                        {phongBan.map(element => (
+                          <Option key={element.maPhongBan} value={element.maPhongBan}>
+                            {element.tenPhongBan}
+                          </Option>
+                        ))}
+                      </Select>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div style={{ marginTop: "30px", marginRight: "40px" }}>
-                <label
-                  style={{
-                    padding: "10px",
-                    fontSize: "80%",
-                    fontWeight: "10 bold"
-                  }}
-                >
-                  Người nhận bàn giao
-                </label>
-                <br />
-                <Select
-                  defaultValue="Chọn Nhân viên"
-                  style={{ width: 300 }}
-                  onChange={this.handleChangenv}
-                >
-                  {nhanVien.map(element => (
-                    <Option key={element.maNhanVien} value={element.maNhanVien}>
-                      {element.tenNhanVien}
-                    </Option>
-                  ))}
-                </Select>
+
+              <div className="ant-row ant-form-item">
+                <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-7">
+                  <label htmlFor="tenTinhTrang" className="ant-form-item-required" title="Nhân viên nhận bàn giao">Nhân viên nhận bàn giao</label>
+                </div>
+                <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16">
+                  <div className="ant-form-item-control">
+                    <span className="ant-form-item-children">
+                      <Select
+                        defaultValue="Chọn Nhân viên"
+                        style={{ width: 300 }}
+                        onChange={this.handleChangenv}
+                      >
+                        {nhanVien.map(element => (
+                          <Option key={element.maNhanVien} value={element.maNhanVien}>
+                            {element.tenNhanVien}
+                          </Option>
+                        ))}
+                      </Select>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <Button
-                onClick={this.onHandleClickSubmit1}
-                type="primary"
-                style={{ marginLeft: "30%", marginTop: "50px" }}
-              >
-                Hoàn tất bàn giao
-              </Button>
+
+              <div className="ant-row ant-form-item">
+                <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-7">
+
+                </div>
+                <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16" >
+                  <div className="ant-form-item-control" >
+                    <span className="ant-form-item-children">
+                      <Button
+                        onClick={this.onHandleClickSubmit1}
+                        type="primary"
+                      >
+                        Hoàn tất bàn giao
+                      </Button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </Col>
         </Row>
@@ -195,13 +204,8 @@ class bangiao1 extends Component {
   }
 }
 
-const mapStateToProps = state => {
+export default connect(function (state) {
   return {
-    thietbiLoai: state.thietbiLoai
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(bangiao1);
+    lstBanGiao: state.lstBanGiao
+  }
+})(bangiao1);
