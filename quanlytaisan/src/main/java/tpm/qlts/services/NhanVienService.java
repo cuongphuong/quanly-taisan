@@ -42,4 +42,8 @@ public class NhanVienService{
 	{
 		return nhanVienRepository.findNhanVienByName(ten);
 	}
+	
+	public List<NhanVien> getNhanVienRefPhongBan(String maPhongBan){
+		return nhanVienRepository.getNhanVienRefPhongBan(maPhongBan);
+	}
 }

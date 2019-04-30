@@ -2,38 +2,51 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
 
 /**
  * The persistent class for the LoaiTB database table.
  * 
  */
 @Entity
-@NamedQuery(name="LoaiTB.findAll", query="SELECT l FROM LoaiTB l")
+@NamedQuery(name = "LoaiTB.findAll", query = "SELECT l FROM LoaiTB l")
 public class LoaiTB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaLoai")
+	@Column(name = "MaLoai")
 	private String maLoai;
 
-	@Column(name="MaLoaiCha")
-	private int maLoaiCha;
+	@Column(name = "MaLoaiCha")
+	private String maLoaiCha;
 
-	@Column(name="MoTa")
+	@Column(name = "MoTa")
 	private String moTa;
 
-	@Column(name="TenLoai")
+	@Column(name = "TenLoai")
 	private String tenLoai;
 
-	//bi-directional many-to-one association to NhaCungCap
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MaNCC")
+	public LoaiTB(String maLoai, String maLoaiCha, String moTa, String tenLoai, NhaCungCap nhaCungCap) {
+		super();
+		this.maLoai = maLoai;
+		this.maLoaiCha = maLoaiCha;
+		this.moTa = moTa;
+		this.tenLoai = tenLoai;
+		this.nhaCungCap = nhaCungCap;
+	}
+
+	// bi-directional many-to-one association to NhaCungCap
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinColumn(name = "MaNCC")
 	private NhaCungCap nhaCungCap;
 
-	//bi-directional many-to-one association to ThietBi
-	@OneToMany(mappedBy="loaiTb")
+	// bi-directional many-to-one association to ThietBi
+	@OneToMany(mappedBy = "loaiTb")
+	@JsonIgnore
 	private List<ThietBi> thietBis;
 
 	public LoaiTB() {
@@ -47,11 +60,11 @@ public class LoaiTB implements Serializable {
 		this.maLoai = maLoai;
 	}
 
-	public int getMaLoaiCha() {
+	public String getMaLoaiCha() {
 		return this.maLoaiCha;
 	}
 
-	public void setMaLoaiCha(int maLoaiCha) {
+	public void setMaLoaiCha(String maLoaiCha) {
 		this.maLoaiCha = maLoaiCha;
 	}
 

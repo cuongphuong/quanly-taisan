@@ -5,33 +5,58 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the BienNhanThietBi database table.
  * 
  */
 @Entity
-@NamedQuery(name="BienNhanThietBi.findAll", query="SELECT b FROM BienNhanThietBi b")
+@NamedQuery(name = "BienNhanThietBi.findAll", query = "SELECT b FROM BienNhanThietBi b")
 public class BienNhanThietBi implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="MaBienNhan")
+	@Column(name = "MaBienNhan")
 	private String maBienNhan;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="NgayBienNhan")
+	@Column(name = "NgayBienNhan")
 	private Date ngayBienNhan;
 
-	//bi-directional many-to-one association to ChiTiet
-	@OneToMany(mappedBy="bienNhanThietBi")
+	// bi-directional many-to-one association to ChiTiet
+	@OneToMany(mappedBy = "bienNhanThietBi")
 	private List<ChiTiet> chiTiets;
 
-	//bi-directional many-to-one association to ThietBi
-	@OneToMany(mappedBy="bienNhanThietBi")
+	// bi-directional many-to-one association to ThietBi
+	@OneToMany(mappedBy = "bienNhanThietBi")
 	private List<ThietBi> thietBis;
 
+	@Column(name = "NhaCungCap")
+	private String maNCC;
+
+	@Column(name = "inputtype")
+	private String inputtype;
+
 	public BienNhanThietBi() {
+	}
+
+	public String getInputtype() {
+		return inputtype;
+	}
+
+	public void setInputtype(String inputtype) {
+		this.inputtype = inputtype;
+	}
+
+	public String getMaNCC() {
+		return maNCC;
+	}
+
+	public void setMaNCC(String maNCC) {
+		this.maNCC = maNCC;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public String getMaBienNhan() {

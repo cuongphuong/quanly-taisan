@@ -28,6 +28,9 @@ public class Users implements Serializable {
 	@Column(name = "Username")
 	private String username;
 
+	@Column(name = "enabled")
+	private boolean enabled;
+
 	// bi-directional many-to-one association to Permission
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -41,12 +44,13 @@ public class Users implements Serializable {
 	public Users() {
 	}
 
-	public Users(String userID, String fullName, String password, String username) {
+	public Users(String userID, String fullName, String password, String username, boolean enabled) {
 		super();
 		this.userID = userID;
 		this.fullName = fullName;
 		this.username = username;
 		this.password = password;
+		this.enabled = enabled;
 	}
 
 	public Users(String fullName, String password, String username) {
@@ -54,6 +58,14 @@ public class Users implements Serializable {
 		this.fullName = fullName;
 		this.password = password;
 		this.username = username;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public String getUserID() {

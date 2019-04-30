@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Table, Divider, Form, Input } from 'antd';
 import { getAllUser, addNewUser, updateUser, deleteUser, deleteByList } from "../../Services/api";
+import { Link } from 'react-router-dom';
 
 class Users extends Component {
     state = {
@@ -34,10 +35,16 @@ class Users extends Component {
 
                     <span className="span-link"
                         onClick={() => this.deleteFunction(record)}> Xóa</span>
+
+                    <Divider type="vertical" />
+
+                    <Link className="span-link" to={"/app/permission/" + record.userID}>Phân quyền</Link>
+
                 </div>
             }
         }],
         isUpdate: false,
+        isProcess: false,
         dataForm: {
             fullName: '',
             username: ''
@@ -104,29 +111,35 @@ class Users extends Component {
     //submitform
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                if (this.state.isUpdate === false) {
-                    let res = await addNewUser(values);
-                    if (res) {
-                        this.setState({
-                            data: [res, ...this.state.data]
+        if (this.state.isProcess === false) {
+            this.setState({ isProcess: true })
+            this.props.form.validateFields(async (err, values) => {
+                if (!err) {
+                    if (this.state.isUpdate === false) {
+                        let res = await addNewUser(values);
+                        if (res) {
+                            this.setState({
+                                data: [res, ...this.state.data]
+                            });
+                            this.handleCancel();
+                            this.setState({ isProcess: false })
+                        }
+                    } else {
+                        let res = await updateUser(values);
+                        var item = this.state.data.find(function (element) {
+                            return element.userID === values.userID;
                         });
-                        this.handleCancel();
-                    }
-                } else {
-                    let res = await updateUser(values);
-                    var item = this.state.data.find(function (element) {
-                        return element.userID === values.userID;
-                    });
 
-                    item.userID = res.userID;
-                    item.username = res.username;
-                    item.fullName = res.fullName;
-                    this.handleCancel();
+                        item.userID = res.userID;
+                        item.username = res.username;
+                        item.fullName = res.fullName;
+                        this.handleCancel();
+                        this.setState({ isProcess: false })
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     deleteFunction = async (record) => {
@@ -178,7 +191,6 @@ class Users extends Component {
                     type="danger"
                     onClick={this.onDeleteAllRecord}
                     disabled={!hasSelected}
-                    loading={loading}
                 >Xóa mục chọn</Button>
                 <Button
                     style={{ marginLeft: '5px' }}

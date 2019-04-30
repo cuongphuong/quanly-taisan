@@ -5,7 +5,7 @@ import { message } from 'antd';
 
 // create an axios instance
 const service = axios.create({
-    baseURL: 'http://localhost:8080', // api base_url
+    baseURL: 'http://localhost:8080/', // api base_url
     timeout: 20000 // request timeout
 })
 
@@ -60,6 +60,7 @@ service.interceptors.response.use(
                     message.error('Lổi không sác định');
                     break;
             }
+            
         } else if (error.response && error.response.status === 401) {
             removeToken();
             if (error.config.url.indexOf("logout") === -1) {
@@ -68,17 +69,33 @@ service.interceptors.response.use(
             setTimeout(() => {
                 history.push('/login')
             }, 1000)
-
+            
         } else if (error.response && error.response.status === 500) {
-            message.error('Lổi hệ thống!');
+            switch (error.response.data.message) {
+                case 'ID_NOT_EXISTS':
+                    message.error('User không tồn tại');
+                    history.push('/app/error404')
+                    break;
+                default:
+                    message.error('Lổi hệ thống!');
+                    break;
+            }
+            
         } else if (error.message && error.message.indexOf("timeout") > -1) {
             message.error('Máy chủ không phản hồi!');
         }
-        else if (error === "403") {
+        else if (error.response && error.response.status === 403) {
+            message.error('Phiên làm việc hết hạn!');
+            removeToken();
+            history.push('/login');
+        }
+        else if (error === "404") {
             message.error('Yêu cầu không được cho phép!');
 
-        } else {
+        }
+        else {
             message.error('Không có kết nối!');
+            history.push('/error-connect')
         }
         return Promise.reject(error)
     })

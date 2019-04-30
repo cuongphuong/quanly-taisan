@@ -12,39 +12,37 @@ import tpm.qlts.repositorys.LoaiTBRepository;
 @Service("loaiTBService")
 public class LoaiTBService {
 	@Autowired
-	public LoaiTBRepository loaiTBRepository;
-	
-	public void deleteById(String id)
-	{
-		loaiTBRepository.deleteById(id);
-	}
-	
-	public List<LoaiTB> findAll(){
-		return (List<LoaiTB>) loaiTBRepository.findAll();
-	}
-	
-	public Optional<LoaiTB> findById(String id)
-	{
-		return loaiTBRepository.findById(id);
-	}
-	
+	LoaiTBRepository loaiTBRepository;
+
 	public LoaiTB save(LoaiTB loaiTB) {
 		return loaiTBRepository.save(loaiTB);
 	}
-	
-	public boolean existsById(String id) {
-		return loaiTBRepository.existsById(id);
+
+	public List<LoaiTB> getLoaiTBSub() {
+		return loaiTBRepository.getLoaiTBSub();
 	}
-	
-	public List<LoaiTB> getAllByIdPhongBan(String id)
-	{
+
+	public List<LoaiTB> getLoaiTBCha() {
+		return loaiTBRepository.getLoaiTBCha();
+	}
+
+	public LoaiTB findByID(String id) {
+		Optional<LoaiTB> x = loaiTBRepository.findById(id);
+		if (x.isPresent()) {
+			return x.get();
+		}
+		return null;
+	}
+
+	public List<LoaiTB> findAll() {
+		return (List<LoaiTB>) loaiTBRepository.findAll();
+	}
+
+	public List<LoaiTB> getAllByIdPhongBan(String id) {
 		return loaiTBRepository.getAllByIdPhongBan(id);
 	}
-	
-	public List<LoaiTB> getAllThietBimaLoai(String maPhongBan, String maLoai)
-	{
-		return loaiTBRepository.getAllThietBimaLoai(maPhongBan, maLoai); 
-	}
-	
-}
 
+	public List<LoaiTB> getAllThietBimaLoai(String maPhongBan, String maLoai) {
+		return loaiTBRepository.getAllThietBimaLoai(maPhongBan, maLoai);
+	}
+}

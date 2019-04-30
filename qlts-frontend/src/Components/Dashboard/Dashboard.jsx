@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import history from '../../Utils/history';
 import '../../Styles/Layout.css';
 import Nav from '../Layout/Nav';
 import Sidebar from '../Layout/Sidebar';
@@ -19,7 +20,7 @@ class Dashboard extends Component {
             collapsed: false,
             lstMenu: [],
             lstSubMenu: [],
-            currenKey: "none"
+            currenKey: "none",
         }
     }
 
@@ -73,10 +74,28 @@ class Dashboard extends Component {
         let token = getToken();
         if (token)
             this.runGetInfoUser();
+        else {
+            history.push('/login');
+        }
     }
 
     getLstMenu = async () => {
         let data = await getFunctionMenu();
+        let functionPermission = [];
+        if (data.length > 0) {
+            data.forEach(element => {
+                element.lstFunction.forEach(functionElement => {
+                    functionPermission = [...functionPermission, functionElement.url];
+                });
+            });
+        }
+
+        let { dispatch } = this.props;
+        dispatch({
+            type: 'ADD_PERMISSION',
+            item: functionPermission
+        });
+
         this.setState({
             lstMenu: data,
             // currenKey: btoa(data[0].moduleID)
@@ -93,10 +112,10 @@ class Dashboard extends Component {
         return (
             <Layout style={{ height: "100vh", }} >
                 <Sidebar handleClickMenu={this.updateBreadcrumb.bind()} lstSubMenu={this.state.lstSubMenu} collapsed={this.state.collapsed}></Sidebar>
-                <Layout style={{background: '#fff'}}>
+                <Layout style={{ background: '#fff' }}>
                     <Nav currenKey={this.state.currenKey} handleMenuClick={this.handleMenuClick} lstMenu={this.state.lstMenu} collapsed={this.state.collapsed} toggle={this.toggle}></Nav>
                     <MyBreadcrumb data={this.props.path} style={{ padding: '10px 10px 10px 17px', background: 'rgb(250, 250, 250)', marginTop: '64px' }}></MyBreadcrumb>
-                    <Content style={{padding: '24px 12px', background: '#fff' }}>
+                    <Content style={{ padding: '16px 12px', background: '#fff' }}>
                         <ContentRouter></ContentRouter>
                     </Content>
                     {/* <MyFooter></MyFooter> */}
@@ -107,5 +126,5 @@ class Dashboard extends Component {
 }
 
 export default connect(function (state) {
-    return { path: state.path }
+    return { path: state.path, PermissionReducer: state.PermissionReducer }
 })(Dashboard);

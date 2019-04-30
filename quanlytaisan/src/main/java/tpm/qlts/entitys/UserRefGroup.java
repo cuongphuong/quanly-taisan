@@ -16,6 +16,28 @@ public class UserRefGroup implements Serializable {
 	@EmbeddedId
 	private UserRefGroupPK id;
 
+	@Column(name = "UserID", insertable = false, updatable = false)
+	private String userID;
+
+	@Column(name = "GroupID", insertable = false, updatable = false)
+	private int groupID;
+
+	public String getUserID() {
+		return userID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+
+	public int getGroupID() {
+		return groupID;
+	}
+
+	public void setGroupID(int groupID) {
+		this.groupID = groupID;
+	}
+
 	// bi-directional many-to-one association to Group
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "GroupID", updatable = false, insertable = false)

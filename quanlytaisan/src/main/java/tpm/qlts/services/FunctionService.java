@@ -33,5 +33,8 @@ public class FunctionService {
 	public boolean existsById(int id) {
 		return functionRepository.existsById(id);
 	}
-	
+
+	public List<Function> getFunctionByModuleID(int id) {
+		return functionRepository.getFunctionByModuleID(id);
+	}
 }
