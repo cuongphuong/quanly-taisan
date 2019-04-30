@@ -93,6 +93,30 @@
     background: #555;
 }
 
+.lable_tt{
+    font-weight: bold;
+    margin-right: 5px;
+    
+}
+
+.item-tt-tb{
+    margin-top: 5px;
+}
+
+.item_list_custom{
+    cursor: pointer;
+}
+
+.item_list_custom_active{
+    cursor: pointer;
+    background: linear-gradient(141deg, #f4feff 0%, #defffd 51%, #bbefff 75%) !important;
+}
+
+
+.item_list_custom:hover{
+    background: linear-gradient(141deg, #f4feff 0%, #defffd 51%, #bbefff 75%) !important;
+}
+
 @keyframes aminationcollapse {
     from {
         height: 0px;

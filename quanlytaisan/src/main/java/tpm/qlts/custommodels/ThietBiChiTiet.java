@@ -3,12 +3,12 @@ package tpm.qlts.custommodels;
 import java.util.Date;
 
 public class ThietBiChiTiet {
-	private String maTB;
+	private String maTB; 
 	private String tenThietBi;
 	private int baoHanh;
 	private double giaTri;
 	private double khauHao;
-	private String maLoai;
+	private String maLoai; 
 	private Date ngayNhap;
 	private String trangThai;
 

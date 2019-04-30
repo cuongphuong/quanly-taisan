@@ -1,9 +1,9 @@
 package tpm.qlts.entitys;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * The primary key class for the TT_TB database table.
@@ -20,21 +20,19 @@ public class TinhTrangRefThietBiPK implements Serializable {
 	@Column(name = "MaThietBi", insertable = false, updatable = false)
 	private long maThietBi;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Timestame", insertable = false, updatable = false)
-	private Date timestame;
+	@Column(name = "MaPhieuBaoTri", insertable = false, updatable = false)
+	private int maPhieuBaoTri;
 
-	public Date getTimestame() {
-		return timestame;
+	public int getMaPhieuBaoTri() {
+		return maPhieuBaoTri;
 	}
 
-	public void setTimestame(Date timestame) {
-		this.timestame = timestame;
+	public void setMaPhieuBaoTri(int maPhieuBaoTri) {
+		this.maPhieuBaoTri = maPhieuBaoTri;
 	}
-	
+
 	public TinhTrangRefThietBiPK() {
 	}
-
 
 	public String getMaTinhTrang() {
 		return this.maTinhTrang;
@@ -71,4 +69,12 @@ public class TinhTrangRefThietBiPK implements Serializable {
 
 		return hash;
 	}
+
+	public TinhTrangRefThietBiPK(String maTinhTrang, long maThietBi, int maPhieuBaoTri) {
+		super();
+		this.maTinhTrang = maTinhTrang;
+		this.maThietBi = maThietBi;
+		this.maPhieuBaoTri = maPhieuBaoTri;
+	}
+
 }

@@ -13,32 +13,34 @@ import tpm.qlts.repositorys.TinhTrangRepository;
 public class TinhTrangService {
 	@Autowired
 	private TinhTrangRepository tinhTrangRepository;
-	
-	public void deleteById(String id)
-	{
+
+	public void deleteById(String id) {
 		tinhTrangRepository.deleteById(id);
 	}
-	
-	public List<TinhTrang> findAll()
-	{
+
+	public List<TinhTrang> findAll() {
 		return (List<TinhTrang>) tinhTrangRepository.findAll();
 	}
+
+	public TinhTrang findById(String id) {
+		Optional<TinhTrang> s = tinhTrangRepository.findById(id);
+		if(s.isPresent())
+			return s.get();
+		return null;
+	}
 	
-	public Optional<TinhTrang> findById(String id)
-	{
+	public Optional<TinhTrang> findById1(String id) {
 		return tinhTrangRepository.findById(id);
 	}
-	
-	public TinhTrang update(TinhTrang tinhTrang)
-	{
+
+	public TinhTrang update(TinhTrang tinhTrang) {
 		return tinhTrangRepository.save(tinhTrang);
 	}
-	
-	public boolean exitstsById(String id)
-	{
+
+	public boolean exitstsById(String id) {
 		return tinhTrangRepository.existsById(id);
 	}
-	
+
 	public String getTenTinhTrangByIDThietBi(long idThietBi) {
 		return tinhTrangRepository.getTenTinhTrangByIDThietBi(idThietBi);
 	}

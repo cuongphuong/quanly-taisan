@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -43,19 +46,23 @@ public class ThietBi implements Serializable {
 	private Date ngayNhap;
 
 	// bi-directional many-to-one association to NhanVienRefThietBi
+	@JsonIgnore
 	@OneToMany(mappedBy = "thietBi")
 	private List<NhanVienRefThietBi> nvTbs;
 
 	// bi-directional many-to-one association to TinhTrangRefThietBi
+	@JsonIgnore
 	@OneToMany(mappedBy = "thietBi")
 	private List<TinhTrangRefThietBi> ttTbs;
 
 	// bi-directional many-to-one association to BienNhanThietBi
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaBienNhan")
 	private BienNhanThietBi bienNhanThietBi;
 
 	// bi-directional many-to-one association to DonViTinh
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaDonViTinh")
 	private DonViTinh donViTinh;
@@ -66,6 +73,7 @@ public class ThietBi implements Serializable {
 	private LoaiTB loaiTb;
 
 	// bi-directional many-to-one association to PhieuThanhLy
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaPhieuThanhLy")
 	private PhieuThanhLy phieuThanhLy;
