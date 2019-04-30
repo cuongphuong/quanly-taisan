@@ -20,6 +20,8 @@ import Bangiao from '../Components/Pages/bangiao/kcbangiao';
 import bangiao1 from '../Components/Pages/bangiao/htbangiao';
 import RotationType from '../Components/Pages/RotationPage/RotationType';
 import ListRotationType from '../Components/Pages/RotationPage/ListRotationType';
+import Baotri from '../Components/Pages/BaoTriThietBi/Baotri';
+import DanhSachPhieuBaoTri from '../Components/Pages/BaoTriThietBi/DanhSachPhieuBaoTri';
 // import  Module  from '../Components/Pages/Module';
 
 export default () => (
@@ -44,6 +46,8 @@ export default () => (
         <AuthorizedRoute exact path="/app/htbangiao" component={bangiao1} />
         <AuthorizedRoute exact path="/app/rotationtype" component={RotationType} />
         <AuthorizedRoute exact path="/app/listrotationtype" component={ListRotationType} />
+        <AuthorizedRoute exact path="/app/baotri" component={Baotri} />
+        <Route exact path="/app/dsphieubaotri" component={DanhSachPhieuBaoTri} />
         <Route component={NoMatch} />
     </Switch>
 )

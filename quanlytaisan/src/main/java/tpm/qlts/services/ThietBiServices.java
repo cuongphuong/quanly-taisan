@@ -28,8 +28,12 @@ public class ThietBiServices {
 		return (List<ThietBi>) thietBiRepository.findAll();
 	}
 
-	public Optional<ThietBi> findById(Long id) {
-		return thietBiRepository.findById(id);
+	public ThietBi findById(Long id) {
+		Optional<ThietBi> s = thietBiRepository.findById(id);
+		if(s.isPresent()) {
+			return s.get();
+		}
+		return null;
 	}
 
 	public long getMaxIDThietBi() {
@@ -48,5 +52,9 @@ public class ThietBiServices {
 	
 	public List<ThietBi> getAllByIdthietBiPhongBan(String id){
 		return thietBiRepository.getAllByIdthietBiPhongBan(id);
+	}
+
+public boolean checkExisted(long id) {
+		return thietBiRepository.existsById(id);
 	}
 }

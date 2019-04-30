@@ -24,10 +24,16 @@ public class TinhTrangRefThietBi implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TuNgay")
 	private Date tuNgay;
+	@Column(name = "MaTinhTrang", insertable = false, updatable = false)
+	private String maTinhTrang;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Timestame", insertable = false, updatable = false)
-	private Date timestame;
+	public String getMaTinhTrang() {
+		return maTinhTrang;
+	}
+
+	public void setMaTinhTrang(String maTinhTrang) {
+		this.maTinhTrang = maTinhTrang;
+	}
 
 	// bi-directional many-to-one association to ThietBi
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -39,15 +45,12 @@ public class TinhTrangRefThietBi implements Serializable {
 	@JoinColumn(name = "MaTinhTrang", updatable = false, insertable = false)
 	private TinhTrang tinhTrang;
 
+	// bi-directional many-to-one association to TinhTrang
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MaPhieuBaoTri", updatable = false, insertable = false)
+	private PhieuBaoTri phieuBaoTri;
+
 	public TinhTrangRefThietBi() {
-	}
-
-	public Date getTimestame() {
-		return timestame;
-	}
-
-	public void setTimestame(Date timestame) {
-		this.timestame = timestame;
 	}
 
 	public TinhTrangRefThietBiPK getId() {
@@ -90,4 +93,18 @@ public class TinhTrangRefThietBi implements Serializable {
 		this.tinhTrang = tinhTrang;
 	}
 
+	public PhieuBaoTri getPhieuBaoTri() {
+		return phieuBaoTri;
+	}
+
+	public void setPhieuBaoTri(PhieuBaoTri phieuBaoTri) {
+		this.phieuBaoTri = phieuBaoTri;
+	}
+
+	public TinhTrangRefThietBi(TinhTrangRefThietBiPK id, Date denNgay, Date tuNgay) {
+		super();
+		this.id = id;
+		this.denNgay = denNgay;
+		this.tuNgay = tuNgay;
+	}
 }
