@@ -35,6 +35,7 @@ import tpm.qlts.entitys.PhieuYeuCauThietBi;
 import tpm.qlts.entitys.PhongBan;
 import tpm.qlts.entitys.ThietBi;
 import tpm.qlts.entitys.TinhTrang;
+import tpm.qlts.entitys.TinhTrangRefThietBi;
 import tpm.qlts.services.ChiTietYeuCauServices;
 import tpm.qlts.services.ChucVuService;
 import tpm.qlts.services.DonViTinhService;
@@ -422,28 +423,6 @@ public class InformationController {
 
 	}
 
-	@GetMapping(value = "listAllWithPhongBan/{id}")
-	public List<LuanChuyenOptions> getLuanChuyenOption(@PathVariable String id) {
-		List<LuanChuyenOptions> luanchuyen = new ArrayList<LuanChuyenOptions>();
-		List<LoaiTB> listLoai = loaiTBService.getAllByIdPhongBan(id);
-		for (LoaiTB loaiTB : listLoai) {
-			LuanChuyenOptions luanChuyenOptions = new LuanChuyenOptions();
-			luanChuyenOptions.setLabel(loaiTB.getTenLoai());
-			List<options> option = new ArrayList<options>();
-			luanChuyenOptions.setOptions(option);
-			List<ThietBi> thietbi = loaiTB.getThietBis();
-			for (ThietBi thietbis : thietbi) {
-				options list = new options();
-				list.setValue(Long.toString(thietbis.getMaThietBi()));
-				list.setLabel(loaiTB.getTenLoai() + " " + Long.toString(thietbis.getMaThietBi()));
-				option.add(list);
-			}
-			luanchuyen.add(luanChuyenOptions);
-		}
-		return luanchuyen;
-
-	}
-
 	@GetMapping(value = "listallDanhSachTB")
 	public List<DanhSachTB> getDanhSachTB() {
 		List<DanhSachTB> danhsach = new ArrayList<DanhSachTB>();
@@ -490,4 +469,90 @@ public class InformationController {
 	public PhongBan getByIdThietBi(@PathVariable long id) {
 		return phongBanService.getByIdThietBi(id);
 	}
+	
+	@GetMapping(value = "getThietBiIdPhongBan/{id}")
+	public List<LuanChuyenOptions> getThietBiIdPhongBan(@PathVariable String id){
+		List<LuanChuyenOptions> lstLuanChuyen = new ArrayList<LuanChuyenOptions>();
+		List<ThietBi> lstThietBi = thietBiServices.getThietBiIdPhongBan(id);
+		for(ThietBi tb : lstThietBi) {
+			String maLoaiCheck = tb.getMaLoai();
+			
+			options opt = new options();
+			opt.setLabel(tb.getLoaiTb().getTenLoai()+ " " + String.valueOf(tb.getMaThietBi()));
+			opt.setValue(String.valueOf(tb.getMaThietBi()));
+			List<TinhTrangRefThietBi> ttTb = tb.getTtTbs();
+			for (TinhTrangRefThietBi ttrefthietBi : ttTb) {
+				if (tb.getMaThietBi() == ttrefthietBi.getThietBi().getMaThietBi()) {
+					opt.setTenTinhTrang(ttrefthietBi.getTinhTrang().getTenTinhTrang());
+					opt.setMoTa(ttrefthietBi.getTinhTrang().getMoTa());
+				}
+			}
+			boolean check = false;
+			for(LuanChuyenOptions lc : lstLuanChuyen) {
+				if(maLoaiCheck.equals(lc.getValue())) {
+					lc.getOptions().add(opt);
+					check = true;
+				}
+			}
+			if(check == false) {
+				LoaiTB loaiTB = loaiTBService.findById(tb.getMaLoai());
+				LuanChuyenOptions lcOT = new LuanChuyenOptions();
+				lcOT.setLabel(loaiTB.getTenLoai());
+				lcOT.setValue(loaiTB.getMaLoai());
+				List<options> lstOpt = new ArrayList<options>();
+				lstOpt.add(opt);
+				lcOT.setOptions(lstOpt);
+				lstLuanChuyen.add(lcOT);
+			}
+		}
+		return lstLuanChuyen;
+	}
+	
+	public boolean checkExistsMaLoai (String maLoai, List<LuanChuyenOptions> lstLuanChuyen) {
+		for(LuanChuyenOptions lc : lstLuanChuyen) {
+			if(maLoai.equals(lc.getValue())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@GetMapping(value = "listThietBiIdPhongBanIdLoai/{maPhongBan}/{maLoai}")
+	public List<LuanChuyenOptions> getThietBiIdPhongBanIdLoai(@PathVariable("maPhongBan") String maPhongBan, @PathVariable("maLoai") String maLoai){
+		List<LuanChuyenOptions> lstLuanChuyen = new ArrayList<LuanChuyenOptions>();
+		List<ThietBi> lstThietBi = thietBiServices.getThietBiIdPhongBanIdLoai(maPhongBan, maLoai);
+		for (ThietBi thietBi : lstThietBi) {
+			String chectMaloai = thietBi.getMaLoai();
+			options opt = new options();
+			opt.setLabel(thietBi.getLoaiTb().getTenLoai() + " " + String.valueOf(thietBi.getMaThietBi()));
+			opt.setValue(String.valueOf(thietBi.getMaThietBi()));
+			List<TinhTrangRefThietBi> ttTb = thietBi.getTtTbs();
+			for (TinhTrangRefThietBi ttrefthietBi : ttTb) {
+				if (thietBi.getMaThietBi() == ttrefthietBi.getThietBi().getMaThietBi()) {
+					opt.setTenTinhTrang(ttrefthietBi.getTinhTrang().getTenTinhTrang());
+					opt.setMoTa(ttrefthietBi.getTinhTrang().getMoTa());
+				}
+			}
+			boolean check = false;
+			for(LuanChuyenOptions lc : lstLuanChuyen) {
+				if (chectMaloai.equals(lc.getValue())) {
+					lc.getOptions().add(opt);
+					check = true;
+				}
+			}
+			if(check == false) {
+				LoaiTB loaiTB = loaiTBService.findById(thietBi.getMaLoai());
+				LuanChuyenOptions lcOT = new LuanChuyenOptions();
+				lcOT.setLabel(loaiTB.getTenLoai());
+				lcOT.setValue(loaiTB.getMaLoai());
+				List<options> lstOpt = new ArrayList<options>();
+				lstOpt.add(opt);
+				lcOT.setOptions(lstOpt);
+				lstLuanChuyen.add(lcOT);
+			}
+		}
+		return lstLuanChuyen;
+	}
+	
+	
 }
