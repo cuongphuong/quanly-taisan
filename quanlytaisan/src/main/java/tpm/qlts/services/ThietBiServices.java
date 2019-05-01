@@ -24,13 +24,13 @@ public class ThietBiServices {
 		thietBiRepository.deleteById(id);
 	}
 
-	public List<ThietBi> findAll(){
+	public List<ThietBi> findAll() {
 		return (List<ThietBi>) thietBiRepository.findAll();
 	}
 
 	public ThietBi findById(Long id) {
 		Optional<ThietBi> s = thietBiRepository.findById(id);
-		if(s.isPresent()) {
+		if (s.isPresent()) {
 			return s.get();
 		}
 		return null;
@@ -44,6 +44,12 @@ public class ThietBiServices {
 	public List<ThietBi> update(Iterable<ThietBi> tbs) {
 		return thietBiRepository.saveAll(tbs);
 	}
+
+	public boolean checkExisted(long id) {
+		return thietBiRepository.existsById(id);
+	}
+	
+	//
 	
 	public List<ThietBi> getAllThietBiByID(String maPhongBan, String maLoai)
 	{
@@ -53,8 +59,12 @@ public class ThietBiServices {
 	public List<ThietBi> getAllByIdthietBiPhongBan(String id){
 		return thietBiRepository.getAllByIdthietBiPhongBan(id);
 	}
-
-public boolean checkExisted(long id) {
-		return thietBiRepository.existsById(id);
+	
+	public List<ThietBi> getThietBiIdPhongBan(String id){
+		return thietBiRepository.getThietBiIdPhongBan(id);
+	}
+	
+	public List<ThietBi> getThietBiIdPhongBanIdLoai(String maPhongBan, String maLoai){
+		return thietBiRepository.getThietBiIdPhongBanIdLoai(maPhongBan, maLoai);
 	}
 }

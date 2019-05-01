@@ -47,7 +47,7 @@ export default () => (
         <AuthorizedRoute exact path="/app/rotationtype" component={RotationType} />
         <AuthorizedRoute exact path="/app/listrotationtype" component={ListRotationType} />
         <AuthorizedRoute exact path="/app/baotri" component={Baotri} />
-        <Route exact path="/app/dsphieubaotri" component={DanhSachPhieuBaoTri} />
+        <AuthorizedRoute exact path="/app/dsphieubaotri" component={DanhSachPhieuBaoTri} />
         <Route component={NoMatch} />
     </Switch>
 )

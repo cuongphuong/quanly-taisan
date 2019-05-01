@@ -13,6 +13,7 @@
 
 .header_app {
     box-shadow: 1px 4px 4px rgba(139, 200, 224, 0.2) !important;
+    z-index: 100;
 }
 
 .menu_header_item {
@@ -51,7 +52,6 @@
     color: #333;
 }
 
-.check_permission{
+.check_permission {
     text-align: center;
-    
 }

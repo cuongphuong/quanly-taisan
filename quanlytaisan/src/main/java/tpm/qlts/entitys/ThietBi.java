@@ -33,12 +33,23 @@ public class ThietBi implements Serializable {
 	@Column(name = "MaLoai", updatable = false, insertable = false)
 	private String maLoai;
 
+	@Column(name = "TinhTrangKho", nullable = true)
+	private Boolean tinhTrangKho;
+
 	public String getMaLoai() {
 		return maLoai;
 	}
 
 	public void setMaLoai(String maLoai) {
 		this.maLoai = maLoai;
+	}
+
+	public Boolean isTinhTrangKho() {
+		return tinhTrangKho;
+	}
+
+	public void setTinhTrangKho(Boolean tinhTrangKho) {
+		this.tinhTrangKho = tinhTrangKho;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

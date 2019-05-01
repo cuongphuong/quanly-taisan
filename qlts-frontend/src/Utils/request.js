@@ -56,11 +56,17 @@ service.interceptors.response.use(
                 case 'ID_NOT_EXISTS':
                     message.error('Bảng ghi cần chỉnh sữa có mã không tồn tại!');
                     break;
+                case 'NOT_CHANGE_TT':
+                    message.error('Trùng tình trạng thiết bị!');
+                    break;
+                case 'NON_ITEM_IN_LIST':
+                    message.error('Không có thiết bị trong danh sách!');
+                    break;
                 default:
                     message.error('Lổi không sác định');
                     break;
             }
-            
+
         } else if (error.response && error.response.status === 401) {
             removeToken();
             if (error.config.url.indexOf("logout") === -1) {
@@ -69,7 +75,7 @@ service.interceptors.response.use(
             setTimeout(() => {
                 history.push('/login')
             }, 1000)
-            
+
         } else if (error.response && error.response.status === 500) {
             switch (error.response.data.message) {
                 case 'ID_NOT_EXISTS':
@@ -80,7 +86,7 @@ service.interceptors.response.use(
                     message.error('Lổi hệ thống!');
                     break;
             }
-            
+
         } else if (error.message && error.message.indexOf("timeout") > -1) {
             message.error('Máy chủ không phản hồi!');
         }

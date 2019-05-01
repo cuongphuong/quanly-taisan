@@ -115,11 +115,13 @@ class ListRotationType extends Component {
 
     getListThietBi = () => {
         var lstThietBi = [];
+        console.log(this.props.thietbis);
         for (var element of this.props.thietbis) {
             for (var tb of element.options) {
-                lstThietBi.push(parseInt(tb.value, 20))
+                lstThietBi = [...lstThietBi, tb.value];
             }
         }
+        console.log(lstThietBi)
         return lstThietBi;
     }
 
@@ -129,7 +131,8 @@ class ListRotationType extends Component {
         var { kieuBanGiao, maNhanVien } = this.state;
         var dataSend = { maNhanVien: maNhanVien, kieuBangiao: kieuBanGiao, lstThietBi: [...list] };
         console.log(dataSend);
-        await updateNhanVienRefThietBi(dataSend);
+        let data = await updateNhanVienRefThietBi(dataSend);
+        console.log(data)
         this.props.fetAllThietBi([]);
     }
 
@@ -187,7 +190,7 @@ class ListRotationType extends Component {
                             {dataList}
                         </div>
                         <div className="btn pull-left" style={{ marginTop: '30px' }}>
-                            <Link to="/app/rotationtype" onClick = {() => this.onComeBack()} className="btn btn-primary"><Icon type="left" />Chọn lại</Link>
+                            <Link to="/app/rotationtype" onClick={() => this.onComeBack()} className="btn btn-primary"><Icon type="left" />Chọn lại</Link>
                         </div>
                     </Col>
                     <Col xs={12} sm={12} md={12} lg={12} xl={12} style={{ padding: '10px' }}>

@@ -1,6 +1,7 @@
 package tpm.qlts.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import tpm.qlts.comporator.PhieuBaoTriComporator;
 import tpm.qlts.custommodels.BaoTriData;
 import tpm.qlts.custommodels.ChiTietPhieuBaoTri;
 import tpm.qlts.custommodels.ChiTietThietBi;
@@ -49,7 +51,7 @@ public class BaoTriThietBiController {
 
 	@Autowired
 	private TinhTrangRefThietBiService tinhTrangRefThietBiService;
-	
+
 	@Autowired
 	private NhanVienService nhanVienService;
 
@@ -79,16 +81,20 @@ public class BaoTriThietBiController {
 		PhieuBaoTri phieuBaoTri = phieuBaoTriService.save(new PhieuBaoTri("cho_sua_chua"));
 		List<TinhTrangRefThietBi> newLstTTTBs = new ArrayList<TinhTrangRefThietBi>();
 
-		for (ChiTietThietBi tb : data.getLstThietBi()) {
+		if (data.getLstThietBi().size() > 0) {
+			for (ChiTietThietBi tb : data.getLstThietBi()) {
 
-			if (tinhTrangRefThietBiService.checkTinhTrangTB(tb.getMaThietBi(), "TT02")) {
+				if (tinhTrangRefThietBiService.checkTinhTrangTB(tb.getMaThietBi(), "TT02")) {
 
-				newLstTTTBs.add(new TinhTrangRefThietBi(
-						new TinhTrangRefThietBiPK("TT02", tb.getMaThietBi(), phieuBaoTri.getMaPhieuBaoTri()), null,
-						new Date()));
-			} else {
-				throw new ResponseStatusException(HttpStatus.CONFLICT, "OBJECT_EXISTS");
+					newLstTTTBs.add(new TinhTrangRefThietBi(
+							new TinhTrangRefThietBiPK("TT02", tb.getMaThietBi(), phieuBaoTri.getMaPhieuBaoTri()), null,
+							new Date()));
+				} else {
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT_CHANGE_TT");
+				}
 			}
+		} else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NON_ITEM_IN_LIST");
 		}
 		return tinhTrangRefThietBiService.saveAll(newLstTTTBs);
 	}
@@ -96,7 +102,9 @@ public class BaoTriThietBiController {
 	// on Lst Bao Tri Thiet Bi
 	@GetMapping("get-all-phieu-baotri")
 	public Iterable<PhieuBaoTri> getAllPhieuBaoTriThietBi() {
-		return phieuBaoTriService.findAll();
+		List<PhieuBaoTri> lstPhieu = (List<PhieuBaoTri>)phieuBaoTriService.findAll();
+		Collections.sort(lstPhieu, new PhieuBaoTriComporator());
+		return lstPhieu;
 	}
 
 	@GetMapping("get-ct-phieu-baotri/{maPhieu}")
@@ -113,6 +121,7 @@ public class BaoTriThietBiController {
 							thietBiService.findById(ttrefTB.getId().getMaThietBi()).getLoaiTb().getTenLoai(),
 							ttrefTB.getId().getMaPhieuBaoTri()));
 		}
+
 		return lstChiTietPhieu;
 	}
 
@@ -143,6 +152,7 @@ public class BaoTriThietBiController {
 							thietBiService.findById(ttrefTB.getId().getMaThietBi()).getLoaiTb().getTenLoai(),
 							ttrefTB.getId().getMaPhieuBaoTri()));
 		}
+
 		return lstChiTietPhieu;
 	}
 
@@ -158,8 +168,8 @@ public class BaoTriThietBiController {
 		phieu.setMaNhanVienChiuTrachNhiem(data.getMaNhanVienChiuTrachNhiem());
 		phieu.setNoiBaoTri(data.getNoiBaoTri());
 		phieu.setPhiBaoTri(data.getPhiBaoTri());
-		
-		//Tạo danh sach cập nhật TinhTrangRefThietBi
+
+		// Tạo danh sach cập nhật TinhTrangRefThietBi
 		for (int i = 0; i < updateLstTTTBs.size(); i++) {
 			updateLstTTTBs.get(i).setId(new TinhTrangRefThietBiPK("TT01", updateLstTTTBs.get(i).getId().getMaThietBi(),
 					updateLstTTTBs.get(i).getId().getMaPhieuBaoTri()));
@@ -180,6 +190,7 @@ public class BaoTriThietBiController {
 							thietBiService.findById(ttrefTB.getId().getMaThietBi()).getLoaiTb().getTenLoai(),
 							ttrefTB.getId().getMaPhieuBaoTri()));
 		}
+
 		return lstChiTietPhieu;
 	}
 
@@ -187,5 +198,5 @@ public class BaoTriThietBiController {
 	public List<NhanVien> getAllNhanVien() {
 		return nhanVienService.findAll();
 	}
-	
+
 }

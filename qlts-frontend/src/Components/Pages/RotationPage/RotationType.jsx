@@ -17,9 +17,9 @@ class RotationType extends Component {
             loaiThietBis: [],
             phongbanloai: [],
             listSelect: [],
-            lst1: [], 
-            keyPhongBan : '', 
-            keyLoai : ''
+            lst1: [],
+            keyPhongBan: '',
+            keyLoai: ''
         }
     }
 
@@ -77,7 +77,7 @@ class RotationType extends Component {
 
     onhanderClick = (key) => {
         var { lst1 } = this.state;
-        var {thietbis} = this.props;
+        var { thietbis } = this.props;
         var index = 0;
         var lstTBnew = [];
         for (var element of lst1) {
@@ -152,7 +152,7 @@ class RotationType extends Component {
                 this.props.fetAllThietBi(thietbis);
                 break;
             }
-            index ++;
+            index++;
         }
     }
 

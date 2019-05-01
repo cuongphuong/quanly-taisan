@@ -8,7 +8,7 @@ const thietbi = (state = initialStateThietBi , action) => {
         case Types.FETCH_THIETBI : 
             state = action.thietbis;
             return [...state];
-        default : return [...state];
+        default : return state;
     }
 }
 

@@ -41,4 +41,8 @@ public class NhanVienRefThietBiService {
 	public NhanVienRefThietBi getAllMathietbi(long id){
 		return nhanVienRefThietBiRepository.getAllMathietbi(id);
 	}
+	
+	public List<NhanVienRefThietBi> getAllNVTBByIdPhongBan(String id){
+		return nhanVienRefThietBiRepository.getAllNVTBByIdPhongBan(id);
+	}
 }
