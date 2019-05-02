@@ -32,7 +32,7 @@ public class LoaiTBController {
 	
 	@GetMapping("listtb")
 	public List<LoaiTB> getallloaitb(){
-		return (List<LoaiTB>)loaiTBService.findAll();
+		return (List<LoaiTB>)loaiTBService.getLoaiTBCha();
 	}
 	
 	@GetMapping("listtbcha")

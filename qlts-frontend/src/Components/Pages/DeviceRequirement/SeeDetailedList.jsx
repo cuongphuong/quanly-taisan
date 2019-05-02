@@ -65,7 +65,7 @@ class SeeDetailedList extends Component {
                                     <List.Item.Meta
                                         key = {index}
                                         avatar={<Avatar>{index + 1}</Avatar>}
-                                        title={<a onClick = {() => this.onShowTable(item.maPhieu)}>Phiếu {item.maPhieu}</a>}
+                                        title={<span onClick = {() => this.onShowTable(item.maPhieu)}>Phiếu {item.maPhieu}</span>}
                                         description={item.mucDich}
                                     />
                                 </List.Item>
@@ -73,7 +73,7 @@ class SeeDetailedList extends Component {
                         />
                     </Col>
                     <Col xs={16} sm={16} md={16} lg={16} xl={16} style={{ padding: '10px', marginTop : '20px' }}>
-                        {dataList.length > 0 ? <Table style={{ marginLeft: '10px', textAlign : 'center' }} rowKey='maCT' style={{ marginTop: '10px' }} columns={this.state.columns} dataSource={dataList} /> : ''}
+                        {dataList.length > 0 ? <Table style={{ marginTop: '10px', marginLeft: '10px', textAlign : 'center' }} rowKey='maCT' columns={this.state.columns} dataSource={dataList} /> : ''}
                     </Col>
                 </Row>
             </div>

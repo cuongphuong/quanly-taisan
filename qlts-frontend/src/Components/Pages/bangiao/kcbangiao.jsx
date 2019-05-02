@@ -1,18 +1,17 @@
 import React, { Component } from "react";
-import { Row, Col, Input, Select, Button, List } from "antd";
+import { Row, Col, Select, Button } from "antd";
 import List2 from "./List";
 import {
   getAllloaitb,
-  gettenloai,
   getbyIdNCC
 } from "../../../Services/apimanh";
 import { getAllNhacungcap } from "../../../Services/apimanh1";
-import DualListBox from "react-dual-listbox";
-import "react-dual-listbox/lib/react-dual-listbox.css";
-import { element } from "prop-types";
+// import DualListBox from "react-dual-listbox";
+// import "react-dual-listbox/lib/react-dual-listbox.css";
+// import { element } from "prop-types";
 import history from "../../../Utils/history";
 import { connect } from "react-redux";
-import { FetAllThietBi } from "./../../../Reducers/action/index";
+// import { FetAllThietBi } from "./../../../Reducers/actions/index";
 
 const Option = Select.Option;
 
@@ -45,18 +44,16 @@ class Bangiao extends Component {
   }
 
   handleselectchangeLoai = async value => {
+    console.log(this.state.mancc + " - " + value)
+    let res = await getbyIdNCC(this.state.mancc, value);
     this.setState({
+      lst1: res,
       maloai: value
     });
-    let tenLoais = await gettenloai(this.state.mancc, value);
-    this.setState({
-      options: tenLoais
-    });
-    console.log(tenLoais);
   };
 
   handleselectchanngeNCC = async (value) => {
-    let res = await getbyIdNCC(value);
+    let res = await getbyIdNCC(value, "none_value");
     this.setState({
       lst1: res,
       mancc: value
@@ -74,8 +71,11 @@ class Bangiao extends Component {
 
   //thay đổi dữ liệu khi nhấn chọn
   changeDataInList = key => {
-    var { lst1, lst2 } = this.state;
+    let { dispatch } = this.props;
+    var { lst1 } = this.state;
+    var { lst2 } = this.props.lstBanGiao;
     var index = 0;
+    console.log(this.props.lstBanGiao)
 
     for (var element of lst1) {
       var objectCanTim = element.lstThietBi.find(e => {
@@ -112,11 +112,80 @@ class Bangiao extends Component {
 
         lst1[index].lstThietBi = lstTBNew;
 
-        this.setState({ lst1: lst1, lst2: lst2 });
+        this.setState({ lst1: lst1 });
+        dispatch({
+          type: 'ADD_THIETBI_BANGIAO',
+          item: { lst2: lst2 }
+        });
         break;
       }
       index++;
     }
+    lst1 = lst1.filter(element => {
+      return element.lstThietBi.length !== 0
+    })
+    this.setState({ lst1: lst1 });
+  };
+
+
+  changeDataInListUnSelect = key => {
+    let { dispatch } = this.props;
+    var { lst1 } = this.state;
+    var { lst2 } = this.props.lstBanGiao;
+
+
+    var index = 0;
+
+    for (var element of lst2) {
+      var objectCanTim = element.lstThietBi.find(e => {
+        return e.maTB.toString() === key.toString();
+      });
+
+      if (objectCanTim) {
+        var tenLoaiTB = element.tenLoaiThietBi;
+        var maLoaiTB = element.maLoaiTB;
+        var objectLoaiTim = lst1.find(
+          element2 =>
+            element2.tenLoaiThietBi.toString() === tenLoaiTB.toString()
+        );
+
+        if (!objectLoaiTim) {
+          lst1 = [
+            ...lst1,
+            { tenLoaiThietBi: tenLoaiTB, maLoaiTB: maLoaiTB, lstThietBi: [objectCanTim] }
+          ];
+        } else {
+          lst1 = lst1.filter(element => {
+            return element.tenLoaiThietBi !== objectLoaiTim.tenLoaiThietBi;
+          });
+          objectLoaiTim = {
+            ...objectLoaiTim,
+            lstThietBi: [...objectLoaiTim.lstThietBi, objectCanTim]
+          };
+          lst1 = [...lst1, objectLoaiTim];
+        }
+
+        var lstTBNew = element.lstThietBi.filter(element => {
+          return element.maTB !== objectCanTim.maTB;
+        });
+
+        lst2[index].lstThietBi = lstTBNew;
+        this.setState({ lst1: lst1 });
+        dispatch({
+          type: 'ADD_THIETBI_BANGIAO',
+          item: { lst2: lst2 }
+        });
+        break;
+      }
+      index++;
+    }
+    lst2 = lst2.filter(element => {
+      return element.lstThietBi.length !== 0
+    })
+    dispatch({
+      type: 'ADD_THIETBI_BANGIAO',
+      item: { lst2: lst2 }
+    });
   };
 
   render() {
@@ -144,18 +213,34 @@ class Bangiao extends Component {
                     </Option>
                   ))}
                 </Select>
+                {lst1.length > 0 ?
+                  <Select
+                    defaultValue="Loại Thiết bị"
+                    style={{ width: '50%' }}
+                    onChange={this.handleselectchangeLoai}
 
-                <Select
-                  defaultValue="Loại Thiết bị"
-                  style={{ width: '50%' }}
-                  onChange={this.handleselectchangeLoai}
-                >
-                  {loaiTBs.map(element => (
-                    <Option key={element.maLoai} value={element.maLoai}>
-                      {element.tenLoai}
-                    </Option>
-                  ))}
-                </Select>
+                  >
+                    {loaiTBs.map(element => (
+                      <Option key={element.maLoai} value={element.maLoai}>
+                        {element.tenLoai}
+                      </Option>
+                    ))}
+                  </Select>
+                  :
+                  <Select
+                    defaultValue="Loại Thiết bị"
+                    style={{ width: '50%' }}
+                    onChange={this.handleselectchangeLoai}
+                    disabled
+                  >
+                    {loaiTBs.map(element => (
+                      <Option key={element.maLoai} value={element.maLoai}>
+                        {element.tenLoai}
+                      </Option>
+                    ))}
+                  </Select>
+                }
+
               </div>
               <List2 handleClickSelect={this.changeDataInList} lableClick="Chọn" data={lst1} />
             </div>
@@ -169,52 +254,27 @@ class Bangiao extends Component {
             xl={12}
           >
             <div style={{ height: '30px', marginBottom: '10px' }}>
-              <h3 style={{ textAlign: 'center' }}>DANH SÁCH CHỌN</h3>
+              <div style={{ textAlign: 'center', position: 'relative' }}>
+                <h3 style={{ marginRight: '10px', display: 'inline-block' }}>DANH SÁCH CHỌN</h3>
+                <Button
+                  onClick={this.onHandleClickSubmit}
+                  type="primary"
+                  style={{ position: 'absolute', right: '5px' }}
+                >
+                  Hoàn tất chọn
+                </Button>
+              </div>
             </div>
-            <List2 handleClickSelect={this.changeDataInList} lableClick="Bỏ chọn" data={this.state.lst2} />
+            <List2 handleClickSelect={this.changeDataInListUnSelect} lableClick="Bỏ chọn" data={this.props.lstBanGiao.lst2} />
           </Col>
         </Row>
-        <div style={{ margin: "40px" }}>
-          {/* <DualListBox
-            canFilter
-            filterCallback={(option, filterInput) => {
-              if (filterInput === "") {
-                return true;
-              }
-
-              return new RegExp(filterInput, "i").test(option.label);
-            }}
-            filterPlaceholder="Filter..."
-            options={options}
-            selected={this.state.selected}
-            onChange={selected => {
-              this.setState({ selected });
-              this.props.fetThietBiLoai(selected)
-            }}
-          /> */}
-
-        </div>
-
-        <Button
-          onClick={this.onHandleClickSubmit}
-          type="primary"
-          style={{ marginLeft: "80%" }}
-        >
-          Hoàn tất chọn
-        </Button>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
+export default connect(function (state) {
   return {
-    fetThietBiLoai: thietbi => {
-      dispatch(FetAllThietBi(thietbi));
-    }
-  };
-};
-export default connect(
-  null,
-  mapDispatchToProps
-)(Bangiao);
+    lstBanGiao: state.lstBanGiao
+  }
+})(Bangiao);

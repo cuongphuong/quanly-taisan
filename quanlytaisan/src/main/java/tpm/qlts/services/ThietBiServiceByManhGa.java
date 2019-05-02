@@ -17,5 +17,11 @@ public class ThietBiServiceByManhGa extends ThietBiServices {
 		return thietBiRepositoryByManhGa.getThietBiByNhaCungCap(maNCC);
 	}
 	
+	public List<ThietBi> getThietBiByNCCAndMaLoai(String maNCC, String maLoai) {
+		return thietBiRepositoryByManhGa.getThietBiByNCCAndMaLoai(maNCC, maLoai);
+	}
+	
+	
+	
 	
 }

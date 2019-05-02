@@ -99,9 +99,16 @@ public class AccountController {
 
 	@GetMapping("get-info-user")
 	public Users getInfoUser(Principal principal) {
-		Users uRes = userService.findByUserName(principal.getName());
-		uRes.setPassword("password is not response...");
-		return uRes;
+		try {
+			Users uRes = userService.findByUserName(principal.getName());
+			uRes.setPassword("password is not response...");
+			return uRes;
+		} catch (ResponseStatusException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "NOT_ACCESS_USER");
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "NOT_COMFIRM_ERROR");
+		}
+
 //		if(perService.checkPermission(uRes.getUserID(), 8)) {
 //			//cos quyen
 //		} 
@@ -113,14 +120,18 @@ public class AccountController {
 
 	@GetMapping("get-info-user-by-id/{id}")
 	public Users getInfoUser(@PathVariable String id) {
-		Optional<Users> uRes = userService.findById(id);
-		Users user = null;
-		if (uRes.isPresent()) {
-			user = uRes.get();
-		}
+		try {
+			Optional<Users> uRes = userService.findById(id);
+			Users user = null;
+			if (uRes.isPresent()) {
+				user = uRes.get();
+			}
 
-		user.setPassword("password is not response...");
-		return user;
+			user.setPassword("password is not response...");
+			return user;
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ID_NOT_EXISTS");
+		}
 	}
 
 //	public OutputAccount getInfoUser() {

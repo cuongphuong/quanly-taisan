@@ -61,6 +61,7 @@ export function updateDonvitinh(data) {
         data: data
     })
 }
+
 export function deleteDonvitinh(id) {
     return request(
         {
@@ -69,6 +70,7 @@ export function deleteDonvitinh(id) {
         }
     )
 }
+
 export function deleteByListdvt(lstdvt) {
     return request({
         url: '/donvitinh/xoadvtbylist',
@@ -91,9 +93,10 @@ export function getAllloaitb() {
         method: 'GET'
     })
 }
-export function getbyIdNCC(id) {
+
+export function getbyIdNCC(idNcc, idLoai) {
     return request({
-        url: '/thietbi/get-tb-by-ncc/' + id,
+        url: '/thietbi/get-tb-by-ncc/' + idNcc + "/" + idLoai,
         method: 'GET'
     })
 }
@@ -142,11 +145,20 @@ export function deletetliaotbbyID(id)
         method:'DELETE'
     })
 }
+
 export function deletebylistloaitb(lsttb)
 {
     return request({
         url:'/loaitb/xoatheolist',
         method:'DELETE',
         data: lsttb
+    })
+}
+
+export function banGiaoThietBi(data) {
+    return request({
+        url: '/thietbi/ban-giao-thiet-bi',
+        method: 'POST',
+        data: data
     })
 }

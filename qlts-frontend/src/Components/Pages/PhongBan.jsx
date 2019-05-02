@@ -11,16 +11,13 @@ class PhongBan extends Component{
         columns:[{
             title: 'Mã Phòng Ban',
             dataIndex: 'maPhongBan',
-            width: 350,
         },{
             title:'Tên Phòng Ban',
             dataIndex:'tenPhongBan',
-            width: 480,
-        },
-        {
+        },{
             title: 'Điều khiển',
             fixed: 'right',
-            width: 250,
+            width: 150,
             render: (text, record) => {
                 return <div>
                     <span className="span-link"
@@ -178,7 +175,6 @@ class PhongBan extends Component{
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                {console.log(rowSelection)}
                 <Table rowKey='maPhongBan' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
                 <Modal
                     onCancel={this.handleCancel}

@@ -10,16 +10,13 @@ class Chucvu extends Component{
         data: [],
         columns:[{
             title: 'Mã chức vụ',
-            dataIndex: 'maChucVu',
-            width: 170,
+            dataIndex: 'maChucVu'
         },{
             title:'Tên Chức vụ',
-            dataIndex:'tenChucVu',
-            width: 370,
+            dataIndex:'tenChucVu'
         },{
             title:'Mô tả',
-            dataIndex: 'moTa',
-            width: 380,
+            dataIndex: 'moTa'
         },{
             title: 'Điều khiển',
             fixed: 'right',
@@ -183,7 +180,6 @@ class Chucvu extends Component{
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                {console.log(rowSelection)}
                 <Table rowKey='maChucVu' style={{ marginTop: '10px' }} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
                 <Modal
                     onCancel={this.handleCancel}

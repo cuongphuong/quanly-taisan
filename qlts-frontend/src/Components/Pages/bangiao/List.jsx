@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Badge } from "antd";
+import { Badge, Empty } from "antd";
 import "./list.css";
 
+var dateFormat = require('dateformat');
 class List extends Component {
     render() {
         return (
@@ -32,9 +33,10 @@ class List extends Component {
                                                                 }}
                                                             />
                                                         </h3>
-                                                        <span>Tinh trang thiet bi</span>
+                                                        {/* {console.log(element1)} */}
+                                                        <span>Trạng thái thiết bị đang - {element1.trangThai}</span>
                                                         <br />
-                                                        <span className="mota">Mo ta thiet bi</span>
+                                                        <span className="mota">Ngày nhập thiết bị {dateFormat(new Date(element1.ngayNhap), "dd/mm/yyyy")} giá thiết bị gốc - {element1.giaTri} VND </span>
                                                         <span onClick={() => this.props.handleClickSelect(element1.maTB)} className="selected-item">>> {this.props.lableClick}</span>
                                                     </div>
                                                 )
@@ -45,7 +47,7 @@ class List extends Component {
                             )
                         })
                         :
-                        'Có cái loz nè chọn không'
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 }
             </div>
         );

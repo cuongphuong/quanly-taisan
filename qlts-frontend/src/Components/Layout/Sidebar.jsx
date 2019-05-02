@@ -7,20 +7,25 @@ class Sidebar extends Component {
 
     renderSubMenu() {
         return this.props.lstSubMenu.map(item => {
-            return (
-                <Menu.Item key={item.functionID}>
-                    <Link to={item.url}>
-                        <Icon type={item.iconType} />
-                        <span>{item.functionName}</span>
-                    </Link>
-                </Menu.Item>
-            )
+            if (item.enable === true) {
+                return (
+                    <Menu.Item key={item.functionID}>
+                        <Link to={item.url}>
+                            <Icon type={item.iconType} />
+                            <span>{item.functionName}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            } else {
+                return '';
+            }
         })
     }
 
     render() {
         return (
             <Sider
+                className="pg_slider"
                 style={{ background: '#fff' }}
                 trigger={null}
                 collapsible
@@ -36,7 +41,7 @@ class Sidebar extends Component {
                         defaultSelectedKeys={['1']}>
                         {this.renderSubMenu()}
                     </Menu>
-                    : <Empty className="empty_menu" image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original" />}
+                    : <Empty className="empty_menu" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
 
             </Sider>
         );

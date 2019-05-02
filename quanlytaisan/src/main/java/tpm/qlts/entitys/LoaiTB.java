@@ -20,7 +20,7 @@ public class LoaiTB implements Serializable {
 	@Column(name = "MaLoai")
 	private String maLoai;
 
-	@Column(name = "MaLoaiCha", nullable=true)
+	@Column(name = "MaLoaiCha")
 	private String maLoaiCha;
 
 	@Column(name = "MoTa")
@@ -29,15 +29,24 @@ public class LoaiTB implements Serializable {
 	@Column(name = "TenLoai")
 	private String tenLoai;
 
+	public LoaiTB(String maLoai, String maLoaiCha, String moTa, String tenLoai, NhaCungCap nhaCungCap) {
+		super();
+		this.maLoai = maLoai;
+		this.maLoaiCha = maLoaiCha;
+		this.moTa = moTa;
+		this.tenLoai = tenLoai;
+		this.nhaCungCap = nhaCungCap;
+	}
+
 	// bi-directional many-to-one association to NhaCungCap
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name = "MaNCC")
 	private NhaCungCap nhaCungCap;
 
 	// bi-directional many-to-one association to ThietBi
-	@JsonIgnore
 	@OneToMany(mappedBy = "loaiTb")
+	@JsonIgnore
 	private List<ThietBi> thietBis;
 
 	public LoaiTB() {
@@ -53,14 +62,6 @@ public class LoaiTB implements Serializable {
 
 	public String getMaLoaiCha() {
 		return this.maLoaiCha;
-	}
-
-	public LoaiTB(String maLoai, String maLoaiCha, String moTa, String tenLoai) {
-		super();
-		this.maLoai = maLoai;
-		this.maLoaiCha = maLoaiCha;
-		this.moTa = moTa;
-		this.tenLoai = tenLoai;
 	}
 
 	public void setMaLoaiCha(String maLoaiCha) {

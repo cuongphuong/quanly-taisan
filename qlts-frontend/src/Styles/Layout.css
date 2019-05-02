@@ -52,14 +52,67 @@
 }
 
 .empty_menu .ant-empty-image img {
-    width: 100%;
-    height: auto;
+    /* width: 100%;
+    height: auto; */
 }
 
 .pg_collapse_moduleadd {
     transition: all 0.2s ease-in-out;
     animation-name: aminationcollapse;
     /* animation-duration: 0.5s; */
+}
+
+.background_default {
+    background-image: url('http://localhost:3000/background.png');
+    background-size: cover;
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: rgba(29, 140, 192, 0.507);
+}
+
+/* Handle on hover */
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.lable_tt {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.item-tt-tb {
+    margin-top: 5px;
+}
+
+.item_list_custom {
+    cursor: pointer;
+}
+
+.item_list_custom_active {
+    cursor: pointer;
+    background: linear-gradient(141deg, #f4feff 0%, #defffd 51%, #bbefff 75%) !important;
+}
+
+.item_list_custom:hover {
+    background: linear-gradient(141deg, #f4feff 0%, #defffd 51%, #bbefff 75%) !important;
 }
 
 @keyframes aminationcollapse {

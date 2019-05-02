@@ -140,7 +140,6 @@ class NhanVien extends Component {
         this.setState({
             data: data
         });
-        console.log(data);
     }
 
     // life cycle

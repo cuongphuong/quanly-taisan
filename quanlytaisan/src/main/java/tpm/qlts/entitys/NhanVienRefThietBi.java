@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 
@@ -17,6 +20,9 @@ public class NhanVienRefThietBi implements Serializable {
 
 	@EmbeddedId
 	private NhanVienRefThietBiPK id;
+	
+	@Column(name="MaThietBi", insertable=false, updatable=false)
+	private long maThietBi;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="DenNgay")
@@ -25,13 +31,18 @@ public class NhanVienRefThietBi implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="TuNgay")
 	private Date tuNgay;
+	
+	@Column(name = "KieuBanGiao")
+	private boolean kieuBanGiao;
 
 	//bi-directional many-to-one association to NhanVien
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="MaNhanVien", updatable = false, insertable = false)
 	private NhanVien nhanVien;
 
 	//bi-directional many-to-one association to ThietBi
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="MaThietBi", updatable = false, insertable = false)
 	private ThietBi thietBi;
@@ -79,4 +90,38 @@ public class NhanVienRefThietBi implements Serializable {
 		this.thietBi = thietBi;
 	}
 
+	public boolean isKieuBanGiao() {
+		return kieuBanGiao;
+	}
+
+	public void setKieuBanGiao(boolean kieuBanGiao) {
+		this.kieuBanGiao = kieuBanGiao;
+	}
+
+	public NhanVienRefThietBi(boolean kieuBanGiao) {
+		super();
+		this.kieuBanGiao = kieuBanGiao;
+	}
+
+	public NhanVienRefThietBi(NhanVienRefThietBiPK id, Date tuNgay, boolean kieuBanGiao) {
+		super();
+		this.id = id;
+		this.tuNgay = tuNgay;
+		this.kieuBanGiao = kieuBanGiao;
+	}
+
+	public long getMaThietBi() {
+		return maThietBi;
+	}
+
+	public void setMaThietBi(long maThietBi) {
+		this.maThietBi = maThietBi;
+	}
+
+	public NhanVienRefThietBi(long maThietBi) {
+		super();
+		this.maThietBi = maThietBi;
+	}
+	
+	
 }

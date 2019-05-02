@@ -13,28 +13,28 @@ import tpm.qlts.repositorys.DonViTInhRepository;
 public class DonViTinhService {
 	@Autowired
 	private DonViTInhRepository donViTInhRepository;
-	
-	public void deleteById(Integer id)
-	{
+
+	public void deleteById(Integer id) {
 		donViTInhRepository.deleteById(id);
 	}
-	
-	public List<DonViTinh> findAll()
-	{
+
+	public List<DonViTinh> findAll() {
 		return (List<DonViTinh>) donViTInhRepository.findAll();
 	}
-	
-	public Optional<DonViTinh> findById(Integer id)
-	{
-		return donViTInhRepository.findById(id);
+
+	public DonViTinh findById(Integer id) {
+		Optional<DonViTinh> x = donViTInhRepository.findById(id);
+		if (x.isPresent()) {
+			return x.get();
+		}
+		return null;
 	}
-	
+
 	public DonViTinh save(DonViTinh donViTinh) {
 		return donViTInhRepository.save(donViTinh);
 	}
-	
-	public boolean existsById(Integer id)
-	{
+
+	public boolean existsById(Integer id) {
 		return donViTInhRepository.existsById(id);
 	}
 }

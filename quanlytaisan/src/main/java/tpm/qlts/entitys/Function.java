@@ -34,12 +34,23 @@ public class Function implements Serializable {
 	@Column(name = "ModuleID", updatable = false, insertable = false)
 	private int moduleID;
 
+	@Column(name = "Enable")
+	private boolean enable;
+
 	public int getModuleID() {
 		return moduleID;
 	}
 
 	public void setModuleID(int moduleID) {
 		this.moduleID = moduleID;
+	}
+
+	public boolean isEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 
 	// bi-directional many-to-one association to Module
