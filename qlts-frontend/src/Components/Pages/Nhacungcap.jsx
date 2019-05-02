@@ -1,28 +1,25 @@
 import React, { Component } from 'react';
 import { Modal, Button, Table, Divider, Form, Input } from 'antd';
-import { getAllNhacungcap, addNewNhacungcap, deleteNhacungcap, deletebylistncc, updateNhacungcap} from '../../Services/apimanh1';
+import { getAllNhacungcap, addNewNhacungcap, deleteNhacungcap, deletebylistncc, updateNhacungcap } from '../../Services/apimanh1';
 
 
 
-class Nhacungcap extends Component{
+class Nhacungcap extends Component {
     state = {
         visible: false,
         selectedRowKeys: [],
         loading: false,
         data: [],
-        columns:[{
+        columns: [{
             title: 'Mã Nhà Cung Cấp',
             dataIndex: 'maNCC',
-            width: 170,
-        },{
-            title:'Tên Nhà Cung Cấp',
-            dataIndex:'tenNCC',
-            width: 370,
-        },{
-            title:'Địa Chỉ',
+        }, {
+            title: 'Tên Nhà Cung Cấp',
+            dataIndex: 'tenNCC',
+        }, {
+            title: 'Địa Chỉ',
             dataIndex: 'diaChi',
-            width: 380,
-        },{
+        }, {
             title: 'Điều khiển',
             fixed: 'right',
             width: 150,
@@ -39,12 +36,12 @@ class Nhacungcap extends Component{
                 </div>
             }
         }],
-    isUpdate: false,
-    dataForm: {
-        maNCC:'',
-        tenNCC:'',
-        diaChi:'',
-    }
+        isUpdate: false,
+        dataForm: {
+            maNCC: '',
+            tenNCC: '',
+            diaChi: '',
+        }
     }
     showModal = () => {
         this.setState({
@@ -57,26 +54,26 @@ class Nhacungcap extends Component{
             visible: false,
             isUpdate: false,
             dataForm: {
-                maNCC : '',
+                maNCC: '',
                 tenNCC: '',
-                diaChi:'',
+                diaChi: '',
             }
         });
     }
     // on table trong ham arrow function
-    start = () =>{
-        this.setState({loading: true});
+    start = () => {
+        this.setState({ loading: true });
         // ajax request after empty completing
-        setTimeout(() =>{
+        setTimeout(() => {
             this.setState({
-                selectedRowKeys:[],
+                selectedRowKeys: [],
                 loading: false,
             });
-        },1000);
+        }, 1000);
     }
     onSelectChange = (selectedRowKeys) => {
         this.setState({ selectedRowKeys });
-    } 
+    }
     editFunction = (record) => {
         this.setState({
             dataForm: record,
@@ -84,31 +81,31 @@ class Nhacungcap extends Component{
             isUpdate: true
         });
     }
-    getAllNhacungcap = async () =>{
+    getAllNhacungcap = async () => {
         let data = await getAllNhacungcap();
         this.setState({
             data: data
         })
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getAllNhacungcap();
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFields(async(err, values) =>{
-            if(!err){
-                if(this.state.isUpdate === false){
+        this.props.form.validateFields(async (err, values) => {
+            if (!err) {
+                if (this.state.isUpdate === false) {
                     let res = await addNewNhacungcap(values);
-                    if(res){
+                    if (res) {
                         this.setState({
-                            data:[res, ...this.state.data]
+                            data: [res, ...this.state.data]
                         });
                         this.handleCancel();
                     }
-                }else{
+                } else {
                     let res = await updateNhacungcap(values);
-                    var item = this.state.data.find(function(element){
+                    var item = this.state.data.find(function (element) {
                         return element.maNCC === values.maNCC;
                     });
                     item.maNCC = res.maNCC;
@@ -116,13 +113,13 @@ class Nhacungcap extends Component{
                     item.diaChi = res.diaChi;
                     this.handleCancel();
                 }
-               
+
             }
         })
     }
 
-    deleteFunction = async(record) =>{
-        if(window.confirm("Xóa" + record.maNCC)){
+    deleteFunction = async (record) => {
+        if (window.confirm("Xóa" + record.maNCC)) {
             await deleteNhacungcap(record.maNCC);
             this.setState({
                 data: this.state.data.filter(e => e.maNCC !== record.maNCC)
@@ -139,13 +136,13 @@ class Nhacungcap extends Component{
             })
         }
     }
-    render(){
-        const {loading, selectedRowKeys} = this.state;
+    render() {
+        const { loading, selectedRowKeys } = this.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
         };
-        const {getFieldDecorator} = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         const hasSelected = selectedRowKeys.length > 0;
         const formItemLayout = {
             labelCol: {
@@ -157,7 +154,7 @@ class Nhacungcap extends Component{
                 sm: { span: 16 },
             },
         };
-        return(
+        return (
             <div>
                 <Button
                     type="primary"
@@ -169,14 +166,14 @@ class Nhacungcap extends Component{
                     disabled={!hasSelected}
                     loading={loading}
                 >Xóa mục chọn</Button>
-                 <Button
+                <Button
                     style={{ marginLeft: '5px' }}
                     type="dashed"
                     onClick={this.start}
                     disabled={!hasSelected}
                     loading={loading}
                 >Bỏ chọn tất cả</Button>
-                 <span style={{ marginLeft: 8 }}>
+                <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
                 {console.log(rowSelection)}
@@ -192,7 +189,7 @@ class Nhacungcap extends Component{
                             Đóng </Button>
 
                     ]}
-                    >
+                >
                     <Form id="addNCCForm" onSubmit={this.handleSubmit}>
                         <Form.Item
                             {...formItemLayout}
@@ -221,7 +218,7 @@ class Nhacungcap extends Component{
                             })(
                                 <Input />
                             )}
-                        </Form.Item> 
+                        </Form.Item>
                         <Form.Item
                             {...formItemLayout}
                             hasFeedback
@@ -235,7 +232,7 @@ class Nhacungcap extends Component{
                             })(
                                 <Input />
                             )}
-                        </Form.Item>   
+                        </Form.Item>
 
                     </Form>
                 </Modal>

@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { message, Row, Col, Button, Divider, Select, Input, Tooltip, List, Avatar, Form, Icon, Switch } from 'antd';
 import { removeLstMaThietBi, setLstMaThietBi, getLstMaThietBi } from '../../../Utils/khoLocalStorage';
 import {
-    getAllNhaCungCap, getAllDonViTinh, getAllTenThietBiExits, getAllLoaiThietBi, nhapKhoHangLoat
+    getAllNhaCungCap, getAllDonViTinh, getAllTenThietBiExits, getAllLoaiThietBi, nhapKhoHangLoat, getAllTenThietBiExitsByNCC
 } from '../../../Services/api';
+import history from '../../../Utils/history.js'
 const Option = Select.Option;
+
 let id = 0;
 
 class NhapKho extends Component {
@@ -51,6 +53,7 @@ class NhapKho extends Component {
             mappingList: [],
             switchKieuThem: true,
             disabledSwitch: false,
+            isSelectThietBi: false
         };
     }
 
@@ -116,8 +119,10 @@ class NhapKho extends Component {
         });
     }
 
-    handleChangeNhaCungCap = (value) => {
-        this.setState({ thongTinNhap: { ...this.state.thongTinNhap, nhaCungCap: value.key } })
+    handleChangeNhaCungCap = async (value) => {
+        let lstTB = await getAllTenThietBiExitsByNCC(value.key);
+        console.log(lstTB)
+        this.setState({ thongTinNhap: { ...this.state.thongTinNhap, nhaCungCap: value.key }, lstMapping: { ...this.state.lstMapping, lstThietBi: lstTB }, isSelectThietBi: true })
     }
 
     handleChangeLoaiThietBi = (value) => {
@@ -251,9 +256,12 @@ class NhapKho extends Component {
                 kieuNhap: this.state.thongTinNhap.kieuNhap,
                 lstThietBi: [...this.state.mappingList]
             }
-            console.log(data);
             let res = await nhapKhoHangLoat(data);
-            console.log(res);
+            if (res) {
+                history.push('/app/dsphieubiennhan');
+                removeLstMaThietBi();
+            }
+
         } else {
             alert('Thông tin nhập chưa chính sác');
         }
@@ -268,10 +276,10 @@ class NhapKho extends Component {
     getData = async () => {
         let lstNCC = await getAllNhaCungCap();
         let lstDVT = await getAllDonViTinh();
-        let lstTB = await getAllTenThietBiExits();
+
         let lstLoaiTB = await getAllLoaiThietBi();
         this.setState({
-            lstMapping: { ...this.state.lstMapping, lstNhaCungCap: lstNCC, lstDonViTinh: lstDVT, lstThietBi: lstTB, lstLoaiThietBi: lstLoaiTB }
+            lstMapping: { ...this.state.lstMapping, lstNhaCungCap: lstNCC, lstDonViTinh: lstDVT, lstLoaiThietBi: lstLoaiTB }
         })
 
     }
@@ -415,7 +423,7 @@ class NhapKho extends Component {
 
                                     <div className="ant-row ant-form-item">
                                         <div className="ant-form-item-label ant-col-xs-24 ant-col-sm-7">
-                                            <label htmlFor="maTinhTrang" className="ant-form-item-required" title="Mã tình trạng">Mã nhóm thiết bị</label>
+                                            <label htmlFor="maTinhTrang" className="ant-form-item-required" title="Mã tình trạng">Mã nhóm</label>
                                         </div>
                                         <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16">
                                             <div className="ant-form-item-control">
@@ -439,13 +447,26 @@ class NhapKho extends Component {
                                     <div className="ant-form-item-control-wrapper ant-col-xs-24 ant-col-sm-16">
                                         <div className="ant-form-item-control">
                                             <span className="ant-form-item-children">
-                                                <Select labelInValue defaultValue={{ key: 'Chọn thiết bị' }} style={{ width: '100%' }} onChange={this.handleChangeTenThietBi}>
-                                                    {
-                                                        this.state.lstMapping.lstThietBi.map(element => {
-                                                            return <Option key={element.maLoai} value={element.maLoai}>{element.tenLoai}</Option>
-                                                        })
-                                                    }
-                                                </Select>
+                                                {
+                                                    this.state.isSelectThietBi === true && this.state.lstMapping.lstThietBi.length > 0
+                                                        ?
+                                                        <Select labelInValue defaultValue={{ key: 'Chọn thiết bị' }} style={{ width: '100%' }} onChange={this.handleChangeTenThietBi}>
+                                                            {
+                                                                this.state.lstMapping.lstThietBi.map(element => {
+                                                                    return <Option key={element.maLoai} value={element.maLoai}>{element.tenLoai}</Option>
+                                                                })
+                                                            }
+                                                        </Select>
+                                                        :
+                                                        <Select disabled labelInValue defaultValue={{ key: 'Vui lòng chọn nhà cung cấp' }} style={{ width: '100%' }} onChange={this.handleChangeTenThietBi}>
+                                                            {
+                                                                this.state.lstMapping.lstThietBi.map(element => {
+                                                                    return <Option key={element.maLoai} value={element.maLoai}>{element.tenLoai}</Option>
+                                                                })
+                                                            }
+                                                        </Select>
+                                                }
+
                                             </span>
                                         </div>
                                     </div>

@@ -29,6 +29,9 @@ public class LoaiTB implements Serializable {
 	@Column(name = "TenLoai")
 	private String tenLoai;
 
+	@Column(name = "MaNCC", insertable = false, updatable = false)
+	private String maNCC;
+
 	public LoaiTB(String maLoai, String maLoaiCha, String moTa, String tenLoai, NhaCungCap nhaCungCap) {
 		super();
 		this.maLoai = maLoai;
@@ -50,6 +53,14 @@ public class LoaiTB implements Serializable {
 	private List<ThietBi> thietBis;
 
 	public LoaiTB() {
+	}
+
+	public String getMaNCC() {
+		return maNCC;
+	}
+
+	public void setMaNCC(String maNCC) {
+		this.maNCC = maNCC;
 	}
 
 	public String getMaLoai() {

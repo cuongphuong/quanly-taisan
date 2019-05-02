@@ -22,6 +22,9 @@ import RotationType from '../Components/Pages/RotationPage/RotationType';
 import ListRotationType from '../Components/Pages/RotationPage/ListRotationType';
 import Baotri from '../Components/Pages/BaoTriThietBi/Baotri';
 import DanhSachPhieuBaoTri from '../Components/Pages/BaoTriThietBi/DanhSachPhieuBaoTri';
+import DanhSachPhieuBienNhan from '../Components/Pages/NhapKho/DanhSachPhieuBienNhan';
+import loaithietbi from '../Components/Pages/loaithietbi';
+import Nhacungcap from '../Components/Pages/Nhacungcap';
 // import  Module  from '../Components/Pages/Module';
 
 export default () => (
@@ -48,6 +51,9 @@ export default () => (
         <AuthorizedRoute exact path="/app/listrotationtype" component={ListRotationType} />
         <AuthorizedRoute exact path="/app/baotri" component={Baotri} />
         <AuthorizedRoute exact path="/app/dsphieubaotri" component={DanhSachPhieuBaoTri} />
+        <AuthorizedRoute exact path="/app/dsphieubiennhan" component={DanhSachPhieuBienNhan} />
+        <AuthorizedRoute exact path="/app/loaitb" component={loaithietbi} />
+        <AuthorizedRoute exact path="/app/nhacungcap" component={Nhacungcap} />
         <Route component={NoMatch} />
     </Switch>
 )

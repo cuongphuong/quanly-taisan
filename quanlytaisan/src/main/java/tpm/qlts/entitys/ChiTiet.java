@@ -34,11 +34,6 @@ public class ChiTiet implements Serializable {
 	@JoinColumn(name = "MaBienNhan")
 	private BienNhanThietBi bienNhanThietBi;
 
-	// bi-directional many-to-one association to DonMuaHang
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MaHoaDon")
-	private DonMuaHang donMuaHang;
-
 	public ChiTiet() {
 	}
 
@@ -88,14 +83,6 @@ public class ChiTiet implements Serializable {
 
 	public void setBienNhanThietBi(BienNhanThietBi bienNhanThietBi) {
 		this.bienNhanThietBi = bienNhanThietBi;
-	}
-
-	public DonMuaHang getDonMuaHang() {
-		return this.donMuaHang;
-	}
-
-	public void setDonMuaHang(DonMuaHang donMuaHang) {
-		this.donMuaHang = donMuaHang;
 	}
 
 }

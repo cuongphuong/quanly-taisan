@@ -39,4 +39,8 @@ public class ChiTietServices {
 		return chiTietRepository.saveAll(cts);
 	}
 	
+	public List<ChiTiet> getChiTietBienNhanByBienNhan(String maBienNhan){
+		return chiTietRepository.getChiTietBienNhanByBienNhan(maBienNhan);
+	}
+	
 }

@@ -130,6 +130,7 @@ class Function extends Component {
             });
         } catch (e) { }
     }
+    // Sử dụng JSX trong omponent 
 
     // on table
     start = () => {
@@ -414,13 +415,14 @@ class Function extends Component {
                         <Form.Item
                             {...formItemLayout}
                             label="Cho phép hiển thị"
-                            
+
                         >
                             {getFieldDecorator('enable', { initialValue: this.state.dataForm.enable, valuePropName: 'checked' })(
                                 <Switch />
                             )}
                         </Form.Item>
                     </Form>
+
                 </Modal>
             </div>
         );

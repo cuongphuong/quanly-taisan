@@ -7,5 +7,7 @@ import tpm.qlts.entitys.BienNhanThietBi;
 
 @Repository("bienNhanThietBiRepository")
 public interface BienNhanThietBiRepository extends JpaRepository<BienNhanThietBi, String> {
+	
+	
 
 }

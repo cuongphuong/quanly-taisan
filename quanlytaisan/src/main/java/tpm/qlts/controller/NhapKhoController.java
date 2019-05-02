@@ -79,6 +79,11 @@ public class NhapKhoController {
 	public List<LoaiTB> getLoaiTBCha() {
 		return loaiTBService.getLoaiTBCha();
 	}
+	
+	@GetMapping("get-loaitb-by-ncc/{maNCC}")
+	public List<LoaiTB> getAllLoaiTBByNhaCungCap(@PathVariable String maNCC){
+		return loaiTBService.getAllLoaiTBByNhaCungCap(maNCC);
+	}
 
 	@GetMapping("get-autoid/{soluong}")
 	public long[] getMaAutoByList(@PathVariable int soluong) {

@@ -42,10 +42,8 @@ public class LoaiTBController {
 	@PostMapping("addloaitb")
 	public LoaiTB newloaitb(@RequestBody LoaiTB ltt)
 	{
-		Optional<NhaCungCap> s = nhaccService.findById(ltt.getMaNCC());
-		NhaCungCap ncc = null;
-		if(s.isPresent())
-			ncc = s.get();
+		NhaCungCap ncc = nhaccService.findById(ltt.getMaNCC());
+		
 		ltt.setNhaCungCap(ncc);
 		return loaiTBService.update(ltt);
 	}

@@ -2,6 +2,9 @@ package tpm.qlts.entitys;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -23,10 +26,12 @@ public class BienNhanThietBi implements Serializable {
 	private Date ngayBienNhan;
 
 	// bi-directional many-to-one association to ChiTiet
+	@JsonIgnore
 	@OneToMany(mappedBy = "bienNhanThietBi")
 	private List<ChiTiet> chiTiets;
 
 	// bi-directional many-to-one association to ThietBi
+	@JsonIgnore
 	@OneToMany(mappedBy = "bienNhanThietBi")
 	private List<ThietBi> thietBis;
 
@@ -35,6 +40,16 @@ public class BienNhanThietBi implements Serializable {
 
 	@Column(name = "inputtype")
 	private String inputtype;
+
+	@Column(name = "TongTien")
+	private Float tongTien;
+
+	@Column(name = "DiaDiemGiao")
+	private String diaDiemGiao;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "ThoiGianGiao")
+	private Date thoiGianGiao;
 
 	public BienNhanThietBi() {
 	}
@@ -73,6 +88,30 @@ public class BienNhanThietBi implements Serializable {
 
 	public void setNgayBienNhan(Date ngayBienNhan) {
 		this.ngayBienNhan = ngayBienNhan;
+	}
+
+	public Float getTongTien() {
+		return tongTien;
+	}
+
+	public void setTongTien(Float tongTien) {
+		this.tongTien = tongTien;
+	}
+
+	public String getDiaDiemGiao() {
+		return diaDiemGiao;
+	}
+
+	public void setDiaDiemGiao(String diaDiemGiao) {
+		this.diaDiemGiao = diaDiemGiao;
+	}
+
+	public Date getThoiGianGiao() {
+		return thoiGianGiao;
+	}
+
+	public void setThoiGianGiao(Date thoiGianGiao) {
+		this.thoiGianGiao = thoiGianGiao;
 	}
 
 	public List<ChiTiet> getChiTiets() {

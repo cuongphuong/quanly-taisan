@@ -304,6 +304,14 @@ export function getAllTenThietBiExits() {
     })
 }
 
+// API lấy tất cả các tên thiết bị có trong cơ sở dữ liệu theo nhà cung cấp
+export function getAllTenThietBiExitsByNCC(maNCC) {
+    return request({
+        url: '/nhap-kho/get-loaitb-by-ncc/' + maNCC,
+        method: 'GET'
+    })
+}
+
 
 // API lấy tất cả loai thiết bị cha
 export function getAllLoaiThietBi() {
@@ -319,5 +327,24 @@ export function nhapKhoHangLoat(data) {
         url: '/nhap-kho/nhap-kho-hang-loat',
         method: 'POST',
         data: data
+    })
+}
+
+
+// API get all biên nhận thiết bị
+// 
+export function getALlBienNhan() {
+    return request({
+        url: '/bien-nhan/get-all-biennhan-tb',
+        method: 'GET'
+    })
+}
+
+// API get all biên nhận thiết bị
+// 
+export function getChiTietByBienNhan(key) {
+    return request({
+        url: '/bien-nhan/get-chitiet-of-biennhan/' + key,
+        method: 'GET'
     })
 }

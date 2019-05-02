@@ -6,9 +6,9 @@ export function getLstMaThietBi() {
 }
 
 export function setLstMaThietBi(value) {
-  localStorage.setItem(key, value);
+  return localStorage.setItem(key, value);
 }
 
 export function removeLstMaThietBi() {
-  localStorage.removeItem(key);
+  return localStorage.removeItem(key);
 }
