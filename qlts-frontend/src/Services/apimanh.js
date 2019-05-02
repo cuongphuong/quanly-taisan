@@ -61,6 +61,7 @@ export function updateDonvitinh(data) {
         data: data
     })
 }
+
 export function deleteDonvitinh(id) {
     return request(
         {
@@ -69,6 +70,7 @@ export function deleteDonvitinh(id) {
         }
     )
 }
+
 export function deleteByListdvt(lstdvt) {
     return request({
         url: '/donvitinh/xoadvtbylist',
@@ -91,6 +93,7 @@ export function getAllloaitb() {
         method: 'GET'
     })
 }
+
 export function getbyIdNCC(idNcc, idLoai) {
     return request({
         url: '/thietbi/get-tb-by-ncc/' + idNcc + "/" + idLoai,
@@ -105,7 +108,52 @@ export function gettenloai(mancc, maloai) {
     })
 }
 
+export function gettenloaitbcha() {
+    return request({
+        url: '/loaitb/listtbcha',
+        method: 'GET'
+    })
+}
 
+export function addloaitb(data) {
+    return request({
+        url: '/loaitb/addloaitb',
+        method: 'POST',
+        data: data
+    })
+}
+
+export function updateloaitb(data) {
+    return request({
+        url: '/loaitb/updateloaitb',
+        method: 'PUT',
+        data: data
+    })
+}
+
+export function gettenloaibymaloai(id) {
+    return request({
+        url: '/loaitb/gettentbbyloaitb/' + id,
+        method: 'GET'
+    })
+}
+
+export function deletetliaotbbyID(id)
+{
+    return request({
+        url:'/loaitb/xoabyID/' + id,
+        method:'DELETE'
+    })
+}
+
+export function deletebylistloaitb(lsttb)
+{
+    return request({
+        url:'/loaitb/xoatheolist',
+        method:'DELETE',
+        data: lsttb
+    })
+}
 
 export function banGiaoThietBi(data) {
     return request({

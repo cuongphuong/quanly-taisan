@@ -1,5 +1,4 @@
 package tpm.qlts.services;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +12,9 @@ import tpm.qlts.repositorys.LoaiTBRepository;
 public class LoaiTBService {
 	@Autowired
 	LoaiTBRepository loaiTBRepository;
+  
+  @Autowired
+	private LoaiThietBiRepository loaiThietBiRepository;
 
 	public LoaiTB save(LoaiTB loaiTB) {
 		return loaiTBRepository.save(loaiTB);
@@ -44,5 +46,28 @@ public class LoaiTBService {
 
 	public List<LoaiTB> getAllThietBimaLoai(String maPhongBan, String maLoai) {
 		return loaiTBRepository.getAllThietBimaLoai(maPhongBan, maLoai);
+	}
+  
+  	public List<LoaiTB> getloaicha()
+	{
+		return (List<LoaiTB>) loaiThietBiRepository.getLoaitbcha();
+	}
+	
+	public LoaiTB update(LoaiTB ltt)
+	{
+		return loaiThietBiRepository.save(ltt);
+	}
+	
+	public boolean exitbyId(String id) {
+		return loaiThietBiRepository.existsById(id);
+	}
+	
+	public List<LoaiTB> gettenloaibyloaicha(String id)
+	{
+		return loaiThietBiRepository.gettbbymaloai(id);
+	}
+	
+	public void deletebyId(String id) {
+		loaiThietBiRepository.deleteById(id);
 	}
 }
