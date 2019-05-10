@@ -67,4 +67,12 @@ public class ThietBiServices {
 	public List<ThietBi> getThietBiIdPhongBanIdLoai(String maPhongBan, String maLoai){
 		return thietBiRepository.getThietBiIdPhongBanIdLoai(maPhongBan, maLoai);
 	}
+	
+	public List<ThietBi> getAllThietBiByTinhTrang(){
+		return thietBiRepository.getAllThietBiByTinhTrang();
+	}
+	
+	public List<ThietBi> getAllThietBiByPhieuThanhLy(){
+		return thietBiRepository.getAllThietBiByPhieuThanhLy();
+	}
 }

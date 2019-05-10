@@ -1,5 +1,6 @@
 package tpm.qlts.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tpm.qlts.custommodels.ChiTietYeuCauUpdate;
 import tpm.qlts.custommodels.DanhSachTB;
 import tpm.qlts.custommodels.DataUpdateNhanVienThietBi;
+import tpm.qlts.custommodels.DisplayThietBi;
 import tpm.qlts.custommodels.LuanChuyenOptions;
 import tpm.qlts.custommodels.NhanVienUpdate;
 import tpm.qlts.custommodels.PhieuYeuCauThietBiUpdate;
@@ -399,17 +401,17 @@ public class InformationController {
 	public List<LoaiTB> getAlllaoiTbByIdphongBan(@PathVariable String id) {
 		return loaiTBService.getAllByIdPhongBan(id);
 	}
-	
+
 	@GetMapping(value = "getAllThietBiPHongBan/{id}")
-	public List<ThietBi> getAllThietBiPHongBan(@PathVariable String id){
+	public List<ThietBi> getAllThietBiPHongBan(@PathVariable String id) {
 		return thietBiServices.getAllByIdthietBiPhongBan(id);
 	}
-	
+
 	@GetMapping(value = "getAllNVTBByIdPhongBan/{id}")
-	public List<NhanVienRefThietBi> getAllNVTBByIdPhongBan(@PathVariable String id){
+	public List<NhanVienRefThietBi> getAllNVTBByIdPhongBan(@PathVariable String id) {
 		return NhanVienRefThietBiService.getAllNVTBByIdPhongBan(id);
 	}
-	
+
 //	@GetMapping(value = "listAllWithPhongBan/{id}")
 //	public List<LuanChuyenOptions> getLuanChuyenOption(@PathVariable String id){
 //		List<LuanChuyenOptions> luanchuyen = new ArrayList<LuanChuyenOptions>();
@@ -437,7 +439,7 @@ public class InformationController {
 //		return luanchuyen;
 //			
 //		}
-	
+
 	@GetMapping(value = "listThietBiTheoLoai/{maPhongBan}/{maLoai}")
 	public List<LuanChuyenOptions> getThietBiTheoLoai(@PathVariable("maPhongBan") String maPhongBan,
 			@PathVariable("maLoai") String maLoai) {
@@ -460,7 +462,6 @@ public class InformationController {
 		return lcOptions;
 
 	}
-
 
 	@GetMapping(value = "listAllWithPhongBan/{id}")
 	public List<LuanChuyenOptions> getLuanChuyenOption(@PathVariable String id) {
@@ -530,16 +531,16 @@ public class InformationController {
 	public PhongBan getByIdThietBi(@PathVariable long id) {
 		return phongBanService.getByIdThietBi(id);
 	}
-	
+
 	@GetMapping(value = "getThietBiIdPhongBan/{id}")
-	public List<LuanChuyenOptions> getThietBiIdPhongBan(@PathVariable String id){
+	public List<LuanChuyenOptions> getThietBiIdPhongBan(@PathVariable String id) {
 		List<LuanChuyenOptions> lstLuanChuyen = new ArrayList<LuanChuyenOptions>();
 		List<ThietBi> lstThietBi = thietBiServices.getThietBiIdPhongBan(id);
-		for(ThietBi tb : lstThietBi) {
+		for (ThietBi tb : lstThietBi) {
 			String maLoaiCheck = tb.getMaLoai();
-			
+
 			options opt = new options();
-			opt.setLabel(tb.getLoaiTb().getTenLoai()+ " " + String.valueOf(tb.getMaThietBi()));
+			opt.setLabel(tb.getLoaiTb().getTenLoai() + " " + String.valueOf(tb.getMaThietBi()));
 			opt.setValue(String.valueOf(tb.getMaThietBi()));
 			List<TinhTrangRefThietBi> ttTb = tb.getTtTbs();
 			for (TinhTrangRefThietBi ttrefthietBi : ttTb) {
@@ -549,13 +550,13 @@ public class InformationController {
 				}
 			}
 			boolean check = false;
-			for(LuanChuyenOptions lc : lstLuanChuyen) {
-				if(maLoaiCheck.equals(lc.getValue())) {
+			for (LuanChuyenOptions lc : lstLuanChuyen) {
+				if (maLoaiCheck.equals(lc.getValue())) {
 					lc.getOptions().add(opt);
 					check = true;
 				}
 			}
-			if(check == false) {
+			if (check == false) {
 				LoaiTB loaiTB = loaiTBService.findByID(tb.getMaLoai());
 				LuanChuyenOptions lcOT = new LuanChuyenOptions();
 				lcOT.setLabel(loaiTB.getTenLoai());
@@ -568,18 +569,19 @@ public class InformationController {
 		}
 		return lstLuanChuyen;
 	}
-	
-	public boolean checkExistsMaLoai (String maLoai, List<LuanChuyenOptions> lstLuanChuyen) {
-		for(LuanChuyenOptions lc : lstLuanChuyen) {
-			if(maLoai.equals(lc.getValue())) {
+
+	public boolean checkExistsMaLoai(String maLoai, List<LuanChuyenOptions> lstLuanChuyen) {
+		for (LuanChuyenOptions lc : lstLuanChuyen) {
+			if (maLoai.equals(lc.getValue())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	@GetMapping(value = "listThietBiIdPhongBanIdLoai/{maPhongBan}/{maLoai}")
-	public List<LuanChuyenOptions> getThietBiIdPhongBanIdLoai(@PathVariable("maPhongBan") String maPhongBan, @PathVariable("maLoai") String maLoai){
+	public List<LuanChuyenOptions> getThietBiIdPhongBanIdLoai(@PathVariable("maPhongBan") String maPhongBan,
+			@PathVariable("maLoai") String maLoai) {
 		List<LuanChuyenOptions> lstLuanChuyen = new ArrayList<LuanChuyenOptions>();
 		List<ThietBi> lstThietBi = thietBiServices.getThietBiIdPhongBanIdLoai(maPhongBan, maLoai);
 		for (ThietBi thietBi : lstThietBi) {
@@ -595,13 +597,13 @@ public class InformationController {
 				}
 			}
 			boolean check = false;
-			for(LuanChuyenOptions lc : lstLuanChuyen) {
+			for (LuanChuyenOptions lc : lstLuanChuyen) {
 				if (chectMaloai.equals(lc.getValue())) {
 					lc.getOptions().add(opt);
 					check = true;
 				}
 			}
-			if(check == false) {
+			if (check == false) {
 				LoaiTB loaiTB = loaiTBService.findByID(thietBi.getMaLoai());
 				LuanChuyenOptions lcOT = new LuanChuyenOptions();
 				lcOT.setLabel(loaiTB.getTenLoai());
@@ -614,6 +616,91 @@ public class InformationController {
 		}
 		return lstLuanChuyen;
 	}
-	
-	
+
+	@GetMapping(value = "listAllThietBi")
+	public List<DisplayThietBi> getAllThietBi() {
+		List<DisplayThietBi> hienthiTB = new ArrayList<DisplayThietBi>();
+		List<ThietBi> resthietbi = thietBiServices.findAll();
+		for (ThietBi thietBi : resthietbi) {
+			String tt = "";
+			List<TinhTrangRefThietBi> tinhtrangrefthietbi = thietBi.getTtTbs();
+			for (TinhTrangRefThietBi ttreftb : tinhtrangrefthietbi) {
+				tt = ttreftb.getTinhTrang().getTenTinhTrang();
+			}
+			String phongBan = "";
+			List<NhanVienRefThietBi> nhanvienrefthietbi = thietBi.getNvTbs();
+			for (NhanVienRefThietBi nvreftb : nhanvienrefthietbi) {
+				if (thietBi.getMaThietBi() == nvreftb.getMaThietBi() && nvreftb.getDenNgay() == null) {
+					phongBan = nvreftb.getNhanVien().getPhongBan().getTenPhongBan();
+				}
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			hienthiTB.add(new DisplayThietBi(
+					thietBi.getLoaiTb().getMaNCC() + thietBi.getLoaiTb().getMaLoaiCha() + thietBi.getMaLoai()
+							+ thietBi.getMaThietBi(),
+					thietBi.getLoaiTb().getTenLoai(), thietBi.getBaoHanh(), thietBi.getGiaTri(), thietBi.getKhauHao(),
+					"" + sdf.format(thietBi.getNgayNhap()), thietBi.getDonViTinh().getTenDonViTinh(),phongBan, tt));
+		}
+		return hienthiTB;
+	}
+
+	@GetMapping(value = "listallThietBiByPhieuThanhLy")
+	public List<DisplayThietBi> getAllThietBiByPhieuThanhLy() {
+		List<DisplayThietBi> hienthiTB = new ArrayList<DisplayThietBi>();
+		List<ThietBi> resthietbi = thietBiServices.getAllThietBiByPhieuThanhLy();
+		for (ThietBi thietBi : resthietbi) {
+			String tt = "";
+			List<TinhTrangRefThietBi> tinhtrangrefthietbi = thietBi.getTtTbs();
+			for (TinhTrangRefThietBi ttreftb : tinhtrangrefthietbi) {
+				tt = ttreftb.getTinhTrang().getTenTinhTrang();
+			}
+			String phongBan = "";
+			List<NhanVienRefThietBi> nhanvienrefthietbi = thietBi.getNvTbs();
+			for (NhanVienRefThietBi nvreftb : nhanvienrefthietbi) {
+				if (thietBi.getMaThietBi() == nvreftb.getMaThietBi() && nvreftb.getDenNgay() == null) {
+					phongBan = nvreftb.getNhanVien().getPhongBan().getTenPhongBan();
+				}
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			hienthiTB.add(new DisplayThietBi(
+					thietBi.getLoaiTb().getMaNCC() + thietBi.getLoaiTb().getMaLoaiCha() + thietBi.getMaLoai()
+							+ thietBi.getMaThietBi(),
+					thietBi.getLoaiTb().getTenLoai(), thietBi.getBaoHanh(), thietBi.getGiaTri(), thietBi.getKhauHao(),
+					"" + sdf.format(thietBi.getNgayNhap()), thietBi.getDonViTinh().getTenDonViTinh(),phongBan, tt));
+		}
+		return hienthiTB;
+	}
+
+	@GetMapping(value = "listallThietBiByTinhTrang")
+	public List<DisplayThietBi> getAllThietBiByTinhTrang() {
+		List<DisplayThietBi> hienthiTB = new ArrayList<DisplayThietBi>();
+		List<ThietBi> resthietbi = thietBiServices.getAllThietBiByTinhTrang();
+		;
+		for (ThietBi thietBi : resthietbi) {
+			String tt = "";
+			List<TinhTrangRefThietBi> tinhtrangrefthietbi = thietBi.getTtTbs();
+			for (TinhTrangRefThietBi ttreftb : tinhtrangrefthietbi) {
+				tt = ttreftb.getTinhTrang().getTenTinhTrang();
+			}
+			String phongBan = "";
+			List<NhanVienRefThietBi> nhanvienrefthietbi = thietBi.getNvTbs();
+			for (NhanVienRefThietBi nvreftb : nhanvienrefthietbi) {
+				if (thietBi.getMaThietBi() == nvreftb.getMaThietBi() && nvreftb.getDenNgay() == null) {
+					phongBan = nvreftb.getNhanVien().getPhongBan().getTenPhongBan();
+				}
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			hienthiTB.add(new DisplayThietBi(
+					thietBi.getLoaiTb().getMaNCC() + thietBi.getLoaiTb().getMaLoaiCha() + thietBi.getMaLoai()
+							+ thietBi.getMaThietBi(),
+					thietBi.getLoaiTb().getTenLoai(), thietBi.getBaoHanh(), thietBi.getGiaTri(), thietBi.getKhauHao(),
+					"" + sdf.format(thietBi.getNgayNhap()), thietBi.getDonViTinh().getTenDonViTinh(),phongBan, tt));
+		}
+		return hienthiTB;
+	}
+
+	@GetMapping(value = "listLoaitb")
+	public List<LoaiTB> getLoaitb() {
+		return loaiTBService.findAll();
+	}
 }
