@@ -35,5 +35,11 @@ public interface ThietBiRepository extends JpaRepository<ThietBi, Long> {
 			+ "where LoaiTB.MaLoai =:maLoai))", nativeQuery = true)
 	public List<ThietBi> getThietBiIdPhongBanIdLoai(@Param("maPhongBan") String maPhongBan,
 			@Param("maLoai") String maLoai);
+	
+	@Query("SELECT tb FROM  ThietBi tb WHERE tb.tinhTrangKho = TRUE")
+	public List<ThietBi> getAllThietBiByTinhTrang();
+	
+	@Query(value = "select tb.* from ThietBi as tb where tb.MaPhieuThanhLy IS NOT NULL", nativeQuery = true)
+	public List<ThietBi> getAllThietBiByPhieuThanhLy();
 
 }

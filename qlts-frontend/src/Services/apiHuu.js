@@ -227,3 +227,24 @@ export function getNhanVienRefPhongBan(id){
         method : 'GET'
     });
 }
+// get all thiết bi
+export function getAllThietBi(){
+    return request({
+        url : 'infor/listAllThietBi', 
+        method : 'GET'
+    });
+}
+// get thiết bị đã thanh lý
+export function getAllThietBiByPhieuThanhLy(){
+    return request({
+        url : 'infor/listallThietBiByPhieuThanhLy', 
+        method : 'GET'
+    });
+}
+// get thiết bị trong kho
+export function getAllThietBiByTinhTrang(){
+    return request({
+        url : 'infor/listallThietBiByTinhTrang', 
+        method : 'GET'
+    });
+}
